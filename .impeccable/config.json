@@ -1,0 +1,44 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "wide-tracking",
+        "value": "*",
+        "files": [
+          ".scratch/calling-agent/prototypes/PROTOTYPE-call-flow.html"
+        ],
+        "createdAt": "2026-09-29T05:26:22.231Z",
+        "reason": "agent: tracking only applies to short uppercase section labels (h2, PROTOTYPE badge), not body text"
+      },
+      {
+        "rule": "tight-leading",
+        "value": "*",
+        "files": [
+          "docs/pdf-src/c-suite-brief.html"
+        ],
+        "createdAt": "2026-10-03T12:57:47.671Z",
+        "reason": "agent: false positive; body line-height is 1.38 in style.css, the flagged values are SVG text nodes in print diagrams"
+      },
+      {
+        "rule": "tight-leading",
+        "value": "*",
+        "files": [
+          "docs/pdf-src/engineer-guide.html"
+        ],
+        "createdAt": "2026-10-03T12:58:04.737Z",
+        "reason": "agent: false positive; body line-height is 1.38 in style.css, flagged values are SVG text nodes in print diagrams"
+      },
+      {
+        "rule": "aphoristic-cadence",
+        "value": "*",
+        "files": [
+          "docs/pdf-src/engineer-guide.html"
+        ],
+        "createdAt": "2026-10-03T12:58:04.754Z",
+        "reason": "agent: flagged text is Omar's spoken call script, quoted verbatim from the decided opening (ticket 09)"
+      }
+    ]
+  }
+}
