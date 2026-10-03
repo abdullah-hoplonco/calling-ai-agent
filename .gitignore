@@ -1,0 +1,25 @@
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Local tool state
+.claude/settings.local.json
+.impeccable/config.local.json
+.impeccable/hook.cache.json
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+
+# Node
+node_modules/
+.next/
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
