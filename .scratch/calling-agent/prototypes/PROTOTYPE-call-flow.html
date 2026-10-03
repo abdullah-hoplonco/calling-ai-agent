@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Call Flow Prototype</title>
+<style>
+:root{--bg:#f7f7f5;--card:#fff;--ink:#1d1d1f;--muted:#6b6b70;--line:#e3e3e0;--accent:#0b6e4f;--accent-ink:#fff;--warn:#a4400b;--omar:#eef6f2;--lead:#f2f2f0}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141415;--card:#1d1d1f;--ink:#ececec;--muted:#9a9aa0;--line:#2e2e31;--accent:#3fb68b;--accent-ink:#0b1a14;--warn:#f0915a;--omar:#1b2a24;--lead:#26262a}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:1180px;margin:0 auto;padding:24px 16px 64px}
+h1{font-size:22px;margin:0 0 4px}
+h2{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:0 0 10px}
+.intro{color:var(--muted);max-width:820px;margin:0 0 20px}
+.proto{display:inline-block;font-size:12px;font-weight:600;letter-spacing:.05em;color:var(--warn);border:1px solid var(--warn);border-radius:4px;padding:1px 6px;margin-bottom:8px}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+@media (max-width:860px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px}
+dl{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;margin:0}
+dt{color:var(--muted)}dd{margin:0;font-weight:500}
+.changed{background:color-mix(in srgb,var(--accent) 18%,transparent);border-radius:4px;padding:0 4px}
+.flags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.flag{font-size:12px;border:1px solid var(--line);border-radius:999px;padding:2px 10px;color:var(--muted)}
+.flag.on{border-color:var(--accent);color:var(--accent)}
+.flag.bad{border-color:var(--warn);color:var(--warn)}
+.log{max-height:420px;overflow:auto;display:flex;flex-direction:column;gap:6px}
+.msg{padding:8px 10px;border-radius:8px;max-width:92%}
+.msg.omar{background:var(--omar);align-self:flex-start}
+.msg.lead{background:var(--lead);align-self:flex-end}
+.msg.sys{align-self:center;font-size:12px;color:var(--muted);font-style:italic;text-align:center}
+.who{font-size:12px;font-weight:600;color:var(--muted);display:block}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+button{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:7px;padding:6px 10px;cursor:pointer}
+button:hover:not(:disabled){border-color:var(--accent)}
+button:disabled{opacity:.35;cursor:not-allowed}
+button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.tab.active{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.steps{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.steps button{text-align:left}
+.steps button.done{opacity:.5;text-decoration:line-through}
+.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+select{font:inherit;padding:4px 6px;border-radius:6px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.section{margin-top:16px}
+.small{font-size:12px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<span class="proto">PROTOTYPE · THROWAWAY</span>
+<h1>Connected Call flow</h1>
+<p class="intro"><b>Question:</b> does this call state machine behave the way we want on a real Connected Call? It covers the legal opening, info, Intent to Buy, objections, booking, callbacks, parking and opting out. Click what the <b>Lead</b> does, then watch what <b>Omar</b> says and how the state changes. The rules are enforced in code, not left to the LLM: no pitch before the legal opening, no budget or timeline numbers, and never "you're booked" before the calendar confirms. Omar's lines are samples; the real agent phrases them naturally within each stage.</p>
+
+<div class="grid">
+  <div class="card">
+    <h2>Current state</h2>
+    <div class="row">
+      <label class="small">Lead type
+        <select id="leadType">
+          <option value="new">New Lead (form today)</option>
+          <option value="old">Old backlog Lead (March)</option>
+        </select>
+      </label>
+      <button id="reset">Reset call</button>
+    </div>
+    <dl id="state"></dl>
+    <div class="flags" id="flags"></div>
+  </div>
+  <div class="card">
+    <h2>Conversation</h2>
+    <div class="log" id="log"></div>
+  </div>
+</div>
+
+<div class="card section">
+  <h2>What the Lead does (free play)</h2>
+  <p class="small">Greyed-out buttons aren't possible at this stage of the call.</p>
+  <div class="btns" id="actions"></div>
+</div>
+
+<div class="card section">
+  <h2>Guided scenarios</h2>
+  <div class="tabs" id="tabs"></div>
+  <div id="scenario"></div>
+</div>
+</div>
+
+<script>
+/* ===== Pure call-flow module (liftable; no DOM) ===== */
+const CallFlow = (() => {
+  const CONFIG = { minRapportTurns: 2, maxObjections: 2, maxSlotRounds: 2, maxCallbacks: 2, windowText: "between 10 and 5:30" };
+  const SLOTS = [["Tuesday at 11am", "Wednesday at 3pm"], ["Thursday at 10am", "Thursday at 4pm"], ["Monday at 2pm", "Tuesday at 4pm"]];
+
+  const STAGE_LABEL = {
+    DIALING: "Dialing", IDENTITY: "Checking it's the right person", OPENING: "Legal opening delivered: waiting for 'is now a good time?'",
+    INFO: "Giving the info they asked for", INTENT: "Probing Intent to Buy", ARABIC_CHECK: "Checking English is OK",
+    BOOKING_PREF: "Asking time preference", BOOKING_OFFER: "Offering 2 slots", EMAIL_CONFIRM: "Confirming invite email",
+    BOOKING_PENDING: "Booking on calendar (waiting for confirmation)", CALLBACK: "Agreeing a callback time", ENDED: "Call ended"
+  };
+
+  function initial(leadType = "new") {
+    return {
+      stage: "DIALING", prevStage: null, leadType,
+      lead: { name: "Ahmed", topic: "a mobile app", emailDomain: "gmail.com", month: "March" },
+      status: "Lead (calling)", outcome: null,
+      opening: { companyAndPurpose: false, recordingNotice: false, askedToContinue: false },
+      objections: 0, slotRound: 0, offered: [], chosen: null,
+      callbacksUsed: 0, aiDisclosed: false, bookingConfirmed: false, saidBooked: false,
+      priceDeflections: 0, emailChanged: false, rapportTurns: 0,
+      log: []
+    };
+  }
+
+  const LIVE = ["IDENTITY", "OPENING", "INFO", "INTENT", "ARABIC_CHECK", "BOOKING_PREF", "BOOKING_OFFER", "EMAIL_CONFIRM", "CALLBACK"];
+  const TALKING = ["INFO", "INTENT", "BOOKING_PREF", "BOOKING_OFFER", "EMAIL_CONFIRM"];
+
+  const EVENTS = {
+    answered:        { label: "Picks up",                              stages: ["DIALING"] },
+    noAnswer:        { label: "Doesn't answer",                        stages: ["DIALING"] },
+    voicemail:       { label: "Goes to voicemail",                     stages: ["DIALING"] },
+    confirmIdentity: { label: "\"Yes, speaking\"",                     stages: ["IDENTITY"] },
+    wrongPerson:     { label: "\"Wrong number\"",                      stages: ["IDENTITY"] },
+    hangUpSilent:    { label: "Hangs up without speaking",             stages: ["IDENTITY"] },
+    goodTime:        { label: "\"Sure, go ahead\"",                    stages: ["OPENING"] },
+    objectsRecording:{ label: "\"I don't want to be recorded\"",       stages: ["OPENING", "INFO", "INTENT"] },
+    speaksArabic:    { label: "Keeps speaking Arabic",                 stages: ["OPENING", "INFO"] },
+    englishOk:       { label: "\"English is fine\"",                   stages: ["ARABIC_CHECK"] },
+    englishNo:       { label: "\"No, Arabic only\"",                   stages: ["ARABIC_CHECK"] },
+    askQuestion:     { label: "Asks about the service",                stages: ["INFO", "INTENT"] },
+    showsInterest:   { label: "Engages / tells about the project",     stages: ["INFO"] },
+    intentYes:       { label: "\"Yes, we want to do this\"",           stages: ["INTENT"] },
+    objection:       { label: "\"Just send me an email\"",             stages: ["INTENT"] },
+    noIntent:        { label: "\"Just browsing, maybe next year\"",    stages: ["INFO", "INTENT"] },
+    askManager:      { label: "\"Can I talk to someone?\"",            stages: ["INFO", "INTENT"] },
+    askPrice:        { label: "\"How much will it cost?\"",            stages: ["INFO", "INTENT", "BOOKING_PREF", "BOOKING_OFFER"] },
+    askTimeline:     { label: "\"How long will it take?\"",            stages: ["INFO", "INTENT", "BOOKING_PREF"] },
+    askBot:          { label: "\"Am I talking to a bot?\"",            stages: ["OPENING", "INFO", "INTENT", "BOOKING_PREF", "BOOKING_OFFER", "EMAIL_CONFIRM"] },
+    notNow:          { label: "\"I'm busy, call me later\"",           stages: ["OPENING", "INFO", "INTENT"] },
+    notInterested:   { label: "\"Not interested, don't call me\"",     stages: ["OPENING", "INFO", "INTENT", "BOOKING_PREF", "BOOKING_OFFER"] },
+    givePreference:  { label: "\"Later this week, afternoon\"",        stages: ["BOOKING_PREF"] },
+    acceptSlot:      { label: "Picks the first slot",                  stages: ["BOOKING_OFFER"] },
+    neitherSlot:     { label: "\"Neither works\"",                     stages: ["BOOKING_OFFER"] },
+    emailOk:         { label: "\"Yes, that email is fine\"",           stages: ["EMAIL_CONFIRM"] },
+    newEmail:        { label: "Gives a different email",               stages: ["EMAIL_CONFIRM"] },
+    calendarConfirms:{ label: "⚙ Calendar confirms booking",           stages: ["BOOKING_PENDING"] },
+    calendarSlotTaken:{label: "⚙ Calendar: slot just got taken",       stages: ["BOOKING_PENDING"] },
+    calendarError:   { label: "⚙ Calendar API fails",                  stages: ["BOOKING_PENDING"] },
+    callbackInWindow:{ label: "\"Call me tomorrow at 4pm\"",           stages: ["CALLBACK"] },
+    callbackOutside: { label: "\"Call me at 8pm\"",                    stages: ["CALLBACK"] },
+    hangUpNegative:  { label: "Says something negative and hangs up",  stages: ["OPENING", "INFO", "INTENT", "BOOKING_PREF", "BOOKING_OFFER"] },
+    lineDrops:       { label: "Line drops mid-call",                   stages: ["OPENING", "INFO", "INTENT", "BOOKING_PREF", "BOOKING_OFFER", "EMAIL_CONFIRM", "BOOKING_PENDING"] },
+  };
+
+  const allowed = (s) => Object.keys(EVENTS).filter(e => EVENTS[e].stages.includes(s.stage));
+
+  function end(s, status, outcome) { s.stage = "ENDED"; s.status = status; s.outcome = outcome; }
+  const omar = (s, t) => s.log.push({ who: "omar", text: t });
+  const lead = (s, t) => s.log.push({ who: "lead", text: t });
+  const sys  = (s, t) => s.log.push({ who: "sys", text: t });
+
+  function offerSlots(s) {
+    s.offered = SLOTS[Math.min(s.slotRound - 1, SLOTS.length - 1)];
+    sys(s, "Tool: calendar freeBusy → 2 free slots matching the preference");
+    omar(s, `I have ${s.offered[0]} or ${s.offered[1]}. Which suits you better?`);
+  }
+
+  function transition(prev, event) {
+    if (!allowed(prev).includes(event)) return prev; // illegal: ignored
+    const s = structuredClone(prev);
+    const L = s.lead;
+    lead(s, EVENTS[event].label.replace(/^⚙ /, ""));
+    if (event.startsWith("calendar")) s.log.pop(); // system events aren't the Lead speaking
+
+    switch (event) {
+      case "answered": s.stage = "IDENTITY"; omar(s, `Hi, is this ${L.name}?`); break;
+      case "noAnswer": end(s, "Lead (retry scheduled)", "No answer: attempt logged; next attempt tomorrow at the opposite time of day"); sys(s, "Attempt 1 no-answer → voicemail + email with booking link (policy)"); break;
+      case "voicemail": end(s, "Lead (retry scheduled)", "Voicemail left (attempt 1 only) + email with booking link");
+        omar(s, `Hi ${L.name}, Omar from Hoplon and Co, following up on the form you sent us about ${L.topic}. I'll try you again tomorrow, or you can reply to our email.`); break;
+      case "wrongPerson": end(s, "Wrong number (flag for Manager)", "Wrong person: apologised and ended"); omar(s, "Sorry about that, I must have the wrong number. Have a good day!"); break;
+      case "hangUpSilent": end(s, "Lead (retry scheduled)", "Counts as no answer (hung up before speaking)"); break;
+
+      case "confirmIdentity": {
+        s.stage = "OPENING";
+        s.opening = { companyAndPurpose: true, recordingNotice: true, askedToContinue: true };
+        const why = s.leadType === "old"
+          ? `You reached out to us back in ${L.month} about ${L.topic}, so I'm following up with the information you asked for.`
+          : `You filled in a form on our website about ${L.topic}, so I'm calling with the information you asked for.`;
+        omar(s, `Hi ${L.name}, this is Omar from Hoplon and Co. ${why} Just so you know, this call is recorded. Is now a good time for two minutes?`);
+        sys(s, "Legal opening delivered by code, in order: company & purpose → recording notice → ask to continue");
+        break;
+      }
+      case "goodTime": s.stage = "INFO";
+        omar(s, `Great. So for ${L.topic}, we design and build iOS and Android apps end to end, from UI/UX through to launch and support. What made you start looking into it?`); break;
+      case "objectsRecording": end(s, "Parked (declined recording)", "Recording is mandatory, so the call can't continue. Info sent by email");
+        omar(s, "Totally understand. I can't continue without recording, but I'll email you the information instead. Thanks for your time!"); break;
+
+      case "speaksArabic": s.prevStage = s.stage; s.stage = "ARABIC_CHECK";
+        omar(s, "Wa alaikum assalam! I'm sorry, I can only continue in English. My manager speaks English too. Would that work for you?"); break;
+      case "englishOk": s.stage = s.prevStage === "OPENING" ? "INFO" : s.prevStage; omar(s, `Perfect, thank you! So about ${L.topic}…`); break;
+      case "englishNo": end(s, "Parked (needs Arabic)", "Parked: needs Arabic (v2). Info sent by email"); omar(s, "No problem at all. I'll send you the details by email. Thank you!"); break;
+
+      case "askQuestion": if (s.stage === "INFO") s.rapportTurns++;
+        omar(s, "Good question. We handle everything from design to launch, and we've built apps for clients across retail, logistics and hospitality. What kind of users is your app for?"); break;
+      case "showsInterest": s.rapportTurns++;
+        if (s.rapportTurns < CONFIG.minRapportTurns) {
+          omar(s, "Oh nice, that's a great space to be in. We actually did something similar for a client in logistics. Tell me more: what's the main thing you want the app to do for your customers?");
+          sys(s, `Building rapport (${s.rapportTurns}/${CONFIG.minRapportTurns}): Omar stays talkative before asking for commitment`);
+        } else { s.stage = "INTENT"; omar(s, "That sounds like a really solid project, and it's right in our wheelhouse. Is this something you're looking to move ahead with soon?"); }
+        break;
+      case "intentYes": case "askManager":
+        s.stage = "BOOKING_PREF"; s.status = "Qualified Lead";
+        omar(s, event === "askManager"
+          ? "Of course. Let me connect you with my manager. I'll set up a quick call. Would earlier or later this week work better, morning or afternoon?"
+          : "The best next step is a 30-minute call with my manager. Budget and timeline can be adjusted to your needs, and he'll go through that with you. Should I book it? Would earlier or later this week work better, morning or afternoon?");
+        break;
+      case "objection":
+        s.objections++;
+        if (s.objections > CONFIG.maxObjections) {
+          end(s, "Parked Lead (no Intent to Buy)", `Parked after ${CONFIG.maxObjections} objection attempts: not needy. Info sent by email`);
+          omar(s, "Completely fair. I'll email you the details, and you can reach us whenever the timing's right. Thanks, " + L.name + "!");
+        } else {
+          omar(s, s.objections === 1
+            ? "Sure, I can do that. Honestly though, a short call with my manager usually saves a lot of back-and-forth, since he can tailor everything to you. Would 30 minutes this week work?"
+            : "No pressure at all. Would it help if I just pencilled something in, and you can move it if needed?");
+        }
+        break;
+      case "noIntent": end(s, "Parked Lead (no Intent to Buy)", "Parked: didn't reject contact; re-nurture later"); omar(s, "No problem. I'll send you some info by email so you have it when you're ready. Thanks!"); break;
+      case "askPrice": s.priceDeflections++;
+        if (s.stage === "INFO" || s.stage === "INTENT") {
+          s.stage = "BOOKING_PREF"; s.status = "Qualified Lead";
+          sys(s, "Price question = Intent to Buy signal → move to booking");
+          omar(s, "It really depends on what you need, and we can adjust the budget to fit. That's exactly what my manager will go through with you on a quick 30-minute call. Would earlier or later this week work better, morning or afternoon?");
+          sys(s, "Guard: no budget numbers spoken"); break;
+        }
+        omar(s, "It really depends on what you need, and we can adjust the budget to fit. My manager will go through that with you on the call. Should I book it?"); sys(s, "Guard: no budget numbers spoken"); break;
+      case "askTimeline":
+        omar(s, "We can adjust the timeline to your needs. My manager will map that out with you on the call. Should I book it?"); sys(s, "Guard: no timeline numbers spoken"); break;
+      case "askBot": s.aiDisclosed = true;
+        omar(s, "Yes, I'm Hoplon's AI assistant. I can answer your questions and book you in with my manager. So, where were we…"); break;
+      case "notNow":
+        if (s.callbacksUsed >= CONFIG.maxCallbacks) { end(s, "Parked Lead", "Max callbacks reached → Parked"); omar(s, "No problem. I'll email you the details instead. Thanks!"); }
+        else { s.prevStage = s.stage; s.stage = "CALLBACK"; omar(s, `No problem! When's a good time to call back? I can call ${CONFIG.windowText}.`); }
+        break;
+      case "callbackOutside": omar(s, `I'm only able to call ${CONFIG.windowText}. Would tomorrow at 4pm work?`); sys(s, "Guard: callbacks only inside the legal calling window"); break;
+      case "callbackInWindow": s.callbacksUsed++; end(s, "Lead (callback scheduled)", `Callback booked for tomorrow 4pm (callback ${s.callbacksUsed}/${CONFIG.maxCallbacks}; doesn't count as a retry)`);
+        omar(s, "Perfect, I'll call you tomorrow at 4. Speak then!"); break;
+      case "notInterested": end(s, "Opted-out Lead", "Opted out: never called again"); omar(s, "Understood, I won't call again. Have a great day!"); break;
+      case "hangUpNegative": end(s, "Opted-out Lead", "Negative statement then hang-up → Opted out"); break;
+      case "lineDrops": end(s, "Lead (callback scheduled)", "Line dropped mid-call → one callback attempt (counts as a retry)"); break;
+
+      case "givePreference": s.stage = "BOOKING_OFFER"; s.slotRound = 1; offerSlots(s); break;
+      case "neitherSlot":
+        if (s.slotRound >= CONFIG.maxSlotRounds) {
+          end(s, "Qualified Lead (booking link sent)", "No slot agreed after 2 rounds → booking link emailed");
+          omar(s, "No worries. I'll email you a link so you can pick any time that suits you. Thanks, " + L.name + "!");
+        } else { s.slotRound++; omar(s, "No problem, let me check other times."); offerSlots(s); }
+        break;
+      case "acceptSlot": s.chosen = s.offered[0]; s.stage = "EMAIL_CONFIRM";
+        omar(s, `Great, ${s.chosen}. I'll send the invite to the email you used on our form, the one at ${L.emailDomain}. Is that still best?`); break;
+      case "newEmail": s.emailChanged = true; omar(s, "Sure. Let me spell that back: a-h-m-e-d dot k at company dot ae. Is that right?"); break;
+      case "emailOk": s.stage = "BOOKING_PENDING"; sys(s, "Tool: re-check freeBusy → events.insert (sendUpdates=all, Meet link)"); omar(s, "One moment while I lock that in…"); break;
+      case "calendarConfirms": s.bookingConfirmed = true; s.saidBooked = true;
+        end(s, "Qualified Lead (Discovery Call booked)", `Discovery Call booked: ${s.chosen}, invite sent`);
+        sys(s, "Calendar confirmed → only now may Omar say 'booked'");
+        omar(s, `You're booked for ${s.chosen} with my manager. The invite with the Google Meet link is on its way. Thanks, ${L.name}!`); break;
+      case "calendarSlotTaken": s.stage = "BOOKING_OFFER"; s.slotRound = Math.min(s.slotRound + 1, CONFIG.maxSlotRounds);
+        sys(s, "Booking failed: slot taken. Omar must NOT say 'booked'");
+        omar(s, "Ah, it looks like that time was just taken, sorry about that."); offerSlots(s); break;
+      case "calendarError": end(s, "Qualified Lead (booking link sent)", "Calendar failed → booking link emailed (never claimed booked)");
+        sys(s, "Booking failed: calendar error");
+        omar(s, "I'm having trouble with the calendar right now, so I'll email you a link to pick a time. Sorry about that!"); break;
+    }
+    return s;
+  }
+
+  return { initial, transition, allowed, EVENTS, STAGE_LABEL, CONFIG };
+})();
+
+/* ===== Throwaway page shell ===== */
+const $ = (id) => document.getElementById(id);
+let state = CallFlow.initial();
+let before = state;
+
+function render() {
+  const s = state, b = before;
+  const rows = [
+    ["Stage", CallFlow.STAGE_LABEL[s.stage], s.stage !== b.stage],
+    ["Lead status", s.status, s.status !== b.status],
+    ["Outcome", s.outcome || "(call in progress)", s.outcome !== b.outcome],
+    ["Rapport turns", `${s.rapportTurns} / ${CallFlow.CONFIG.minRapportTurns}`, s.rapportTurns !== b.rapportTurns],
+    ["Objections handled", `${s.objections} / ${CallFlow.CONFIG.maxObjections}`, s.objections !== b.objections],
+    ["Slot rounds", `${s.slotRound} / ${CallFlow.CONFIG.maxSlotRounds}`, s.slotRound !== b.slotRound],
+    ["Slots on offer", s.offered.length ? s.offered.join(" · ") : "(none)", s.offered.join() !== b.offered.join()],
+    ["Callbacks used", `${s.callbacksUsed} / ${CallFlow.CONFIG.maxCallbacks}`, s.callbacksUsed !== b.callbacksUsed],
+  ];
+  $("state").innerHTML = rows.map(([k, v, ch]) => `<dt>${k}</dt><dd><span class="${ch ? "changed" : ""}">${v}</span></dd>`).join("");
+  const o = s.opening;
+  const flags = [
+    ["Company & purpose said", o.companyAndPurpose], ["Recording notice given", o.recordingNotice], ["Asked to continue", o.askedToContinue],
+    ["Admitted AI when asked", s.aiDisclosed], ["Calendar confirmed", s.bookingConfirmed],
+  ];
+  $("flags").innerHTML = flags.map(([t, on]) => `<span class="flag ${on ? "on" : ""}">${on ? "✓" : "○"} ${t}</span>`).join("")
+    + `<span class="flag on">✓ No budget/timeline numbers spoken</span>`
+    + (s.saidBooked && !s.bookingConfirmed ? `<span class="flag bad">✗ Said "booked" without confirmation</span>` : `<span class="flag on">✓ Never claimed an unconfirmed booking</span>`);
+  $("log").innerHTML = s.log.length ? s.log.map(m => m.who === "sys"
+      ? `<div class="msg sys">${m.text}</div>`
+      : `<div class="msg ${m.who}"><span class="who">${m.who === "omar" ? "Omar" : "Lead"}</span>${m.text}</div>`).join("")
+    : `<div class="msg sys">Press "Picks up" to start the call.</div>`;
+  $("log").scrollTop = 1e9;
+  const ok = CallFlow.allowed(s);
+  $("actions").innerHTML = "";
+  Object.entries(CallFlow.EVENTS).forEach(([k, e]) => {
+    const btn = document.createElement("button");
+    btn.textContent = e.label; btn.disabled = !ok.includes(k);
+    btn.onclick = () => dispatch(k); $("actions").appendChild(btn);
+  });
+}
+function dispatch(ev) { before = state; state = CallFlow.transition(state, ev); render(); }
+function reset(type) { before = state = CallFlow.initial(type || $("leadType").value); render(); }
+$("reset").onclick = () => reset();
+$("leadType").onchange = () => reset();
+
+const SCENARIOS = [
+  { name: "Happy path", type: "new", desc: "A warm Lead picks up, engages and books. Watch the legal opening flags turn on before any pitch, and the booking only confirmed after the calendar says so.",
+    steps: ["answered", "confirmIdentity", "goodTime", "showsInterest", "showsInterest", "intentYes", "givePreference", "acceptSlot", "emailOk", "calendarConfirms"] },
+  { name: "Price pusher", type: "new", desc: "Asking the price counts as an Intent to Buy signal: Omar moves straight to booking, never gives numbers, and deflects again if asked twice.",
+    steps: ["answered", "confirmIdentity", "goodTime", "showsInterest", "askPrice", "askPrice", "givePreference", "acceptSlot", "emailOk", "calendarConfirms"] },
+  { name: "\"Just email me\" ×3", type: "new", desc: "Consultative, not needy: Omar handles the objection twice, then gracefully Parks on the third.",
+    steps: ["answered", "confirmIdentity", "goodTime", "showsInterest", "showsInterest", "objection", "objection", "objection"] },
+  { name: "Are you a bot?", type: "new", desc: "Omar doesn't volunteer that he's an AI, but says yes honestly when asked, then carries on.",
+    steps: ["answered", "confirmIdentity", "askBot", "goodTime", "showsInterest", "showsInterest", "intentYes", "givePreference", "acceptSlot", "emailOk", "calendarConfirms"] },
+  { name: "Busy → call at 8pm", type: "new", desc: "A callback request outside the legal window gets a counter-offer inside it.",
+    steps: ["answered", "confirmIdentity", "notNow", "callbackOutside", "callbackInWindow"] },
+  { name: "Slot taken mid-booking", type: "new", desc: "The slot disappears between offering it and booking it. Omar must not say 'booked'; he re-offers instead.",
+    steps: ["answered", "confirmIdentity", "goodTime", "showsInterest", "showsInterest", "intentYes", "givePreference", "acceptSlot", "emailOk", "calendarSlotTaken", "acceptSlot", "emailOk", "calendarConfirms"] },
+  { name: "Nothing fits", type: "new", desc: "Two rounds of slots, no fit → booking link by email. Still a Qualified Lead.",
+    steps: ["answered", "confirmIdentity", "goodTime", "showsInterest", "showsInterest", "intentYes", "givePreference", "neitherSlot", "neitherSlot"] },
+  { name: "Arabic speaker", type: "old", desc: "Old backlog Lead (note the 'back in March' opening) who keeps speaking Arabic, and is OK with English.",
+    steps: ["answered", "confirmIdentity", "speaksArabic", "englishOk", "showsInterest", "askManager", "givePreference", "acceptSlot", "emailOk", "calendarConfirms"] },
+  { name: "Declines recording", type: "new", desc: "Recording is mandatory by law, so an objection ends the call. The Lead is Parked (owner decision), not Opted-out.",
+    steps: ["answered", "confirmIdentity", "objectsRecording"] },
+  { name: "Not interested", type: "new", desc: "A clear rejection → Opted-out Lead, never called again.",
+    steps: ["answered", "confirmIdentity", "goodTime", "notInterested"] },
+];
+let active = 0, stepIdx = 0;
+function renderTabs() {
+  $("tabs").innerHTML = "";
+  SCENARIOS.forEach((sc, i) => {
+    const t = document.createElement("button");
+    t.className = "tab" + (i === active ? " active" : ""); t.textContent = sc.name;
+    t.onclick = () => startScenario(i); $("tabs").appendChild(t);
+  });
+  const sc = SCENARIOS[active];
+  $("scenario").innerHTML = `<p>${sc.desc}</p><div class="steps" id="steps"></div>`;
+  sc.steps.forEach((ev, i) => {
+    const b = document.createElement("button");
+    b.textContent = `${i + 1}. ${CallFlow.EVENTS[ev].label}`;
+    if (i < stepIdx) b.className = "done";
+    b.disabled = i !== stepIdx;
+    if (i === stepIdx) b.classList.add("primary");
+    b.onclick = () => { dispatch(ev); stepIdx++; renderTabs(); };
+    $("steps").appendChild(b);
+  });
+}
+function startScenario(i) { active = i; stepIdx = 0; $("leadType").value = SCENARIOS[i].type; reset(SCENARIOS[i].type); renderTabs(); }
+startScenario(0);
+</script>
+</body>
+</html>
