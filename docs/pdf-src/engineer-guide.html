@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>AI Calling Agent: Engineer Guide</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.toc{columns:2;column-gap:6mm;font-size:9pt}
+.toc div{break-inside:avoid;margin-bottom:1mm}
+.toc b{color:var(--blue);display:inline-block;width:7mm}
+.lane{font-size:8.6pt}
+</style></head>
+<body>
+<svg width="0" height="0" style="position:absolute"><defs>
+  <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1F5FBF"/></marker>
+  <marker id="arg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#7A859C"/></marker>
+  <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#B42318"/></marker>
+</defs></svg>
+
+<!-- ===================== PAGE 1: COVER + MIND MAP ===================== -->
+<div class="page">
+  <div class="band" style="padding-top:10mm;padding-bottom:9mm">
+    <div>
+      <img src="../assets/hoplon-logo.png" alt="Hoplon &amp; Co">
+      <div class="t" style="font-size:23pt">AI Calling Agent: Engineer Guide</div>
+      <div class="st">The complete picture of "Omar": goal, rules, architecture, plan and risks</div>
+    </div>
+    <div class="meta">Research and report by<br><b>Engr Abdullah Bukhari</b><br>Snr. SWE, HoplonCo<br>3 October 2026 · Version 1.0</div>
+  </div>
+
+  <div class="callout blue"><b>Read this first.</b> This guide gives you the full project in short sections. Each section has a diagram or a chart. The source of each decision is a ticket in <code>.scratch/calling-agent/issues/</code>. The glossary is in <code>CONTEXT.md</code>. Use the words from the glossary. Do not use other words for the same things.</div>
+
+  <h2><span class="n">0</span>The project on one page</h2>
+  <svg viewBox="0 0 740 470" width="100%" height="470" role="img" aria-label="Mind map of the project">
+    <g font-size="10.5">
+      <!-- center -->
+      <ellipse cx="370" cy="235" rx="92" ry="40" fill="#0B2E6B"/>
+      <text x="370" y="230" text-anchor="middle" fill="#fff" font-weight="700" font-size="13">Omar</text>
+      <text x="370" y="248" text-anchor="middle" fill="#C9DAF5" font-size="10">AI Calling Agent</text>
+      <!-- branches -->
+      <g stroke="#1F5FBF" stroke-width="2" fill="none">
+        <path d="M300,212 C250,150 200,110 150,95"/><path d="M440,212 C490,150 540,110 590,95"/>
+        <path d="M278,235 L190,235"/><path d="M462,235 L550,235"/>
+        <path d="M300,258 C250,320 200,360 150,375"/><path d="M440,258 C490,320 540,360 590,375"/>
+        <path d="M370,195 L370,135"/><path d="M370,275 L370,335"/>
+      </g>
+      <!-- nodes -->
+      <g>
+        <rect x="20" y="40" width="200" height="98" rx="9" fill="#E8F0FB" stroke="#1F5FBF"/>
+        <text x="32" y="60" font-weight="700" fill="#0B2E6B">Goal</text>
+        <text x="32" y="78" fill="#14213D">Call each Lead from the form.</text>
+        <text x="32" y="94" fill="#14213D">Find Intent to Buy.</text>
+        <text x="32" y="110" fill="#14213D">Book a Discovery Call.</text>
+        <text x="32" y="126" fill="#46526B" font-size="9.5">UAE, English, outbound only</text>
+
+        <rect x="520" y="40" width="200" height="98" rx="9" fill="#E8F0FB" stroke="#1F5FBF"/>
+        <text x="532" y="60" font-weight="700" fill="#0B2E6B">Rules (law + ours)</text>
+        <text x="532" y="78" fill="#14213D">Legal opening, recording notice</text>
+        <text x="532" y="94" fill="#14213D">Calls 10:00–17:30, max 3 tries</text>
+        <text x="532" y="110" fill="#14213D">No price, no timeline</text>
+        <text x="532" y="126" fill="#14213D">Honest "yes" if asked "AI?"</text>
+
+        <rect x="270" y="58" width="200" height="74" rx="9" fill="#E8F0FB" stroke="#1F5FBF"/>
+        <text x="282" y="78" font-weight="700" fill="#0B2E6B">Persona</text>
+        <text x="282" y="96" fill="#14213D">Omar, male, international English</text>
+        <text x="282" y="112" fill="#14213D">"client coordinator"</text>
+        <text x="282" y="126" fill="#46526B" font-size="9.5">calm first, then talkative</text>
+
+        <rect x="20" y="190" width="168" height="90" rx="9" fill="#E8F0FB" stroke="#1F5FBF"/>
+        <text x="32" y="210" font-weight="700" fill="#0B2E6B">Data</text>
+        <text x="32" y="228" fill="#14213D">Lead, Submission</text>
+        <text x="32" y="244" fill="#14213D">Call Attempt, Connected Call</text>
+        <text x="32" y="260" fill="#14213D">Discovery Call, Event log</text>
+
+        <rect x="552" y="190" width="168" height="90" rx="9" fill="#E8F0FB" stroke="#1F5FBF"/>
+        <text x="564" y="210" font-weight="700" fill="#0B2E6B">Stack</text>
+        <text x="564" y="228" fill="#14213D">LiveKit Agents + Twilio SIP</text>
+        <text x="564" y="244" fill="#14213D">Python, FastAPI, Next.js</text>
+        <text x="564" y="260" fill="#14213D">Postgres, Redis, Celery</text>
+        <text x="564" y="274" fill="#46526B" font-size="9.5">Azure, Ireland (v1)</text>
+
+        <rect x="20" y="330" width="200" height="98" rx="9" fill="#E8F0FB" stroke="#1F5FBF"/>
+        <text x="32" y="350" font-weight="700" fill="#0B2E6B">AI providers</text>
+        <text x="32" y="368" fill="#14213D">Listen: Deepgram Flux (EU)</text>
+        <text x="32" y="384" fill="#14213D">Think: Qwen3.8-27B, own GPU</text>
+        <text x="32" y="400" fill="#14213D">Speak: Cartesia (EU)</text>
+        <text x="32" y="416" fill="#46526B" font-size="9.5">Backups: DeepSeek, ElevenLabs</text>
+
+        <rect x="520" y="330" width="200" height="98" rx="9" fill="#E8F0FB" stroke="#1F5FBF"/>
+        <text x="532" y="350" font-weight="700" fill="#0B2E6B">Quality</text>
+        <text x="532" y="368" fill="#14213D">Simulated Leads on each PR</text>
+        <text x="532" y="384" fill="#14213D">Jev judges, Sonnet 5 escalation</text>
+        <text x="532" y="400" fill="#14213D">Langfuse traces per call</text>
+        <text x="532" y="416" fill="#14213D">Each failure becomes a test</text>
+
+        <rect x="270" y="338" width="200" height="94" rx="9" fill="#FDF1F0" stroke="#B42318"/>
+        <text x="282" y="358" font-weight="700" fill="#B42318">Risks + legal</text>
+        <text x="282" y="376" fill="#14213D">R1 local caller number</text>
+        <text x="282" y="392" fill="#14213D">R2 telemarketing approval</text>
+        <text x="282" y="408" fill="#14213D">Owner: legal team</text>
+        <text x="282" y="424" fill="#46526B" font-size="9.5">blocks soft launch (M4)</text>
+      </g>
+    </g>
+  </svg>
+
+  <h2>Contents</h2>
+  <div class="toc">
+    <div><b>1</b>Goal, scope and words</div><div><b>2</b>Journeys: Lead and Manager</div>
+    <div><b>3</b>The Connected Call flow</div><div><b>4</b>Lead lifecycle and data model</div>
+    <div><b>5</b>Architecture</div><div><b>6</b>Latency</div>
+    <div><b>7</b>Calling policy and booking</div><div><b>8</b>Ingestion and dashboard</div>
+    <div><b>9</b>Evals and observability</div><div><b>10</b>Failures, security, compliance</div>
+    <div><b>11</b>Infrastructure and cost</div><div><b>12</b>Risks</div>
+    <div><b>13</b>Build plan and parallel lanes</div><div><b>14</b>Open items and file map</div>
+  </div>
+  <div class="foot"><span>Hoplon &amp; Co · AI Calling Agent · Engineer Guide · Research and report by Engr Abdullah Bukhari, Snr. SWE, HoplonCo</span><span>Page 1</span></div>
+</div>
+
+<!-- ===================== PAGE 2: GOAL / SCOPE / GLOSSARY ===================== -->
+<div class="page">
+  <div class="band slim"><div class="t">1 · Goal, scope and words</div><img src="../assets/hoplon-logo.png" alt=""></div>
+
+  <h2><span class="n">1</span>Goal</h2>
+  <p>Hoplon &amp; Co gets Leads from the form on hoplonco.com. The Calling Agent (Omar) calls each Lead. Omar gives the information that the Lead asked for. Omar finds Intent to Buy. Then Omar books a Discovery Call with the Manager.</p>
+  <p>This project is also a portfolio project. Each decision must be clear and explained.</p>
+
+  <h3>Scope in three columns</h3>
+  <div class="grid3">
+    <div class="card"><h3>v1 (this plan)</h3><ul style="margin:0">
+      <li>Outbound calls only</li><li>English only</li><li>UAE Leads only</li><li>Twilio + LiveKit, Azure Ireland</li><li>Excel and Gmail ingestion</li><li>Dashboard, admin only</li></ul></div>
+    <div class="card"><h3>v2 (later)</h3><ul style="margin:0">
+      <li>All parts in Azure UAE North</li><li>e&amp;/du SIP trunk</li><li>Self-hosted STT and TTS</li><li>Temporal for the Lead journey</li></ul></div>
+    <div class="card" style="background:#F3F5F9;border-color:#DDE3EC"><h3>Out of scope</h3><ul style="margin:0">
+      <li>CRM updates</li><li>Arabic or other languages</li><li>Inbound calls</li><li>Product for clients</li><li>WhatsApp (calls are blocked in UAE)</li><li>Live transfer to the Manager</li></ul></div>
+  </div>
+
+  <h2><span class="n">1.1</span>Glossary (from CONTEXT.md)</h2>
+  <table>
+    <tr><th style="width:24%">Term</th><th>Meaning</th><th style="width:22%">Do not say</th></tr>
+    <tr><td><b>Lead</b></td><td>A person who showed interest through our web form. Not qualified yet.</td><td>prospect, contact</td></tr>
+    <tr><td><b>Submission</b></td><td>One filled-in web form. One Lead can have many.</td><td>enquiry, form entry</td></tr>
+    <tr><td><b>Calling Agent</b></td><td>The AI system that calls Leads and talks by voice. Persona name: Omar.</td><td>bot, dialer</td></tr>
+    <tr><td><b>Call Attempt</b></td><td>Any outbound dial to a Lead. The Lead can answer or not.</td><td>dial</td></tr>
+    <tr><td><b>Connected Call</b></td><td>A Call Attempt with a live talk. It tries to find Intent to Buy and book a Discovery Call.</td><td>sales call, cold call</td></tr>
+    <tr><td><b>Intent to Buy</b></td><td>The Lead says "yes", asks about price, or asks to talk to a person.</td><td>BANT, score</td></tr>
+    <tr><td><b>Qualified Lead</b></td><td>A Lead who showed Intent to Buy on a Connected Call.</td><td>—</td></tr>
+    <tr><td><b>Parked Lead</b></td><td>No Intent to Buy, but the Lead did not reject contact.</td><td>dead lead</td></tr>
+    <tr><td><b>Opted-out Lead</b></td><td>The Lead rejected contact. We never call again.</td><td>DNC lead</td></tr>
+    <tr><td><b>Unreachable Lead</b></td><td>The Lead did not answer any permitted Call Attempt.</td><td>dead number</td></tr>
+    <tr><td><b>Discovery Call</b></td><td>A 30-minute meeting with the Manager. Budget and timeline are discussed only here.</td><td>demo, appointment</td></tr>
+    <tr><td><b>Manager</b></td><td>The human who hosts Discovery Calls. Omar says "my manager".</td><td>"a human"</td></tr>
+  </table>
+  <div class="foot"><span>Hoplon &amp; Co · AI Calling Agent · Engineer Guide · Research and report by Engr Abdullah Bukhari, Snr. SWE, HoplonCo</span><span>Page 2</span></div>
+</div>
+
+<!-- ===================== PAGE 3: JOURNEYS ===================== -->
+<div class="page">
+  <div class="band slim"><div class="t">2 · Journeys: Lead and Manager</div><img src="../assets/hoplon-logo.png" alt=""></div>
+
+  <h2><span class="n">2</span>The Lead journey</h2>
+  <svg viewBox="0 0 740 240" width="100%" height="240" role="img" aria-label="Lead journey">
+    <g font-size="10">
+      <line x1="20" y1="70" x2="720" y2="70" stroke="#C9D6EC" stroke-width="6" stroke-linecap="round"/>
+      <g>
+        <circle cx="45" cy="70" r="14" fill="#1F5FBF"/><text x="45" y="74" text-anchor="middle" fill="#fff" font-weight="700">1</text>
+        <circle cx="160" cy="70" r="14" fill="#1F5FBF"/><text x="160" y="74" text-anchor="middle" fill="#fff" font-weight="700">2</text>
+        <circle cx="275" cy="70" r="14" fill="#1F5FBF"/><text x="275" y="74" text-anchor="middle" fill="#fff" font-weight="700">3</text>
+        <circle cx="390" cy="70" r="14" fill="#1F5FBF"/><text x="390" y="74" text-anchor="middle" fill="#fff" font-weight="700">4</text>
+        <circle cx="505" cy="70" r="14" fill="#1F5FBF"/><text x="505" y="74" text-anchor="middle" fill="#fff" font-weight="700">5</text>
+        <circle cx="620" cy="70" r="14" fill="#0B2E6B"/><text x="620" y="74" text-anchor="middle" fill="#fff" font-weight="700">6</text>
+        <circle cx="705" cy="70" r="14" fill="#0E7A3E"/><text x="705" y="74" text-anchor="middle" fill="#fff" font-weight="700">✓</text>
+      </g>
+      <g text-anchor="middle">
+        <text x="45" y="34" font-weight="700" fill="#0B2E6B">Form</text><text x="45" y="48" fill="#46526B">website</text>
+        <text x="160" y="34" font-weight="700" fill="#0B2E6B">Ingest</text><text x="160" y="48" fill="#46526B">Gmail / Excel</text>
+        <text x="275" y="34" font-weight="700" fill="#0B2E6B">Pre-dial gate</text><text x="275" y="48" fill="#46526B">DNC, hours, tries</text>
+        <text x="390" y="34" font-weight="700" fill="#0B2E6B">Dial</text><text x="390" y="48" fill="#46526B">Twilio → LiveKit</text>
+        <text x="505" y="34" font-weight="700" fill="#0B2E6B">Talk</text><text x="505" y="48" fill="#46526B">Connected Call</text>
+        <text x="620" y="34" font-weight="700" fill="#0B2E6B">Book</text><text x="620" y="48" fill="#46526B">calendar + invite</text>
+        <text x="705" y="34" font-weight="700" fill="#0E7A3E">Done</text>
+      </g>
+      <g fill="#14213D">
+        <text x="45" y="102" text-anchor="middle">t = 0</text>
+        <text x="160" y="102" text-anchor="middle">&lt; 1 min</text>
+        <text x="275" y="102" text-anchor="middle">checks pass</text>
+        <text x="390" y="102" text-anchor="middle">&lt; 5 min</text>
+        <text x="505" y="102" text-anchor="middle">2–4 min</text>
+        <text x="620" y="102" text-anchor="middle">"booked" only</text>
+        <text x="620" y="115" text-anchor="middle">after confirm</text>
+      </g>
+      <!-- branch outcomes -->
+      <rect x="250" y="140" width="470" height="92" rx="8" fill="#F6F9FE" stroke="#C9D6EC"/>
+      <text x="262" y="160" font-weight="700" fill="#0B2E6B">Other outcomes</text>
+      <g fill="#14213D">
+        <text x="262" y="180">No answer → retry next day at the other time of day (max 3 Call Attempts)</text>
+        <text x="262" y="196">"Call me later" → callback in legal hours (max 2, not counted as a retry)</text>
+        <text x="262" y="212">No Intent to Buy → Parked Lead, info by email</text>
+        <text x="262" y="228">"Do not call me" → Opted-out Lead, never called again</text>
+      </g>
+      <line x1="505" y1="86" x2="505" y2="138" stroke="#7A859C" stroke-dasharray="3 3" marker-end="url(#arg)"/>
+      <text x="20" y="160" font-weight="700" fill="#0B2E6B">Speed-to-lead</text>
+      <text x="20" y="176" fill="#14213D">A new Lead gets a call</text>
+      <text x="20" y="192" fill="#14213D">some minutes after the form.</text>
+      <text x="20" y="208" fill="#14213D">New Leads always go before</text>
+      <text x="20" y="224" fill="#14213D">old backlog Leads.</text>
+    </g>
+  </svg>
+
+  <h2><span class="n">2.1</span>The Manager's day</h2>
+  <div class="grid4">
+    <div class="card"><h3>Morning</h3>Open the dashboard Home. See new bookings, flags and cost.</div>
+    <div class="card"><h3>Before a meeting</h3>Read the prep brief: summary, Intent to Buy evidence, transcript link.</div>
+    <div class="card"><h3>After a meeting</h3>Click Attended, No-show, Won or Lost. This measures quality.</div>
+    <div class="card"><h3>Weekly</h3>Review flagged calls. Label transcripts. Start the next backlog batch.</div>
+  </div>
+
+  <h2><span class="n">2.2</span>Backlog plan and soft launch</h2>
+  <svg viewBox="0 0 740 120" width="100%" height="120" role="img" aria-label="Soft launch batches">
+    <g font-size="10">
+      <rect x="10" y="40" width="70" height="40" rx="6" fill="#2a78d6"/><text x="45" y="64" text-anchor="middle" fill="#fff" font-weight="700">10</text>
+      <text x="45" y="98" text-anchor="middle" fill="#14213D">review all</text>
+      <rect x="120" y="30" width="120" height="50" rx="6" fill="#2a78d6"/><text x="180" y="60" text-anchor="middle" fill="#fff" font-weight="700">25</text>
+      <text x="180" y="98" text-anchor="middle" fill="#14213D">spot-check</text>
+      <rect x="280" y="14" width="300" height="66" rx="6" fill="#0B2E6B"/><text x="430" y="52" text-anchor="middle" fill="#fff" font-weight="700">Full pace: 30 backlog dials/day, 2 at once</text>
+      <text x="430" y="98" text-anchor="middle" fill="#14213D">pause if fewer than 5 free slots in 7 days</text>
+      <line x1="80" y1="60" x2="118" y2="60" stroke="#1F5FBF" stroke-width="2" marker-end="url(#ar)"/>
+      <line x1="240" y1="55" x2="278" y2="55" stroke="#1F5FBF" stroke-width="2" marker-end="url(#ar)"/>
+      <text x="610" y="40" fill="#0B2E6B" font-weight="700">Gate between steps:</text>
+      <text x="610" y="56" fill="#14213D">0 rule breaches</text>
+      <text x="610" y="72" fill="#14213D">Manager OK on tone</text>
+      <text x="610" y="88" fill="#14213D">newest Leads first</text>
+    </g>
+  </svg>
+  <p class="small">Old Leads (more than 30 days) hear a different opening: "You contacted us in March about an app. Are you still interested?" Non-UAE numbers are skipped and flagged.</p>
+  <div class="foot"><span>Hoplon &amp; Co · AI Calling Agent · Engineer Guide · Research and report by Engr Abdullah Bukhari, Snr. SWE, HoplonCo</span><span>Page 3</span></div>
+</div>
+
+<!-- ===================== PAGE 4: CALL FLOW ===================== -->
+<div class="page">
+  <div class="band slim"><div class="t">3 · The Connected Call flow</div><img src="../assets/hoplon-logo.png" alt=""></div>
+
+  <p>Code owns the call state machine (ADR 0001). The LLM writes the words inside each stage. The LLM never decides alone to skip a rule. A clickable prototype is in <code>.scratch/calling-agent/prototypes/PROTOTYPE-call-flow.html</code>.</p>
+  <h2><span class="n">3</span>Stages of a Connected Call</h2>
+  <svg viewBox="0 -16 740 346" width="100%" height="346" role="img" aria-label="Call state machine">
+    <g font-size="10">
+      <!-- main row -->
+      <g>
+        <rect x="6" y="20" width="92" height="44" rx="8" fill="#E8F0FB" stroke="#1F5FBF"/><text x="52" y="40" text-anchor="middle" font-weight="700" fill="#0B2E6B">Dialing</text><text x="52" y="54" text-anchor="middle" fill="#46526B" font-size="9">Call Attempt</text>
+        <rect x="118" y="20" width="92" height="44" rx="8" fill="#E8F0FB" stroke="#1F5FBF"/><text x="164" y="40" text-anchor="middle" font-weight="700" fill="#0B2E6B">Identity</text><text x="164" y="54" text-anchor="middle" fill="#46526B" font-size="9">"Is this Ahmed?"</text>
+        <rect x="230" y="20" width="104" height="44" rx="8" fill="#0B2E6B"/><text x="282" y="40" text-anchor="middle" font-weight="700" fill="#fff">Legal opening</text><text x="282" y="54" text-anchor="middle" fill="#C9DAF5" font-size="9">scripted by code</text>
+        <rect x="354" y="20" width="92" height="44" rx="8" fill="#E8F0FB" stroke="#1F5FBF"/><text x="400" y="40" text-anchor="middle" font-weight="700" fill="#0B2E6B">Info</text><text x="400" y="54" text-anchor="middle" fill="#46526B" font-size="9">≥ 2 rapport turns</text>
+        <rect x="466" y="20" width="104" height="44" rx="8" fill="#E8F0FB" stroke="#1F5FBF"/><text x="518" y="40" text-anchor="middle" font-weight="700" fill="#0B2E6B">Intent probe</text><text x="518" y="54" text-anchor="middle" fill="#46526B" font-size="9">≤ 2 objections</text>
+        <rect x="590" y="20" width="144" height="44" rx="8" fill="#0E7A3E"/><text x="662" y="40" text-anchor="middle" font-weight="700" fill="#fff">Booking</text><text x="662" y="54" text-anchor="middle" fill="#D9F2E3" font-size="9">preference → 2 slots × 2</text>
+      </g>
+      <g stroke="#1F5FBF" stroke-width="2"><line x1="98" y1="42" x2="116" y2="42" marker-end="url(#ar)"/><line x1="210" y1="42" x2="228" y2="42" marker-end="url(#ar)"/><line x1="334" y1="42" x2="352" y2="42" marker-end="url(#ar)"/><line x1="446" y1="42" x2="464" y2="42" marker-end="url(#ar)"/><line x1="570" y1="42" x2="588" y2="42" marker-end="url(#ar)"/></g>
+      <!-- shortcut: price / ask manager -->
+      <path d="M400,20 C420,0 640,0 660,18" stroke="#0E7A3E" stroke-width="1.5" fill="none" stroke-dasharray="4 3" marker-end="url(#ar)"/>
+      <text x="530" y="-4" text-anchor="middle" fill="#0E7A3E" font-size="9">price question or "talk to someone" = Intent to Buy</text>
+      <!-- booking sub-steps -->
+      <rect x="590" y="88" width="144" height="118" rx="8" fill="#F6F9FE" stroke="#C9D6EC"/>
+      <text x="600" y="106" fill="#0B2E6B" font-weight="700">Booking sub-steps</text>
+      <text x="600" y="124" fill="#14213D">1. Ask preference</text>
+      <text x="600" y="140" fill="#14213D">2. Offer 2 slots (freeBusy)</text>
+      <text x="600" y="156" fill="#14213D">3. Confirm email domain</text>
+      <text x="600" y="172" fill="#14213D">4. Re-check, insert event</text>
+      <text x="600" y="188" fill="#14213D">5. Say "booked" only now</text>
+      <text x="600" y="202" fill="#46526B" font-size="9">no fit × 2 → email booking link</text>
+      <line x1="662" y1="64" x2="662" y2="86" stroke="#1F5FBF" stroke-width="1.5" marker-end="url(#ar)"/>
+      <!-- end states -->
+      <text x="6" y="112" fill="#0B2E6B" font-weight="700">End states (Lead status after the call)</text>
+      <g>
+        <rect x="6" y="122" width="120" height="34" rx="6" fill="#fff" stroke="#7A859C"/><text x="66" y="143" text-anchor="middle" fill="#14213D">No answer / voicemail</text>
+        <rect x="136" y="122" width="96" height="34" rx="6" fill="#fff" stroke="#7A859C"/><text x="184" y="143" text-anchor="middle" fill="#14213D">Wrong person</text>
+        <rect x="242" y="122" width="96" height="34" rx="6" fill="#fff" stroke="#7A859C"/><text x="290" y="143" text-anchor="middle" fill="#14213D">Callback</text>
+        <rect x="348" y="122" width="108" height="34" rx="6" fill="#FFF6E5" stroke="#B26B00"/><text x="402" y="143" text-anchor="middle" fill="#14213D">Parked Lead</text>
+        <rect x="466" y="122" width="108" height="34" rx="6" fill="#FDF1F0" stroke="#B42318"/><text x="520" y="143" text-anchor="middle" fill="#14213D">Opted-out Lead</text>
+      </g>
+      <g stroke="#7A859C" stroke-dasharray="3 3"><line x1="52" y1="64" x2="60" y2="120" marker-end="url(#arg)"/><line x1="164" y1="64" x2="180" y2="120" marker-end="url(#arg)"/><line x1="290" y1="64" x2="290" y2="120" marker-end="url(#arg)"/><line x1="410" y1="64" x2="404" y2="120" marker-end="url(#arg)"/><line x1="518" y1="64" x2="520" y2="120" marker-end="url(#arg)"/></g>
+      <!-- side paths -->
+      <text x="6" y="190" fill="#0B2E6B" font-weight="700">Side paths (any live stage)</text>
+      <g fill="#14213D">
+        <text x="6" y="208">"Are you a bot?" → "Yes, I'm Hoplon's AI assistant." Then continue.</text>
+        <text x="6" y="224">Prompt injection → light laugh, "Nice try!", back to the topic.</text>
+        <text x="6" y="240">Arabic only → "My manager speaks English. OK?" No → Parked (needs Arabic).</text>
+        <text x="6" y="256">"I don't want recording" → end call, email info → Parked (declined recording).</text>
+        <text x="6" y="272">"How much?" / "How long?" → "We adjust to your needs. My manager covers that."</text>
+      </g>
+      <rect x="440" y="226" width="294" height="96" rx="8" fill="#0B2E6B"/>
+      <text x="452" y="246" fill="#fff" font-weight="700">Guards enforced by code (never by prompt only)</text>
+      <g fill="#DCE7F8"><text x="452" y="264">• Legal order: company + reason → recording → "continue?"</text><text x="452" y="280">• No pitch before the Lead agrees to continue</text><text x="452" y="296">• No budget or timeline numbers</text><text x="452" y="312">• No "booked" before calendar confirms · max 10 min</text></g>
+    </g>
+  </svg>
+
+  <h2><span class="n">3.1</span>The opening (legal order)</h2>
+  <div class="card"><p style="margin:0">"Hi, is this <b>{first name}</b>?" → "Hi {first name}, this is <b>Omar from Hoplon and Co</b>. You filled in a form on our website about <b>{topic}</b>, so I'm calling with the information you asked for. <b>Just so you know, this call is recorded.</b> Is now a good time for two minutes?"</p></div>
+  <p class="small">Lines in the prototype are samples. The real agent writes natural words inside each stage. Persona values are configuration, not code.</p>
+  <h2><span class="n">3.2</span>Objections and answers (examples)</h2>
+  <table>
+    <tr><th style="width:30%">The Lead says</th><th>Omar does</th><th style="width:20%">Result</th></tr>
+    <tr><td>"Just send me an email."</td><td>Agrees. Says a short call with the Manager saves time. Offers 30 minutes this week. Max 2 tries.</td><td>3rd time → Parked</td></tr>
+    <tr><td>"How much will it cost?"</td><td>"It depends on your needs. We can adjust the budget. My manager covers that." Moves to booking.</td><td>Intent to Buy</td></tr>
+    <tr><td>"Can I talk to someone?"</td><td>"Of course. Let me connect you with my manager." Moves to booking.</td><td>Intent to Buy</td></tr>
+    <tr><td>"I'm busy, call me later."</td><td>Asks for a time. Agrees only inside the calling window.</td><td>Callback</td></tr>
+    <tr><td>"Just browsing, maybe next year."</td><td>Offers info by email. Ends the call warmly.</td><td>Parked</td></tr>
+    <tr><td>"Not interested. Don't call me."</td><td>"Understood, I won't call again." Ends the call.</td><td>Opted-out</td></tr>
+  </table>
+  <div class="foot"><span>Hoplon &amp; Co · AI Calling Agent · Engineer Guide · Research and report by Engr Abdullah Bukhari, Snr. SWE, HoplonCo</span><span>Page 4</span></div>
+</div>
+
+<!-- ===================== PAGE 5: LIFECYCLE + DATA MODEL ===================== -->
+<div class="page">
+  <div class="band slim"><div class="t">4 · Lead lifecycle and data model</div><img src="../assets/hoplon-logo.png" alt=""></div>
+
+  <h2><span class="n">4</span>Lead statuses</h2>
+  <p>The Lead status follows the Lead across all calls. The call state machine follows one call only. Do not mix them.</p>
+  <svg viewBox="0 -14 740 264" width="100%" height="264" role="img" aria-label="Lead status diagram">
+    <g font-size="10">
+      <g>
+        <rect x="6" y="100" width="70" height="36" rx="18" fill="#E8F0FB" stroke="#1F5FBF"/><text x="41" y="122" text-anchor="middle" fill="#0B2E6B" font-weight="700">New</text>
+        <rect x="104" y="100" width="76" height="36" rx="18" fill="#E8F0FB" stroke="#1F5FBF"/><text x="142" y="122" text-anchor="middle" fill="#0B2E6B" font-weight="700">Queued</text>
+        <rect x="210" y="100" width="76" height="36" rx="18" fill="#2a78d6"/><text x="248" y="122" text-anchor="middle" fill="#fff" font-weight="700">In call</text>
+        <rect x="330" y="18" width="128" height="36" rx="18" fill="#E8F0FB" stroke="#1F5FBF"/><text x="394" y="40" text-anchor="middle" fill="#0B2E6B">Retry scheduled</text>
+        <rect x="330" y="66" width="128" height="36" rx="18" fill="#E8F0FB" stroke="#1F5FBF"/><text x="394" y="88" text-anchor="middle" fill="#0B2E6B">Callback scheduled</text>
+        <rect x="330" y="118" width="128" height="36" rx="18" fill="#0E7A3E"/><text x="394" y="140" text-anchor="middle" fill="#fff" font-weight="700">Qualified</text>
+        <rect x="330" y="170" width="128" height="36" rx="18" fill="#FFF6E5" stroke="#B26B00"/><text x="394" y="192" text-anchor="middle" fill="#14213D">Parked (+ reason)</text>
+        <rect x="490" y="170" width="112" height="36" rx="18" fill="#FDF1F0" stroke="#B42318"/><text x="546" y="192" text-anchor="middle" fill="#14213D">Opted-out</text>
+        <rect x="490" y="18" width="112" height="36" rx="18" fill="#F3F5F9" stroke="#7A859C"/><text x="546" y="40" text-anchor="middle" fill="#14213D">Unreachable</text>
+        <rect x="490" y="104" width="112" height="28" rx="14" fill="#fff" stroke="#0E7A3E"/><text x="546" y="122" text-anchor="middle" fill="#0E7A3E">Booked</text>
+        <rect x="490" y="138" width="112" height="28" rx="14" fill="#fff" stroke="#0E7A3E"/><text x="546" y="156" text-anchor="middle" fill="#0E7A3E">Link sent</text>
+        <rect x="104" y="196" width="76" height="36" rx="18" fill="#F3F5F9" stroke="#7A859C"/><text x="142" y="218" text-anchor="middle" fill="#14213D">Invalid</text>
+      </g>
+      <g stroke="#1F5FBF" stroke-width="1.6" fill="none">
+        <line x1="76" y1="118" x2="102" y2="118" marker-end="url(#ar)"/><line x1="180" y1="118" x2="208" y2="118" marker-end="url(#ar)"/>
+        <path d="M286,110 C306,80 310,40 328,36" marker-end="url(#ar)"/><path d="M286,114 C306,100 312,86 328,84" marker-end="url(#ar)"/>
+        <line x1="286" y1="122" x2="328" y2="134" marker-end="url(#ar)"/><path d="M286,128 C306,160 310,186 328,188" marker-end="url(#ar)"/>
+        <line x1="458" y1="36" x2="488" y2="36" marker-end="url(#ar)"/><line x1="458" y1="132" x2="488" y2="120" marker-end="url(#ar)"/><line x1="458" y1="140" x2="488" y2="152" marker-end="url(#ar)"/>
+        <path d="M286,132 C350,250 470,230 500,206" marker-end="url(#ar)"/>
+        <path d="M394,18 C380,0 160,0 145,98" stroke-dasharray="4 3" marker-end="url(#ar)"/><path d="M394,66 C370,58 200,60 150,98" stroke-dasharray="4 3" marker-end="url(#ar)"/>
+        <line x1="41" y1="136" x2="102" y2="210" stroke="#7A859C" stroke-dasharray="3 3" marker-end="url(#arg)"/>
+      </g>
+      <text x="160" y="-4" fill="#46526B" font-size="9">retry / callback time reached → back to Queued</text>
+      <text x="6" y="236" fill="#46526B" font-size="9">spam, bad number,</text><text x="6" y="248" fill="#46526B" font-size="9">wrong person, non-UAE</text>
+      <rect x="626" y="18" width="110" height="188" rx="8" fill="#F6F9FE" stroke="#C9D6EC"/>
+      <text x="636" y="36" fill="#0B2E6B" font-weight="700">Manual (Admin)</text>
+      <g fill="#14213D"><text x="636" y="56">Re-queue Parked</text><text x="636" y="74">Mark "do not call"</text><text x="636" y="92">Fix phone/email</text><text x="636" y="110">Add notes</text><text x="636" y="128">Erase Lead</text><text x="636" y="146">Export Lead data</text></g>
+      <text x="636" y="170" fill="#46526B" font-size="9">Each change goes</text><text x="636" y="182" fill="#46526B" font-size="9">to the event log.</text>
+    </g>
+  </svg>
+
+  <h2><span class="n">4.1</span>Data model (simplified)</h2>
+  <svg viewBox="0 0 740 230" width="100%" height="230" role="img" aria-label="Entity relationship diagram">
+    <g font-size="9.5">
+      <g>
+        <rect x="6" y="20" width="150" height="110" rx="6" fill="#fff" stroke="#1F5FBF"/><rect x="6" y="20" width="150" height="22" rx="6" fill="#1F5FBF"/><text x="81" y="35" text-anchor="middle" fill="#fff" font-weight="700">Lead</text>
+        <text x="14" y="58" fill="#14213D">phone_e164 (unique)</text><text x="14" y="73" fill="#14213D">name, email</text><text x="14" y="88" fill="#14213D">status, park_reason</text><text x="14" y="103" fill="#14213D">service_topic</text><text x="14" y="118" fill="#14213D">consent_evidence</text>
+        <rect x="196" y="20" width="150" height="80" rx="6" fill="#fff" stroke="#1F5FBF"/><rect x="196" y="20" width="150" height="22" rx="6" fill="#1F5FBF"/><text x="271" y="35" text-anchor="middle" fill="#fff" font-weight="700">Submission</text>
+        <text x="204" y="58" fill="#14213D">message, submitted_at</text><text x="204" y="73" fill="#14213D">source (gmail/excel)</text><text x="204" y="88" fill="#14213D">gmail_message_id</text>
+        <rect x="196" y="122" width="150" height="100" rx="6" fill="#fff" stroke="#1F5FBF"/><rect x="196" y="122" width="150" height="22" rx="6" fill="#1F5FBF"/><text x="271" y="137" text-anchor="middle" fill="#fff" font-weight="700">Call Attempt</text>
+        <text x="204" y="160" fill="#14213D">call_sid, trace_id</text><text x="204" y="175" fill="#14213D">result: no-answer /</text><text x="204" y="188" fill="#14213D">voicemail / connected</text><text x="204" y="203" fill="#14213D">cost, started_at</text>
+        <rect x="386" y="122" width="160" height="100" rx="6" fill="#fff" stroke="#0B2E6B"/><rect x="386" y="122" width="160" height="22" rx="6" fill="#0B2E6B"/><text x="466" y="137" text-anchor="middle" fill="#fff" font-weight="700">Connected Call</text>
+        <text x="394" y="160" fill="#14213D">recording_url, transcript</text><text x="394" y="175" fill="#14213D">turn timings, outcome</text><text x="394" y="190" fill="#14213D">intent evidence</text><text x="394" y="205" fill="#14213D">judge scores</text>
+        <rect x="586" y="122" width="148" height="88" rx="6" fill="#fff" stroke="#0E7A3E"/><rect x="586" y="122" width="148" height="22" rx="6" fill="#0E7A3E"/><text x="660" y="137" text-anchor="middle" fill="#fff" font-weight="700">Discovery Call</text>
+        <text x="594" y="160" fill="#14213D">calendar_event_id</text><text x="594" y="175" fill="#14213D">starts_at, meet_link</text><text x="594" y="190" fill="#14213D">result: attended / no-</text><text x="594" y="203" fill="#14213D">show / won / lost</text>
+        <rect x="386" y="20" width="160" height="80" rx="6" fill="#fff" stroke="#7A859C"/><rect x="386" y="20" width="160" height="22" rx="6" fill="#7A859C"/><text x="466" y="35" text-anchor="middle" fill="#fff" font-weight="700">Event (append-only)</text>
+        <text x="394" y="58" fill="#14213D">lead_id, type, actor</text><text x="394" y="73" fill="#14213D">reason, at</text><text x="394" y="88" fill="#14213D">→ legal call register</text>
+      </g>
+      <g stroke="#1F5FBF" stroke-width="1.4" fill="none"><line x1="156" y1="60" x2="194" y2="60"/><text x="160" y="54" fill="#46526B" stroke="none">1 : n</text>
+        <path d="M156,100 C176,100 176,170 194,170"/><text x="160" y="150" fill="#46526B" stroke="none">1 : n</text>
+        <line x1="346" y1="172" x2="384" y2="172"/><text x="350" y="166" fill="#46526B" stroke="none">1 : 0..1</text>
+        <line x1="546" y1="166" x2="584" y2="166"/><text x="550" y="160" fill="#46526B" stroke="none">1 : 0..1</text>
+        <line x1="156" y1="40" x2="384" y2="40" stroke="#7A859C" stroke-dasharray="3 3"/><text x="300" y="14" fill="#46526B" stroke="none">each change writes an Event</text></g>
+    </g>
+  </svg>
+  <p class="small">Retention: recordings and transcripts are kept 12 months by default (configurable). A cleanup job deletes old data. "Erase Lead" removes personal data and keeps an anonymous record.</p>
+  <div class="foot"><span>Hoplon &amp; Co · AI Calling Agent · Engineer Guide · Research and report by Engr Abdullah Bukhari, Snr. SWE, HoplonCo</span><span>Page 5</span></div>
+</div>
+
+<!-- ===================== PAGE 6: ARCHITECTURE ===================== -->
+<div class="page">
+  <div class="band slim"><div class="t">5 · Architecture</div><img src="../assets/hoplon-logo.png" alt=""></div>
+
+  <h2><span class="n">5</span>System view (v1)</h2>
+  <svg viewBox="0 0 740 400" width="100%" height="400" role="img" aria-label="Architecture diagram">
+    <g font-size="10">
+      <!-- external left -->
+      <rect x="6" y="40" width="110" height="50" rx="8" fill="#fff" stroke="#1F5FBF"/><text x="61" y="62" text-anchor="middle" font-weight="700" fill="#0B2E6B">Lead's phone</text><text x="61" y="78" text-anchor="middle" fill="#46526B" font-size="9">UAE</text>
+      <rect x="6" y="120" width="110" height="50" rx="8" fill="#fff" stroke="#1F5FBF"/><text x="61" y="142" text-anchor="middle" font-weight="700" fill="#0B2E6B">Twilio</text><text x="61" y="158" text-anchor="middle" fill="#46526B" font-size="9">Elastic SIP, Ireland</text>
+      <rect x="6" y="200" width="110" height="50" rx="8" fill="#fff" stroke="#1F5FBF"/><text x="61" y="222" text-anchor="middle" font-weight="700" fill="#0B2E6B">LiveKit Cloud</text><text x="61" y="238" text-anchor="middle" fill="#46526B" font-size="9">SIP + media, EU</text>
+      <rect x="6" y="300" width="110" height="50" rx="8" fill="#fff" stroke="#1F5FBF"/><text x="61" y="322" text-anchor="middle" font-weight="700" fill="#0B2E6B">Gmail API</text><text x="61" y="338" text-anchor="middle" fill="#46526B" font-size="9">info@ (Workspace)</text>
+      <g stroke="#1F5FBF" stroke-width="1.6"><line x1="61" y1="90" x2="61" y2="118" marker-end="url(#ar)"/><line x1="61" y1="170" x2="61" y2="198" marker-end="url(#ar)"/></g>
+      <!-- azure box -->
+      <rect x="140" y="10" width="440" height="380" rx="12" fill="#F6F9FE" stroke="#1F5FBF" stroke-dasharray="5 4"/>
+      <text x="152" y="28" fill="#1F5FBF" font-weight="700">Microsoft Azure · North Europe (Ireland) · one VNet</text>
+      <!-- app zone (left) -->
+      <rect x="156" y="40" width="190" height="200" rx="10" fill="#fff" stroke="#1F5FBF"/>
+      <text x="166" y="58" fill="#0B2E6B" font-weight="700">App (Container Apps)</text>
+      <g fill="#14213D"><text x="168" y="80">FastAPI: API + webhooks</text><text x="168" y="98">Celery workers:</text><text x="178" y="113" font-size="9.5">· dialer + pre-dial gate</text><text x="178" y="128" font-size="9.5">· ingestion (Excel, Gmail)</text><text x="178" y="143" font-size="9.5">· post-call agents</text><text x="178" y="158" font-size="9.5">· retention cleanup</text><text x="168" y="178">Celery beat: schedules</text><text x="168" y="196">Next.js dashboard</text><text x="168" y="214" fill="#46526B" font-size="9">Google sign-in, admin only</text></g>
+      <!-- voice zone (right, next to providers) -->
+      <rect x="366" y="40" width="200" height="200" rx="10" fill="#E8F0FB" stroke="#1F5FBF"/>
+      <text x="376" y="58" fill="#0B2E6B" font-weight="700">Voice (latency-critical)</text>
+      <rect x="378" y="66" width="176" height="62" rx="8" fill="#fff" stroke="#0B2E6B" stroke-width="1.5"/><text x="466" y="84" text-anchor="middle" fill="#0B2E6B" font-weight="700">GPU VM: Qwen3.8-27B</text><text x="466" y="99" text-anchor="middle" fill="#46526B" font-size="9">vLLM / SGLang, OpenAI API</text><text x="466" y="112" text-anchor="middle" fill="#46526B" font-size="9">on in calling hours only</text><text x="466" y="124" text-anchor="middle" fill="#46526B" font-size="9">~1 ms from the agent</text>
+      <rect x="378" y="150" width="176" height="80" rx="8" fill="#0B2E6B"/><text x="466" y="170" text-anchor="middle" fill="#fff" font-weight="700">LiveKit agent worker</text><text x="466" y="186" text-anchor="middle" fill="#C9DAF5" font-size="9">core/ call state machine</text><text x="466" y="200" text-anchor="middle" fill="#C9DAF5" font-size="9">turn detection, preemptive gen</text><text x="466" y="214" text-anchor="middle" fill="#C9DAF5" font-size="9">tools: calendar, outcome</text>
+      <line x1="466" y1="150" x2="466" y2="130" stroke="#0B2E6B" stroke-width="2" marker-end="url(#ar)"/>
+      <!-- data -->
+      <rect x="156" y="256" width="410" height="60" rx="10" fill="#fff" stroke="#1F5FBF"/>
+      <text x="166" y="274" fill="#0B2E6B" font-weight="700">Data</text>
+      <g fill="#14213D"><text x="166" y="294">Postgres (Flexible Server): durable record</text><text x="166" y="309">Redis (Managed): Celery broker, dialer locks, live status</text><text x="430" y="294">Blob: recordings</text><text x="430" y="309">Key Vault: secrets</text></g>
+      <rect x="156" y="326" width="410" height="54" rx="10" fill="#fff" stroke="#1F5FBF"/>
+      <text x="166" y="344" fill="#0B2E6B" font-weight="700">Observability</text>
+      <g fill="#14213D"><text x="166" y="362">OpenTelemetry → Langfuse (self-hosted): one trace per call, audio attached</text><text x="166" y="376" fill="#46526B" font-size="9">PII masked in logs · alerts by email/Slack</text></g>
+      <!-- external right -->
+      <rect x="600" y="40" width="134" height="44" rx="8" fill="#fff" stroke="#1F5FBF"/><text x="667" y="58" text-anchor="middle" font-weight="700" fill="#0B2E6B">Deepgram Flux</text><text x="667" y="74" text-anchor="middle" fill="#46526B" font-size="9">EU endpoint · listen</text>
+      <rect x="600" y="96" width="134" height="44" rx="8" fill="#fff" stroke="#1F5FBF"/><text x="667" y="114" text-anchor="middle" font-weight="700" fill="#0B2E6B">Cartesia Sonic</text><text x="667" y="130" text-anchor="middle" fill="#46526B" font-size="9">EU endpoint · speak</text>
+      <rect x="600" y="152" width="134" height="44" rx="8" fill="#fff" stroke="#0E7A3E"/><text x="667" y="170" text-anchor="middle" font-weight="700" fill="#0E7A3E">Google Calendar</text><text x="667" y="186" text-anchor="middle" fill="#46526B" font-size="9">freeBusy + insert</text>
+      <rect x="600" y="208" width="134" height="44" rx="8" fill="#fff" stroke="#7A859C"/><text x="667" y="226" text-anchor="middle" font-weight="700" fill="#14213D">Backups</text><text x="667" y="242" text-anchor="middle" fill="#46526B" font-size="9">DeepSeek · ElevenLabs</text>
+      <rect x="600" y="264" width="134" height="44" rx="8" fill="#fff" stroke="#7A859C"/><text x="667" y="282" text-anchor="middle" font-weight="700" fill="#14213D">Judges</text><text x="667" y="298" text-anchor="middle" fill="#46526B" font-size="9">Jev → Claude Sonnet 5</text>
+      <!-- links -->
+      <g stroke="#1F5FBF" stroke-width="1.6" fill="none">
+        <path d="M116,225 L130,225 C140,225 140,248 150,248 L440,248 C452,248 456,240 456,232" marker-end="url(#ar)"/>
+        <path d="M554,160 C580,160 580,62 598,62" marker-end="url(#ar)"/>
+        <path d="M554,175 C580,175 580,118 598,118" marker-end="url(#ar)"/>
+        <line x1="554" y1="190" x2="598" y2="176" marker-end="url(#ar)"/>
+        <path d="M554,214 C576,214 580,230 598,230" stroke="#7A859C" stroke-dasharray="3 3" marker-end="url(#arg)"/>
+        <line x1="116" y1="325" x2="154" y2="128" stroke-dasharray="4 3" marker-end="url(#ar)"/>
+        <line x1="346" y1="190" x2="376" y2="190" marker-end="url(#ar)"/>
+      </g>
+      <text x="361" y="184" fill="#46526B" font-size="8" text-anchor="middle">start</text><text x="300" y="262" fill="#46526B" font-size="8.5" text-anchor="middle" dy="-16">LiveKit → agent (audio)</text>
+    </g>
+  </svg>
+
+  <div class="grid2">
+    <div>
+      <h3>What we build, and what we use</h3>
+      <table><tr><th>We build</th><th>We use</th></tr>
+        <tr><td>Call state machine, guards</td><td>LiveKit Agents (open source)</td></tr>
+        <tr><td>Domain model, data, dialer</td><td>LiveKit Cloud SIP + media</td></tr>
+        <tr><td>Ingestion, dashboard</td><td>Twilio Elastic SIP Trunking</td></tr>
+        <tr><td>Evals harness, judges setup</td><td>Deepgram, Cartesia, Qwen weights</td></tr></table>
+      <p class="small">ADR 0002 records why we use LiveKit and do not hand-write the voice loop.</p>
+    </div>
+    <div>
+      <h3>Repo layout (monorepo, uv workspace)</h3>
+      <table><tr><th style="width:28%">Folder</th><th>Contents</th></tr>
+        <tr><td><code>core/</code></td><td>Domain, state machine, ports. No I/O. No dependencies.</td></tr>
+        <tr><td><code>voice/</code></td><td>LiveKit agent worker</td></tr>
+        <tr><td><code>app/</code></td><td>FastAPI, Celery, dialer, ingestion</td></tr>
+        <tr><td><code>web/</code></td><td>Next.js dashboard (UI only)</td></tr>
+        <tr><td><code>evals/</code></td><td>YAML scenarios, harness, judges</td></tr>
+        <tr><td><code>infra/</code></td><td>Terraform (azurerm)</td></tr></table>
+    </div>
+  </div>
+  <div class="foot"><span>Hoplon &amp; Co · AI Calling Agent · Engineer Guide · Research and report by Engr Abdullah Bukhari, Snr. SWE, HoplonCo</span><span>Page 6</span></div>
+</div>
+
+<!-- ===================== PAGE 7: LATENCY ===================== -->
+<div class="page">
+  <div class="band slim"><div class="t">6 · Latency</div><img src="../assets/hoplon-logo.png" alt=""></div>
+
+  <p>Latency is the time from the end of the Lead's speech to the start of Omar's voice. People reply in about 0.2–0.5 s. Slow replies feel robotic and reduce bookings.</p>
+  <h2><span class="n">6</span>Where the time goes (median estimate, ms)</h2>
+  <svg viewBox="0 0 740 230" width="100%" height="230" role="img" aria-label="Stacked latency per stage for three setups">
+    <g font-size="10">
+      <!-- axis -->
+      <g stroke="#E3EAF5"><line x1="150" y1="20" x2="150" y2="170"/><line x1="276" y1="20" x2="276" y2="170"/><line x1="402" y1="20" x2="402" y2="170"/><line x1="528" y1="20" x2="528" y2="170"/><line x1="654" y1="20" x2="654" y2="170"/></g>
+      <g fill="#7A859C" font-size="9" text-anchor="middle"><text x="150" y="184">0</text><text x="276" y="184">400</text><text x="402" y="184">800</text><text x="528" y="184">1200</text><text x="654" y="184">1600</text></g>
+      <!-- scale 0.315 px per ms -->
+      <text x="140" y="46" text-anchor="end" fill="#14213D">First plan (A)</text>
+      <rect x="150" y="30" width="78" height="26" fill="#2a78d6"/><rect x="230" y="30" width="86" height="26" fill="#eb6834"/><rect x="318" y="30" width="236" height="26" fill="#1baf7a"/><rect x="556" y="30" width="47" height="26" rx="3" fill="#4a3aa7"/>
+      <text x="610" y="47" fill="#14213D" font-weight="700">≈ 1.4–1.7 s</text>
+      <text x="140" y="96" text-anchor="end" fill="#14213D">v1 (this plan)</text>
+      <rect x="150" y="80" width="78" height="26" fill="#2a78d6"/><rect x="230" y="80" width="80" height="26" fill="#eb6834"/><rect x="312" y="80" width="30" height="26" fill="#1baf7a"/><rect x="344" y="80" width="47" height="26" rx="3" fill="#4a3aa7"/>
+      <text x="398" y="97" fill="#14213D" font-weight="700">≈ 0.75 s → 0.6–0.8 s with preemptive generation</text>
+      <text x="140" y="146" text-anchor="end" fill="#14213D">v2 (all UAE)</text>
+      <rect x="150" y="130" width="10" height="26" fill="#2a78d6"/><rect x="162" y="130" width="80" height="26" fill="#eb6834"/><rect x="244" y="130" width="30" height="26" fill="#1baf7a"/><rect x="276" y="130" width="30" height="26" rx="3" fill="#4a3aa7"/>
+      <text x="314" y="147" fill="#14213D" font-weight="700">≈ 0.5–0.7 s</text>
+      <!-- legend -->
+      <g transform="translate(150,200)"><rect width="12" height="12" fill="#2a78d6"/><text x="17" y="10" fill="#14213D">Network UAE ⇄ servers</text>
+        <rect x="160" width="12" height="12" fill="#eb6834"/><text x="177" y="10" fill="#14213D">Listen: end-of-turn</text>
+        <rect x="300" width="12" height="12" fill="#1baf7a"/><text x="317" y="10" fill="#14213D">Think: LLM first token</text>
+        <rect x="455" width="12" height="12" fill="#4a3aa7"/><text x="472" y="10" fill="#14213D">Speak: first audio</text></g>
+    </g>
+  </svg>
+  <p class="cap">Sources: research tickets 03 and 25. These are estimates, not measurements. Ticket 23 measures the LLM step. Real test calls recalibrate all steps.</p>
+
+  <h2><span class="n">6.1</span>How we cut the time</h2>
+  <svg viewBox="0 0 740 150" width="100%" height="150" role="img" aria-label="Preemptive generation timeline">
+    <g font-size="10">
+      <text x="6" y="22" fill="#0B2E6B" font-weight="700">Without preemptive generation</text>
+      <rect x="6" y="30" width="300" height="20" rx="3" fill="#C9D6EC"/><text x="156" y="44" text-anchor="middle" fill="#14213D">Lead speaks</text>
+      <rect x="308" y="30" width="80" height="20" fill="#eb6834"/><text x="348" y="44" text-anchor="middle" fill="#fff">wait</text>
+      <rect x="390" y="30" width="110" height="20" fill="#1baf7a"/><text x="445" y="44" text-anchor="middle" fill="#fff">LLM thinks</text>
+      <rect x="502" y="30" width="60" height="20" fill="#4a3aa7"/><text x="532" y="44" text-anchor="middle" fill="#fff">TTS</text>
+      <text x="570" y="44" fill="#14213D">Omar speaks</text>
+      <text x="6" y="82" fill="#0B2E6B" font-weight="700">With preemptive generation (LiveKit)</text>
+      <rect x="6" y="90" width="300" height="20" rx="3" fill="#C9D6EC"/><text x="156" y="104" text-anchor="middle" fill="#14213D">Lead speaks</text>
+      <rect x="230" y="114" width="110" height="18" fill="#1baf7a" opacity=".85"/><text x="285" y="127" text-anchor="middle" fill="#fff" font-size="9">LLM drafts early</text>
+      <rect x="308" y="90" width="50" height="20" fill="#eb6834"/><text x="333" y="104" text-anchor="middle" fill="#fff" font-size="9">wait</text>
+      <rect x="360" y="90" width="60" height="20" fill="#4a3aa7"/><text x="390" y="104" text-anchor="middle" fill="#fff">TTS</text>
+      <text x="428" y="104" fill="#14213D">Omar speaks (earlier)</text>
+      <line x1="420" y1="70" x2="562" y2="70" stroke="#0E7A3E" stroke-width="2" marker-end="url(#ar)"/>
+      <text x="491" y="64" text-anchor="middle" fill="#0E7A3E" font-weight="700">time saved</text>
+      <text x="440" y="132" fill="#46526B" font-size="9">If the Lead adds words, we discard the draft and start again.</text>
+    </g>
+  </svg>
+  <table>
+    <tr><th style="width:28%">Technique</th><th>What it does</th><th style="width:22%">Where</th></tr>
+    <tr><td>Own GPU next to the agent</td><td>No network and no queue for the LLM. First token in about 100 ms.</td><td>Azure GPU VM</td></tr>
+    <tr><td>Turn-detection model</td><td>Reads the words. Knows "finished" from "pause". Allows a 0.3 s wait, not 0.5 s.</td><td>Deepgram Flux (default) or LiveKit model</td></tr>
+    <tr><td>Preemptive generation</td><td>The LLM starts before the turn ends. Optional: preemptive TTS.</td><td>LiveKit setting</td></tr>
+    <tr><td>Stream by sentence</td><td>TTS starts on the first sentence. The LLM writes the rest.</td><td>LiveKit pipeline</td></tr>
+    <tr><td>Warm connections, prompt cache</td><td>No reconnect for each turn. The fixed prompt part is cached.</td><td>Agent worker</td></tr>
+    <tr><td>Calendar prefetch</td><td>Get free slots when Intent to Buy appears. Say a short line while booking.</td><td>Tools</td></tr>
+  </table>
+  <p class="small"><b>Targets (start values):</b> median turn gap ≤ 1.2 s and p95 ≤ 2.0 s as hard limits. The design goal is 0.6–0.8 s. Real calls set the final values.</p>
+  <div class="foot"><span>Hoplon &amp; Co · AI Calling Agent · Engineer Guide · Research and report by Engr Abdullah Bukhari, Snr. SWE, HoplonCo</span><span>Page 7</span></div>
+</div>
+
+<!-- ===================== PAGE 8: CALLING POLICY + BOOKING ===================== -->
+<div class="page">
+  <div class="band slim"><div class="t">7 · Calling policy and booking</div><img src="../assets/hoplon-logo.png" alt=""></div>
+
+  <h2><span class="n">7</span>When Omar may call (UAE time)</h2>
+  <svg viewBox="0 0 740 190" width="100%" height="190" role="img" aria-label="Weekly calling window">
+    <g font-size="10">
+      <g fill="#7A859C" font-size="9" text-anchor="middle">
+        <text x="110" y="16">08</text><text x="170" y="16">09</text><text x="230" y="16">10</text><text x="290" y="16">11</text><text x="350" y="16">12</text><text x="410" y="16">13</text><text x="470" y="16">14</text><text x="530" y="16">15</text><text x="590" y="16">16</text><text x="650" y="16">17</text><text x="710" y="16">18</text>
+      </g>
+      <g stroke="#E3EAF5"><line x1="110" y1="22" x2="110" y2="160"/><line x1="170" y1="22" x2="170" y2="160"/><line x1="230" y1="22" x2="230" y2="160"/><line x1="290" y1="22" x2="290" y2="160"/><line x1="350" y1="22" x2="350" y2="160"/><line x1="410" y1="22" x2="410" y2="160"/><line x1="470" y1="22" x2="470" y2="160"/><line x1="530" y1="22" x2="530" y2="160"/><line x1="590" y1="22" x2="590" y2="160"/><line x1="650" y1="22" x2="650" y2="160"/><line x1="710" y1="22" x2="710" y2="160"/></g>
+      <!-- legal window 9-18 -->
+      <rect x="170" y="24" width="540" height="134" fill="#F6F9FE" stroke="#C9D6EC" stroke-dasharray="4 3"/>
+      <g fill="#14213D" text-anchor="end"><text x="100" y="42">Monday</text><text x="100" y="64">Tuesday</text><text x="100" y="86">Wednesday</text><text x="100" y="108">Thursday</text><text x="100" y="130">Friday</text><text x="100" y="152">Sat / Sun</text></g>
+      <g fill="#2a78d6"><rect x="230" y="32" width="450" height="14" rx="3"/><rect x="230" y="54" width="450" height="14" rx="3"/><rect x="230" y="76" width="450" height="14" rx="3"/><rect x="230" y="98" width="450" height="14" rx="3"/><rect x="230" y="120" width="120" height="14" rx="3"/></g>
+      <text x="230" y="153" fill="#46526B">no calls (UAE weekend), no public holidays, shorter in Ramadan</text>
+      <text x="360" y="131" fill="#46526B" font-size="9">ends 12:00 (Friday prayer)</text>
+      <text x="710" y="176" text-anchor="end" fill="#46526B" font-size="9">dashed box = legal limit 09:00–18:00 · blue = our window (config)</text>
+    </g>
+  </svg>
+
+  <h2><span class="n">7.1</span>Call Attempt sequence (no answer)</h2>
+  <svg viewBox="0 0 740 110" width="100%" height="110" role="img" aria-label="Attempt sequence">
+    <g font-size="10">
+      <line x1="20" y1="40" x2="720" y2="40" stroke="#C9D6EC" stroke-width="4"/>
+      <circle cx="60" cy="40" r="12" fill="#2a78d6"/><text x="60" y="44" text-anchor="middle" fill="#fff" font-weight="700" font-size="9">1</text>
+      <circle cx="260" cy="40" r="12" fill="#2a78d6"/><text x="260" y="44" text-anchor="middle" fill="#fff" font-weight="700" font-size="9">2</text>
+      <circle cx="520" cy="40" r="12" fill="#2a78d6"/><text x="520" y="44" text-anchor="middle" fill="#fff" font-weight="700" font-size="9">3</text>
+      <rect x="640" y="26" width="80" height="28" rx="14" fill="#F3F5F9" stroke="#7A859C"/><text x="680" y="44" text-anchor="middle" fill="#14213D">Unreachable</text>
+      <g text-anchor="middle" fill="#14213D"><text x="60" y="72">Day 0, in minutes</text><text x="60" y="86" fill="#46526B" font-size="9">voicemail + email link</text>
+        <text x="260" y="72">Next calling day</text><text x="260" y="86" fill="#46526B" font-size="9">other time of day</text>
+        <text x="520" y="72">2 days later</text><text x="520" y="86" fill="#46526B" font-size="9">last try</text></g>
+      <text x="380" y="18" text-anchor="middle" fill="#B42318" font-size="9.5">Law: after no answer, max 1 retry per day and 2 per week. After "no": never again.</text>
+    </g>
+  </svg>
+
+  <h2><span class="n">7.2</span>Booking a Discovery Call</h2>
+  <div class="grid2">
+    <svg viewBox="0 0 360 230" width="100%" height="230" role="img" aria-label="Booking flow">
+      <g font-size="9.5">
+        <rect x="80" y="4" width="200" height="28" rx="6" fill="#E8F0FB" stroke="#1F5FBF"/><text x="180" y="22" text-anchor="middle" fill="#0B2E6B">Ask: early/late week? morning/afternoon?</text>
+        <rect x="80" y="46" width="200" height="28" rx="6" fill="#E8F0FB" stroke="#1F5FBF"/><text x="180" y="64" text-anchor="middle" fill="#0B2E6B">freeBusy → offer 2 slots</text>
+        <rect x="80" y="88" width="200" height="28" rx="6" fill="#E8F0FB" stroke="#1F5FBF"/><text x="180" y="106" text-anchor="middle" fill="#0B2E6B">Confirm email (domain only)</text>
+        <rect x="80" y="130" width="200" height="28" rx="6" fill="#E8F0FB" stroke="#1F5FBF"/><text x="180" y="148" text-anchor="middle" fill="#0B2E6B">Re-check, events.insert, sendUpdates=all</text>
+        <rect x="80" y="172" width="200" height="28" rx="6" fill="#0E7A3E"/><text x="180" y="190" text-anchor="middle" fill="#fff" font-weight="700">Calendar OK → say "booked"</text>
+        <g stroke="#1F5FBF" stroke-width="1.5"><line x1="180" y1="32" x2="180" y2="44" marker-end="url(#ar)"/><line x1="180" y1="74" x2="180" y2="86" marker-end="url(#ar)"/><line x1="180" y1="116" x2="180" y2="128" marker-end="url(#ar)"/><line x1="180" y1="158" x2="180" y2="170" marker-end="url(#ar)"/></g>
+        <path d="M280,60 C320,60 320,40 290,30" stroke="#B26B00" fill="none" stroke-dasharray="3 3" marker-end="url(#arg)"/><text x="284" y="86" fill="#B26B00">no fit</text><text x="284" y="98" fill="#B26B00">(max 2)</text>
+        <path d="M80,144 C30,144 30,64 78,60" stroke="#B42318" fill="none" stroke-dasharray="3 3" marker-end="url(#arr)"/><text x="2" y="100" fill="#B42318">slot</text><text x="2" y="112" fill="#B42318">taken</text>
+        <text x="180" y="222" text-anchor="middle" fill="#46526B">no fit after 2 rounds, or calendar error → email booking link</text>
+      </g>
+    </svg>
+    <div>
+      <table><tr><th>Rule</th><th>Value (config)</th></tr>
+        <tr><td>Length</td><td>30 min, Google Meet</td></tr>
+        <tr><td>Bookable time</td><td>Mon–Fri 10:00–18:00</td></tr>
+        <tr><td>Buffer</td><td>15 min around events</td></tr>
+        <tr><td>Window</td><td>2 h to 7 days ahead</td></tr>
+        <tr><td>Slots per offer</td><td>2 (never more)</td></tr>
+        <tr><td>Fallback</td><td>Email link (Google booking page)</td></tr>
+        <tr><td>Auth</td><td>Workspace Internal OAuth app</td></tr></table>
+      <p class="small">The invite shows only the title, the Meet link and a 3-line agenda. The Manager's private brief goes to the dashboard and to email. It never goes in the invite.</p>
+      <p class="small"><b>Callbacks:</b> Omar agrees only to times in the calling window. Max 2 callbacks for each Lead.</p>
+    </div>
+  </div>
+  <div class="foot"><span>Hoplon &amp; Co · AI Calling Agent · Engineer Guide · Research and report by Engr Abdullah Bukhari, Snr. SWE, HoplonCo</span><span>Page 8</span></div>
+</div>
+
+<!-- ===================== PAGE 9: INGESTION, DASHBOARD, EVALS ===================== -->
+<div class="page">
+  <div class="band slim"><div class="t">8–9 · Ingestion, dashboard, evals and observability</div><img src="../assets/hoplon-logo.png" alt=""></div>
+
+  <h2><span class="n">8</span>Ingestion</h2>
+  <svg viewBox="0 0 740 110" width="100%" height="110" role="img" aria-label="Ingestion pipeline">
+    <g font-size="9.8">
+      <rect x="4" y="10" width="118" height="36" rx="6" fill="#fff" stroke="#1F5FBF"/><text x="63" y="32" text-anchor="middle" fill="#0B2E6B">Gmail push + 1-min poll</text>
+      <rect x="4" y="60" width="118" height="36" rx="6" fill="#fff" stroke="#1F5FBF"/><text x="63" y="82" text-anchor="middle" fill="#0B2E6B">Excel upload</text>
+      <rect x="150" y="34" width="120" height="40" rx="6" fill="#E8F0FB" stroke="#1F5FBF"/><text x="210" y="51" text-anchor="middle" fill="#0B2E6B">Strict parser</text><text x="210" y="65" text-anchor="middle" fill="#46526B" font-size="8.8">LLM fallback</text>
+      <rect x="298" y="34" width="130" height="40" rx="6" fill="#E8F0FB" stroke="#1F5FBF"/><text x="363" y="51" text-anchor="middle" fill="#0B2E6B">Clean</text><text x="363" y="65" text-anchor="middle" fill="#46526B" font-size="8.8">E.164 phone, dedupe, spam</text>
+      <rect x="456" y="34" width="130" height="40" rx="6" fill="#E8F0FB" stroke="#1F5FBF"/><text x="521" y="51" text-anchor="middle" fill="#0B2E6B">Infer topic</text><text x="521" y="65" text-anchor="middle" fill="#46526B" font-size="8.8">from free-text message</text>
+      <rect x="614" y="34" width="120" height="40" rx="6" fill="#0B2E6B"/><text x="674" y="58" text-anchor="middle" fill="#fff" font-weight="700">Lead: New</text>
+      <g stroke="#1F5FBF" stroke-width="1.5"><line x1="122" y1="28" x2="148" y2="46" marker-end="url(#ar)"/><line x1="122" y1="78" x2="148" y2="62" marker-end="url(#ar)"/><line x1="270" y1="54" x2="296" y2="54" marker-end="url(#ar)"/><line x1="428" y1="54" x2="454" y2="54" marker-end="url(#ar)"/><line x1="586" y1="54" x2="612" y2="54" marker-end="url(#ar)"/></g>
+      <text x="363" y="98" text-anchor="middle" fill="#B26B00">unparseable → "Needs review" · "don't call" note → Opted-out · non-UAE → flagged</text>
+    </g>
+  </svg>
+
+  <h3>Dashboard: 7 screens (Google sign-in, admin only)</h3>
+  <div class="grid4" style="grid-template-columns:repeat(7,1fr);gap:1.6mm;font-size:8.2pt">
+    <div class="card" style="padding:1.6mm"><b>Home</b><br>today's KPIs, live status</div>
+    <div class="card" style="padding:1.6mm"><b>Leads</b><br>list, import, detail</div>
+    <div class="card" style="padding:1.6mm"><b>Calls</b><br>every Call Attempt</div>
+    <div class="card" style="padding:1.6mm"><b>Campaigns</b><br>batches, gates</div>
+    <div class="card" style="padding:1.6mm"><b>Discovery</b><br>attended / won</div>
+    <div class="card" style="padding:1.6mm"><b>Settings</b><br>hours, pace, slots</div>
+    <div class="card" style="padding:1.6mm"><b>Quality</b><br>flags, labels</div>
+  </div>
+
+  <h2><span class="n">9</span>Evals: three layers</h2>
+  <svg viewBox="0 0 740 200" width="100%" height="200" role="img" aria-label="Evaluation pyramid">
+    <g font-size="10">
+      <polygon points="200,10 290,10 330,70 160,70" fill="#0B2E6B"/><text x="245" y="38" text-anchor="middle" fill="#fff" font-weight="700">Production</text><text x="245" y="54" text-anchor="middle" fill="#C9DAF5" font-size="9">every real call graded</text>
+      <polygon points="160,74 330,74 370,134 120,134" fill="#2a78d6"/><text x="245" y="102" text-anchor="middle" fill="#fff" font-weight="700">Tier 2: audio, nightly</text><text x="245" y="118" text-anchor="middle" fill="#fff" font-size="9">~5 real Twilio calls, ~$5</text>
+      <polygon points="120,138 370,138 410,198 80,198" fill="#4FA3F7"/><text x="245" y="166" text-anchor="middle" fill="#0B2E6B" font-weight="700">Tier 1: text, every PR</text><text x="245" y="182" text-anchor="middle" fill="#0B2E6B" font-size="9">simulated Leads, blocks merge</text>
+      <g fill="#14213D">
+        <text x="430" y="24" font-weight="700" fill="#0B2E6B">Order of checks</text>
+        <text x="430" y="44">1. Code checks first: end status, legal order,</text><text x="444" y="58">no numbers, no false "booked"</text>
+        <text x="430" y="78">2. Jev judges: one yes/no per failure mode</text><text x="444" y="92">(needy tone, talks over Lead, off-sheet info, missed intent)</text>
+        <text x="430" y="112">3. Unsure verdict → escalate to Claude Sonnet 5</text>
+        <text x="430" y="132">4. Calibrate: Manager labels ~50 real calls</text>
+        <text x="430" y="152">5. Simulated Lead = Claude Haiku 4.5</text><text x="444" y="166">(other model family than Omar)</text>
+        <text x="430" y="186">6. Each real failure → new Tier 1 scenario</text>
+      </g>
+    </g>
+  </svg>
+
+  <h3>Observability</h3>
+  <ul>
+    <li>OpenTelemetry → Langfuse (self-hosted in Azure). One trace for each call, keyed on the call ID. Audio is attached.</li>
+    <li>Spans for each turn: end-of-turn, LLM first token, TTS first audio, tool calls.</li>
+    <li>Dashboard KPIs: connect rate, booking rate, show-up rate, cost for each Discovery Call, latency p50/p95.</li>
+  </ul>
+  <div class="foot"><span>Hoplon &amp; Co · AI Calling Agent · Engineer Guide · Research and report by Engr Abdullah Bukhari, Snr. SWE, HoplonCo</span><span>Page 9</span></div>
+</div>
+
+<!-- ===================== PAGE 10: FAILURES, SECURITY, COMPLIANCE ===================== -->
+<div class="page">
+  <div class="band slim"><div class="t">10 · Failures, security and compliance</div><img src="../assets/hoplon-logo.png" alt=""></div>
+
+  <h2><span class="n">10</span>When a part fails during a call</h2>
+  <table>
+    <tr><th style="width:22%">Part that fails</th><th>What the Lead hears and what happens</th><th style="width:22%">Counts as retry?</th></tr>
+    <tr><td>Own GPU / LLM</td><td>Same-turn switch to DeepSeek (EU/US host). Omar can say "one sec…".</td><td>No</td></tr>
+    <tr><td>TTS (Cartesia)</td><td>Same-turn switch to ElevenLabs.</td><td>No</td></tr>
+    <tr><td>Calendar</td><td>"I will email you a link to pick a time." Lead stays Qualified.</td><td>No</td></tr>
+    <tr><td>STT (Deepgram)</td><td>"Sorry, the line is bad. I will call you right back." Callback is scheduled.</td><td>Yes (like a dropped line)</td></tr>
+    <tr><td>All parts</td><td>Call ends, callback is scheduled. The dialer pauses until the system is healthy.</td><td>Yes</td></tr>
+  </table>
+  <p class="small">Alerts by email/Slack: GPU down, repeated failovers, dialer self-pause.</p>
+
+  <h2><span class="n">10.1</span>Pre-dial gate (each Call Attempt must pass)</h2>
+  <svg viewBox="0 0 740 120" width="100%" height="120" role="img" aria-label="Pre-dial gate">
+    <g font-size="10">
+      <rect x="4" y="40" width="90" height="40" rx="8" fill="#E8F0FB" stroke="#1F5FBF"/><text x="49" y="64" text-anchor="middle" fill="#0B2E6B" font-weight="700">Lead queued</text>
+      <g>
+        <rect x="120" y="40" width="96" height="40" rx="8" fill="#fff" stroke="#1F5FBF"/><text x="168" y="58" text-anchor="middle" fill="#0B2E6B">Kill switch</text><text x="168" y="72" text-anchor="middle" fill="#46526B" font-size="9">off?</text>
+        <rect x="232" y="40" width="96" height="40" rx="8" fill="#fff" stroke="#1F5FBF"/><text x="280" y="58" text-anchor="middle" fill="#0B2E6B">DNC list</text><text x="280" y="72" text-anchor="middle" fill="#46526B" font-size="9">+ Opted-out</text>
+        <rect x="344" y="40" width="96" height="40" rx="8" fill="#fff" stroke="#1F5FBF"/><text x="392" y="58" text-anchor="middle" fill="#0B2E6B">Call window</text><text x="392" y="72" text-anchor="middle" fill="#46526B" font-size="9">day + hour</text>
+        <rect x="456" y="40" width="96" height="40" rx="8" fill="#fff" stroke="#1F5FBF"/><text x="504" y="58" text-anchor="middle" fill="#0B2E6B">Retry limits</text><text x="504" y="72" text-anchor="middle" fill="#46526B" font-size="9">day / week</text>
+        <rect x="568" y="40" width="80" height="40" rx="8" fill="#fff" stroke="#1F5FBF"/><text x="608" y="58" text-anchor="middle" fill="#0B2E6B">Redis lock</text><text x="608" y="72" text-anchor="middle" fill="#46526B" font-size="9">no double</text>
+        <rect x="664" y="40" width="72" height="40" rx="8" fill="#0E7A3E"/><text x="700" y="64" text-anchor="middle" fill="#fff" font-weight="700">Dial</text>
+      </g>
+      <g stroke="#1F5FBF" stroke-width="1.5"><line x1="94" y1="60" x2="118" y2="60" marker-end="url(#ar)"/><line x1="216" y1="60" x2="230" y2="60" marker-end="url(#ar)"/><line x1="328" y1="60" x2="342" y2="60" marker-end="url(#ar)"/><line x1="440" y1="60" x2="454" y2="60" marker-end="url(#ar)"/><line x1="552" y1="60" x2="566" y2="60" marker-end="url(#ar)"/><line x1="648" y1="60" x2="662" y2="60" marker-end="url(#ar)"/></g>
+      <text x="380" y="106" text-anchor="middle" fill="#B42318">Any check fails → do not dial. Write the reason to the event log.</text>
+      <text x="380" y="24" text-anchor="middle" fill="#46526B" font-size="9">The legal team supplies the rule values. Engineering builds the gate now.</text>
+    </g>
+  </svg>
+
+  <div class="grid2">
+    <div>
+      <h3>Security and abuse</h3>
+      <ul>
+        <li>Omar has only 4 tools: check calendar, book slot, schedule callback, set outcome. No tool can leak data.</li>
+        <li>Omar never tells his instructions or data about other Leads.</li>
+        <li>Prompt injection: Omar laughs lightly, says "Nice try!", and goes back to the topic. This is an eval scenario.</li>
+        <li>Maximum call length: 10 minutes.</li>
+        <li>Phone and email are masked in logs. Data is encrypted at rest.</li>
+        <li>Admin kill switch: "Stop all calls now".</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Compliance hooks we build now</h3>
+      <ul>
+        <li>Pre-dial gate (above).</li>
+        <li>Call register: CSV export from the event log.</li>
+        <li>Data requests: "Erase this Lead" and "Export this Lead's data".</li>
+        <li>Consent evidence fields: timestamp, IP, form version. The website team adds the checkbox.</li>
+        <li>Recording notice in each opening. Call ends if the Lead refuses recording.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span>Hoplon &amp; Co · AI Calling Agent · Engineer Guide · Research and report by Engr Abdullah Bukhari, Snr. SWE, HoplonCo</span><span>Page 10</span></div>
+</div>
+
+<!-- ===================== PAGE 11: INFRA + COST ===================== -->
+<div class="page">
+  <div class="band slim"><div class="t">11 · Infrastructure, delivery and cost</div><img src="../assets/hoplon-logo.png" alt=""></div>
+
+  <h2><span class="n">11</span>Environments and delivery</h2>
+  <svg viewBox="0 0 740 150" width="100%" height="150" role="img" aria-label="CI/CD pipeline">
+    <g font-size="10">
+      <rect x="4" y="30" width="100" height="44" rx="8" fill="#E8F0FB" stroke="#1F5FBF"/><text x="54" y="50" text-anchor="middle" fill="#0B2E6B" font-weight="700">Pull request</text><text x="54" y="64" text-anchor="middle" fill="#46526B" font-size="9">GitHub</text>
+      <rect x="128" y="10" width="190" height="84" rx="8" fill="#fff" stroke="#1F5FBF"/><text x="223" y="28" text-anchor="middle" fill="#0B2E6B" font-weight="700">CI checks (must pass)</text>
+      <g fill="#14213D" font-size="9.5"><text x="140" y="46">• lint + type check</text><text x="140" y="62">• unit tests (state machine)</text><text x="140" y="78">• Tier 1 text evals</text></g>
+      <rect x="342" y="30" width="96" height="44" rx="8" fill="#E8F0FB" stroke="#1F5FBF"/><text x="390" y="50" text-anchor="middle" fill="#0B2E6B" font-weight="700">Merge</text><text x="390" y="64" text-anchor="middle" fill="#46526B" font-size="9">build images</text>
+      <rect x="462" y="30" width="110" height="44" rx="8" fill="#2a78d6"/><text x="517" y="50" text-anchor="middle" fill="#fff" font-weight="700">Staging</text><text x="517" y="64" text-anchor="middle" fill="#fff" font-size="9">nightly audio evals</text>
+      <rect x="600" y="30" width="134" height="44" rx="8" fill="#0B2E6B"/><text x="667" y="50" text-anchor="middle" fill="#fff" font-weight="700">Production</text><text x="667" y="64" text-anchor="middle" fill="#C9DAF5" font-size="9">1 approval click</text>
+      <g stroke="#1F5FBF" stroke-width="1.6"><line x1="104" y1="52" x2="126" y2="52" marker-end="url(#ar)"/><line x1="318" y1="52" x2="340" y2="52" marker-end="url(#ar)"/><line x1="438" y1="52" x2="460" y2="52" marker-end="url(#ar)"/><line x1="572" y1="52" x2="598" y2="52" marker-end="url(#ar)"/></g>
+      <text x="4" y="120" fill="#14213D"><tspan font-weight="700" fill="#0B2E6B">Local:</tspan> your laptop, LiveKit web playground, Twilio calls to own phones.</text>
+      <text x="4" y="138" fill="#14213D"><tspan font-weight="700" fill="#0B2E6B">Deploys:</tspan> LiveKit agent workers drain. Live calls finish first. No call drops on a deploy.</text>
+    </g>
+  </svg>
+
+  <h2><span class="n">11.1</span>Configuration: where each setting lives</h2>
+  <table>
+    <tr><th style="width:26%">Kind</th><th>Examples</th><th style="width:30%">Where</th></tr>
+    <tr><td>Agent behaviour</td><td>Prompts, persona, knowledge sheet</td><td>Git, gated by evals</td></tr>
+    <tr><td>Operations</td><td>Calling hours, pace, concurrency, slot rules</td><td>Database, edited in dashboard, logged</td></tr>
+    <tr><td>Secrets</td><td>API keys, OAuth refresh token</td><td>Azure Key Vault</td></tr>
+    <tr><td>Infrastructure</td><td>VMs, Container Apps, DB, Redis, Blob</td><td>Terraform in <code>infra/</code></td></tr>
+  </table>
+
+  <h2><span class="n">11.2</span>Cost for each minute (estimate)</h2>
+  <div class="callout" style="border-color:#B26B00;background:#FFF8EC;margin-top:0"><b style="color:#B26B00">Estimated costs.</b> Each cost centre has a 30% safety margin. We will report the real costs after the first test calls (milestone M2).</div>
+  <div class="grid2">
+    <div>
+      <svg viewBox="0 0 360 160" width="100%" height="160" role="img" aria-label="Usage cost per connected minute">
+        <g font-size="10">
+          <text x="0" y="12" fill="#0B2E6B" font-weight="700">Usage cost for each connected minute (USD)</text>
+          <g fill="#14213D" text-anchor="end"><text x="112" y="38">Phone (Twilio, UAE)</text><text x="112" y="62">LiveKit (agent + SIP)</text><text x="112" y="86">Speak (Cartesia)</text><text x="112" y="110">Listen (Deepgram)</text><text x="112" y="134">Think (own GPU)</text></g>
+          <rect x="118" y="27" width="190" height="15" rx="3" fill="#2a78d6"/><text x="314" y="39" fill="#14213D">0.39</text>
+          <rect x="118" y="51" width="9.7" height="15" rx="3" fill="#2a78d6"/><text x="133" y="63" fill="#14213D">0.02</text>
+          <rect x="118" y="75" width="9.7" height="15" rx="3" fill="#2a78d6"/><text x="133" y="87" fill="#14213D">0.02</text>
+          <rect x="118" y="99" width="4.9" height="15" rx="3" fill="#2a78d6"/><text x="128" y="111" fill="#14213D">0.01</text>
+          <text x="118" y="135" fill="#46526B">in fixed cost</text>
+          <line x1="0" y1="146" x2="360" y2="146" stroke="#C9D6EC"/>
+          <text x="0" y="158" fill="#0B2E6B" font-weight="700">Usage total ≈ $0.44 for each minute</text>
+        </g>
+      </svg>
+    </div>
+    <div>
+      <table><tr><th>Fixed cost (estimate)</th><th>Each month</th></tr>
+        <tr><td>GPU VM, calling hours only</td><td>$360–550</td></tr>
+        <tr><td>Azure platform (apps, DB, Redis, storage, Langfuse)</td><td>$200–330</td></tr>
+        <tr><td>LiveKit Cloud plan</td><td>$65</td></tr>
+        <tr><td>Nightly audio evals</td><td>$200</td></tr>
+        <tr><td><b>Total fixed</b></td><td><b>$825–1,145</b></td></tr></table>
+    </div>
+  </div>
+  <h3>All-in cost for each minute (usage + share of fixed cost)</h3>
+  <table>
+    <tr><th>Call minutes each month</th><th>Share of fixed cost</th><th>All-in for each minute</th><th>One 3-minute call</th></tr>
+    <tr><td>1,500 (expected start)</td><td>$0.55–0.76</td><td><b>$1.00–1.20</b></td><td>$3.00–3.60</td></tr>
+    <tr><td>5,000</td><td>$0.17–0.23</td><td><b>$0.61–0.67</b></td><td>$1.83–2.01</td></tr>
+    <tr><td>10,000</td><td>$0.08–0.11</td><td><b>$0.52–0.56</b></td><td>$1.56–1.68</td></tr>
+  </table>
+  <p class="small">Cost levers: if a hosted LLM (for example Groq) is fast enough in ticket 23, we can remove the GPU VM. A local e&amp;/du line (v2) can lower the phone cost.</p>
+  <div class="foot"><span>Hoplon &amp; Co · AI Calling Agent · Engineer Guide · Research and report by Engr Abdullah Bukhari, Snr. SWE, HoplonCo</span><span>Page 11</span></div>
+</div>
+
+<!-- ===================== PAGE 12: RISKS ===================== -->
+<div class="page">
+  <div class="band slim"><div class="t">12 · Risks</div><img src="../assets/hoplon-logo.png" alt=""></div>
+
+  <h2><span class="n">12</span>Risk map (likelihood × impact, our judgement)</h2>
+  <svg viewBox="0 0 740 300" width="100%" height="300" role="img" aria-label="Risk matrix">
+    <g font-size="10">
+      <g>
+        <rect x="90" y="10" width="200" height="85" fill="#FFF6E5"/><rect x="290" y="10" width="200" height="85" fill="#FDE3E0"/><rect x="490" y="10" width="200" height="85" fill="#F9C9C4"/>
+        <rect x="90" y="95" width="200" height="85" fill="#EEF7F1"/><rect x="290" y="95" width="200" height="85" fill="#FFF6E5"/><rect x="490" y="95" width="200" height="85" fill="#FDE3E0"/>
+        <rect x="90" y="180" width="200" height="85" fill="#EEF7F1"/><rect x="290" y="180" width="200" height="85" fill="#EEF7F1"/><rect x="490" y="180" width="200" height="85" fill="#FFF6E5"/>
+      </g>
+      <g stroke="#fff" stroke-width="2"><line x1="290" y1="10" x2="290" y2="265"/><line x1="490" y1="10" x2="490" y2="265"/><line x1="90" y1="95" x2="690" y2="95"/><line x1="90" y1="180" x2="690" y2="180"/></g>
+      <g fill="#46526B" text-anchor="end"><text x="82" y="56">High</text><text x="82" y="141">Medium</text><text x="82" y="226">Low</text></g>
+      <text x="20" y="140" fill="#0B2E6B" font-weight="700" transform="rotate(-90 20 140)" text-anchor="middle">Likelihood</text>
+      <g fill="#46526B" text-anchor="middle"><text x="190" y="282">Low</text><text x="390" y="282">Medium</text><text x="590" y="282">High</text></g>
+      <text x="390" y="298" fill="#0B2E6B" font-weight="700" text-anchor="middle">Impact</text>
+      <!-- chips -->
+      <g font-size="9.5" font-weight="700">
+        <rect x="510" y="22" width="80" height="22" rx="11" fill="#B42318"/><text x="550" y="37" text-anchor="middle" fill="#fff">R1 caller ID</text>
+        <rect x="598" y="22" width="84" height="22" rx="11" fill="#B42318"/><text x="640" y="37" text-anchor="middle" fill="#fff">R2 approval</text>
+        <rect x="510" y="54" width="86" height="22" rx="11" fill="#B26B00"/><text x="553" y="69" text-anchor="middle" fill="#fff">R3 old consent</text>
+        <rect x="510" y="110" width="80" height="22" rx="11" fill="#B26B00"/><text x="550" y="125" text-anchor="middle" fill="#fff">R4 DNC check</text>
+        <rect x="598" y="110" width="84" height="22" rx="11" fill="#1F5FBF"/><text x="640" y="125" text-anchor="middle" fill="#fff">R6 data abroad</text>
+        <rect x="300" y="22" width="84" height="22" rx="11" fill="#1F5FBF"/><text x="342" y="37" text-anchor="middle" fill="#fff">T2/T8 latency</text>
+        <rect x="392" y="22" width="88" height="22" rx="11" fill="#1F5FBF"/><text x="436" y="37" text-anchor="middle" fill="#fff">T1 accents</text>
+        <rect x="300" y="110" width="84" height="22" rx="11" fill="#1F5FBF"/><text x="342" y="125" text-anchor="middle" fill="#fff">T4 voicemail</text>
+        <rect x="392" y="110" width="88" height="22" rx="11" fill="#1F5FBF"/><text x="436" y="125" text-anchor="middle" fill="#fff">T7 website team</text>
+        <rect x="510" y="196" width="88" height="22" rx="11" fill="#1F5FBF"/><text x="554" y="211" text-anchor="middle" fill="#fff">R5 recording</text>
+        <rect x="300" y="196" width="84" height="22" rx="11" fill="#1F5FBF"/><text x="342" y="211" text-anchor="middle" fill="#fff">R7 AI rules</text>
+        <rect x="100" y="196" width="88" height="22" rx="11" fill="#1F5FBF"/><text x="144" y="211" text-anchor="middle" fill="#fff">T3 false booking</text>
+        <rect x="100" y="110" width="88" height="22" rx="11" fill="#1F5FBF"/><text x="144" y="125" text-anchor="middle" fill="#fff">T5 token expiry</text>
+        <rect x="100" y="22" width="88" height="22" rx="11" fill="#1F5FBF"/><text x="144" y="37" text-anchor="middle" fill="#fff">T6 cost</text>
+      </g>
+    </g>
+  </svg>
+  <p class="cap"><span class="tag crit">red</span> blocks go-live · <span class="tag warn">amber</span> open or accepted · <span class="tag info">blue</span> reduced by design. Full register: <code>.scratch/calling-agent/risks.md</code>.</p>
+
+  <table>
+    <tr><th style="width:8%">ID</th><th>Risk</th><th style="width:16%">Owner</th><th style="width:30%">Action</th></tr>
+    <tr><td>R1</td><td>Foreign caller number (Res 56/2024 Art. 4)</td><td>Legal team</td><td>e&amp;/du number via Twilio BYOC or direct LiveKit trunk</td></tr>
+    <tr><td>R2</td><td>No telemarketing approval</td><td>Legal team</td><td>Apply to the competent authority</td></tr>
+    <tr><td>R3</td><td>Backlog Leads without consent box</td><td>Owner (accepted)</td><td>Show to C-suite; new form gets checkbox</td></tr>
+    <tr><td>R4</td><td>DNC register check not defined</td><td>Legal + eng</td><td>Gate ready; plug in the official check</td></tr>
+    <tr><td>R10</td><td>LLM data to China</td><td>Engineering</td><td>Never use DeepSeek's own API; EU/US hosts only</td></tr>
+    <tr><td>T8</td><td>LLM latency not proven</td><td>Engineering</td><td>Benchmark ticket 23 before lock-in</td></tr>
+  </table>
+  <div class="foot"><span>Hoplon &amp; Co · AI Calling Agent · Engineer Guide · Research and report by Engr Abdullah Bukhari, Snr. SWE, HoplonCo</span><span>Page 12</span></div>
+</div>
+
+<!-- ===================== PAGE 13: BUILD PLAN + LANES ===================== -->
+<div class="page">
+  <div class="band slim"><div class="t">13 · Build plan and parallel lanes</div><img src="../assets/hoplon-logo.png" alt=""></div>
+
+  <p>One engineer builds the system with subagents. We maximise parallel work. Rule: <b>contracts first</b> (lane L0). Then most lanes run at the same time.</p>
+  <h2><span class="n">13</span>Lanes and dependencies</h2>
+  <svg viewBox="0 0 740 330" width="100%" height="330" role="img" aria-label="Parallel lanes Gantt">
+    <g font-size="9.6">
+      <!-- columns = milestones -->
+      <g fill="#7A859C" text-anchor="middle" font-weight="700"><text x="185" y="14">M0 Setup</text><text x="285" y="14">M1 Web demo</text><text x="415" y="14">M2 Phone tests</text><text x="560" y="14">M3 Platform</text><text x="690" y="14">M4–M5</text></g>
+      <g stroke="#E3EAF5"><line x1="140" y1="20" x2="140" y2="300"/><line x1="230" y1="20" x2="230" y2="300"/><line x1="340" y1="20" x2="340" y2="300"/><line x1="490" y1="20" x2="490" y2="300"/><line x1="630" y1="20" x2="630" y2="300"/></g>
+      <rect x="640" y="20" width="96" height="280" fill="#FDF1F0"/>
+      <text x="688" y="160" text-anchor="middle" fill="#B42318" font-weight="700">legal gate</text><text x="688" y="174" text-anchor="middle" fill="#B42318" font-size="9">R1 + R2</text>
+      <g fill="#14213D" text-anchor="end">
+        <text x="134" y="42">L0 Contracts</text><text x="134" y="74">L6 Infra</text><text x="134" y="106">L1 Agent</text><text x="134" y="138">L2 Evals</text><text x="134" y="170">L3 Platform API</text><text x="134" y="202">L4 Ingestion</text><text x="134" y="234">L5 Dashboard</text><text x="134" y="266">L7 Telephony</text>
+      </g>
+      <rect x="144" y="30" width="110" height="18" rx="4" fill="#0B2E6B"/><text x="150" y="43" fill="#fff">domain, ports, API</text>
+      <rect x="144" y="62" width="480" height="18" rx="4" fill="#4a3aa7"/><text x="150" y="75" fill="#fff">Terraform, CI/CD, GPU VM + vLLM, Langfuse</text>
+      <rect x="258" y="94" width="230" height="18" rx="4" fill="#2a78d6"/><text x="264" y="107" fill="#fff">LiveKit worker, prompts, turn tuning, tools</text>
+      <rect x="258" y="126" width="366" height="18" rx="4" fill="#2a78d6"/><text x="264" y="139" fill="#fff">harness, YAML scenarios, judges, nightly audio</text>
+      <rect x="258" y="158" width="366" height="18" rx="4" fill="#1baf7a"/><text x="264" y="171" fill="#fff">FastAPI, Postgres, Celery, dialer, gate</text>
+      <rect x="258" y="190" width="230" height="18" rx="4" fill="#1baf7a"/><text x="264" y="203" fill="#fff">Excel + Gmail, parser</text>
+      <rect x="258" y="222" width="366" height="18" rx="4" fill="#eb6834"/><text x="264" y="235" fill="#fff">Next.js 7 screens (mock API first)</text>
+      <rect x="344" y="254" width="200" height="18" rx="4" fill="#2a78d6"/><text x="350" y="267" fill="#fff">Twilio SIP, voicemail, recording</text>
+      <g stroke="#B42318" stroke-width="1.4" fill="none"><line x1="254" y1="39" x2="258" y2="103" marker-end="url(#arr)"/><path d="M380,112 C380,190 360,230 352,252" stroke-dasharray="3 3" marker-end="url(#arr)"/></g>
+      <text x="150" y="300" fill="#46526B" font-size="9">Arrows: L0 must finish before L1–L5. L7 starts after the first working agent (L1). L6 runs from day 1.</text>
+    </g>
+  </svg>
+
+  <h2><span class="n">13.1</span>Milestones and exit criteria</h2>
+  <table>
+    <tr><th style="width:15%">Milestone</th><th>Done when</th><th style="width:8%">Size</th></tr>
+    <tr><td>M0 Setup</td><td>Repo, Azure + GPU quota, Twilio/Deepgram/Cartesia/LiveKit accounts, Terraform skeleton</td><td>S</td></tr>
+    <tr><td>M1 Web demo</td><td>Talk to Omar in a browser. Legal opening, rapport, objections, fake booking. Tier 1 evals run.</td><td>M</td></tr>
+    <tr><td>M2 Phone tests</td><td>Calls to own team, real bookings, recording, voicemail detection. LLM benchmark and voice pick done.</td><td>M</td></tr>
+    <tr><td>M3 Platform</td><td>Ingestion, Lead lifecycle, dialer + gate, 7 screens, Langfuse, judges, nightly audio evals</td><td>L</td></tr>
+    <tr><td>M4 Soft launch</td><td>After R1 + R2. 10 Leads (all reviewed) → 25 → judges calibrated</td><td>S</td></tr>
+    <tr><td>M5 Full use</td><td>Backlog at full pace. New Leads called in minutes.</td><td>S</td></tr>
+  </table>
+  <div class="foot"><span>Hoplon &amp; Co · AI Calling Agent · Engineer Guide · Research and report by Engr Abdullah Bukhari, Snr. SWE, HoplonCo</span><span>Page 13</span></div>
+</div>
+
+<!-- ===================== PAGE 14: OPEN ITEMS + FILE MAP ===================== -->
+<div class="page">
+  <div class="band slim"><div class="t">14 · Open items and where to find things</div><img src="../assets/hoplon-logo.png" alt=""></div>
+
+  <h2><span class="n">14</span>Open items</h2>
+  <table>
+    <tr><th style="width:34%">Item</th><th>What is needed</th><th style="width:18%">Owner</th></tr>
+    <tr><td>Benchmark LLM hosts (ticket 23)</td><td>Own GPU vs Groq (Helsinki) vs Nebius vs DeepSeek. Needs Azure GPU quota and keys.</td><td>Engineering</td></tr>
+    <tr><td>Pick Omar's voice (ticket 24)</td><td>4–6 male voices at phone quality. Owner picks by ear.</td><td>Owner</td></tr>
+    <tr><td>Approval, DNC, recording consent (ticket 18)</td><td>Rules from the authority. Plug into the gate.</td><td>Legal team</td></tr>
+    <tr><td>e&amp;/du SIP trunk (ticket 22)</td><td>Local number on trade licence. Path: Twilio BYOC or direct LiveKit trunk.</td><td>Legal team</td></tr>
+    <tr><td>Website form change (ticket 20)</td><td>Consent checkbox, Service dropdown, evidence fields.</td><td>Website team</td></tr>
+  </table>
+
+  <h2><span class="n">14.1</span>File map</h2>
+  <svg viewBox="0 0 740 250" width="100%" height="250" role="img" aria-label="File map">
+    <g font-size="10">
+      <rect x="6" y="10" width="230" height="230" rx="10" fill="#E8F0FB" stroke="#1F5FBF"/>
+      <text x="18" y="30" fill="#0B2E6B" font-weight="700">Decisions (read first)</text>
+      <g fill="#14213D"><text x="18" y="52">CONTEXT.md · glossary</text><text x="18" y="70">docs/adr/0001 · state machine</text><text x="18" y="88">docs/adr/0002 · LiveKit</text><text x="18" y="106">.scratch/calling-agent/map.md</text><text x="30" y="122" font-size="9" fill="#46526B">index of all decisions</text><text x="18" y="142">.scratch/…/issues/NN-*.md</text><text x="30" y="158" font-size="9" fill="#46526B">one ticket per decision</text><text x="18" y="178">.scratch/…/risks.md</text><text x="30" y="194" font-size="9" fill="#46526B">C-suite risk register</text></g>
+      <rect x="254" y="10" width="230" height="230" rx="10" fill="#fff" stroke="#1F5FBF"/>
+      <text x="266" y="30" fill="#0B2E6B" font-weight="700">Evidence</text>
+      <g fill="#14213D"><text x="266" y="52">research/01 · UAE law</text><text x="266" y="70">research/02 · Twilio in UAE</text><text x="266" y="88">research/03 · STT/TTS/LLM</text><text x="266" y="106">research/04 · Google Calendar</text><text x="266" y="124">research/05 · evals practice</text><text x="266" y="142">research/25 · all-UAE stack</text><text x="266" y="168">assets/agency-knowledge.md</text><text x="278" y="184" font-size="9" fill="#46526B">what Omar may say</text><text x="266" y="204">assets/dummy-leads/</text><text x="278" y="220" font-size="9" fill="#46526B">test data with mess</text></g>
+      <rect x="502" y="10" width="232" height="230" rx="10" fill="#fff" stroke="#1F5FBF"/>
+      <text x="514" y="30" fill="#0B2E6B" font-weight="700">Try it</text>
+      <g fill="#14213D"><text x="514" y="52">prototypes/</text><text x="526" y="68" font-size="9" fill="#46526B">PROTOTYPE-call-flow.html</text><text x="526" y="84" font-size="9" fill="#46526B">click through 10 call scenarios</text><text x="514" y="110">assets/accent-clips/SCRIPT.md</text><text x="526" y="126" font-size="9" fill="#46526B">for a later STT accent test</text><text x="514" y="152">docs/pdf-src/</text><text x="526" y="168" font-size="9" fill="#46526B">source of these PDFs</text></g>
+    </g>
+  </svg>
+
+  <div class="callout blue"><b>Rules for new engineers.</b> Use the glossary words. Put each new decision in a ticket or an ADR. Do not put business logic in Next.js. Do not let the LLM own a legal rule. Add a test scenario for each real failure.</div>
+  <div class="foot"><span>Hoplon &amp; Co · AI Calling Agent · Engineer Guide · Research and report by Engr Abdullah Bukhari, Snr. SWE, HoplonCo</span><span>Page 14</span></div>
+</div>
+</body></html>
