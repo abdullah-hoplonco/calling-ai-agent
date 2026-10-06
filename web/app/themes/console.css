@@ -1043,6 +1043,13 @@
   .cn-meters {
     display: none;
   }
+  .cn-stages {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .cn-stages span {
+    overflow: visible;
+  }
   .cn-msg {
     grid-template-columns: 26px minmax(0, 1fr);
   }

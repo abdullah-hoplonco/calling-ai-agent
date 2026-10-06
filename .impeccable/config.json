@@ -38,6 +38,168 @@
         ],
         "createdAt": "2026-10-03T12:58:04.754Z",
         "reason": "agent: flagged text is Omar's spoken call script, quoted verbatim from the decided opening (ticket 09)"
+      },
+      {
+        "rule": "layout-transition",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/preview/call-score.html"
+        ],
+        "createdAt": "2026-10-06T14:09:14.376Z",
+        "reason": "agent: throwaway direction preview, not shipped; the shipped UI lives in web/"
+      },
+      {
+        "rule": "pulsing-dot",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/preview/call-score.html"
+        ],
+        "createdAt": "2026-10-06T14:09:14.383Z",
+        "reason": "agent: throwaway direction preview, not shipped; the shipped UI lives in web/"
+      },
+      {
+        "rule": "undersized-ui-text",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/preview/call-score.html"
+        ],
+        "createdAt": "2026-10-06T14:09:14.389Z",
+        "reason": "agent: throwaway direction preview, not shipped; the shipped UI lives in web/"
+      },
+      {
+        "rule": "tiny-text",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/preview/call-score.html"
+        ],
+        "createdAt": "2026-10-06T14:09:14.394Z",
+        "reason": "agent: throwaway direction preview, not shipped; the shipped UI lives in web/"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/preview/call-score.html"
+        ],
+        "createdAt": "2026-10-06T14:09:14.398Z",
+        "reason": "agent: throwaway direction preview, not shipped; the shipped UI lives in web/"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/preview/call-score.html"
+        ],
+        "createdAt": "2026-10-06T14:09:14.403Z",
+        "reason": "agent: throwaway direction preview, not shipped; the shipped UI lives in web/"
+      },
+      {
+        "rule": "layout-transition",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/preview/session-timeline.html"
+        ],
+        "createdAt": "2026-10-06T14:09:14.408Z",
+        "reason": "agent: throwaway direction preview, not shipped; the shipped UI lives in web/"
+      },
+      {
+        "rule": "pulsing-dot",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/preview/session-timeline.html"
+        ],
+        "createdAt": "2026-10-06T14:09:14.413Z",
+        "reason": "agent: throwaway direction preview, not shipped; the shipped UI lives in web/"
+      },
+      {
+        "rule": "undersized-ui-text",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/preview/session-timeline.html"
+        ],
+        "createdAt": "2026-10-06T14:09:14.418Z",
+        "reason": "agent: throwaway direction preview, not shipped; the shipped UI lives in web/"
+      },
+      {
+        "rule": "tiny-text",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/preview/session-timeline.html"
+        ],
+        "createdAt": "2026-10-06T14:09:14.423Z",
+        "reason": "agent: throwaway direction preview, not shipped; the shipped UI lives in web/"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/preview/session-timeline.html"
+        ],
+        "createdAt": "2026-10-06T14:09:14.428Z",
+        "reason": "agent: throwaway direction preview, not shipped; the shipped UI lives in web/"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/preview/session-timeline.html"
+        ],
+        "createdAt": "2026-10-06T14:09:14.433Z",
+        "reason": "agent: throwaway direction preview, not shipped; the shipped UI lives in web/"
+      },
+      {
+        "rule": "layout-transition",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/preview/saas-console.html"
+        ],
+        "createdAt": "2026-10-06T14:09:14.449Z",
+        "reason": "agent: throwaway direction preview, not shipped; the shipped UI lives in web/"
+      },
+      {
+        "rule": "pulsing-dot",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/preview/saas-console.html"
+        ],
+        "createdAt": "2026-10-06T14:09:14.454Z",
+        "reason": "agent: throwaway direction preview, not shipped; the shipped UI lives in web/"
+      },
+      {
+        "rule": "undersized-ui-text",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/preview/saas-console.html"
+        ],
+        "createdAt": "2026-10-06T14:09:14.459Z",
+        "reason": "agent: throwaway direction preview, not shipped; the shipped UI lives in web/"
+      },
+      {
+        "rule": "tiny-text",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/preview/saas-console.html"
+        ],
+        "createdAt": "2026-10-06T14:09:14.465Z",
+        "reason": "agent: throwaway direction preview, not shipped; the shipped UI lives in web/"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/preview/saas-console.html"
+        ],
+        "createdAt": "2026-10-06T14:09:14.472Z",
+        "reason": "agent: throwaway direction preview, not shipped; the shipped UI lives in web/"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/preview/saas-console.html"
+        ],
+        "createdAt": "2026-10-06T14:09:14.477Z",
+        "reason": "agent: throwaway direction preview, not shipped; the shipped UI lives in web/"
       }
     ]
   }
