@@ -4,8 +4,8 @@ Omar is an AI voice agent for **Hoplon & Co**, a web, mobile and digital-marketi
 Omar phones warm **Leads** (people who filled in the website form).
 He gives them the information they asked for, finds **Intent to Buy**, and books a **Discovery Call** on the Manager's Google Calendar.
 
-> **Status:** planning is complete. The build starts with milestone **M1, the browser demo**.
-> This repo has no application code yet.
+> **Status:** planning is complete. Milestone **M1, the browser demo**, is built on branch `demo/web/v1`.
+> It needs API keys for a live call; see "Run the demo".
 
 ## How a call works
 
@@ -81,7 +81,7 @@ flowchart LR
 | [`.scratch/calling-agent/prototypes/`](.scratch/calling-agent/prototypes/) | Clickable call-flow prototype. Open it in a browser. |
 | [`.scratch/calling-agent/assets/`](.scratch/calling-agent/assets/) | Agency knowledge sheet and dummy Lead data |
 
-Planned code layout (from M1):
+Code layout:
 
 ```
 core/    pure domain: call state machine, rules, prompts (no vendor imports)
@@ -89,6 +89,19 @@ voice/   LiveKit agent worker: Omar
 web/     Next.js "Talk to Omar" page
 evals/   text-mode conversation tests
 ```
+
+## Run the demo (M1)
+
+The full plan is in [`docs/demo-plan.md`](docs/demo-plan.md).
+
+1. Copy `.env.example` to `.env`. Add the LiveKit, Deepgram, Groq and Cartesia keys.
+2. Install: `uv sync`, `uv run python -m livekit.agents download-files`, `cd web && pnpm install`.
+3. Start the worker: `uv run omar-agent dev`.
+4. Start the page: `cd web && pnpm dev`. Open http://localhost:3000.
+
+Without keys, open the page and click **Watch a sample call**. The page plays a call with synthetic data, and labels it as synthetic.
+
+Tests: `uv run pytest` (offline, no keys) and `uv run pytest evals -m live` (real Groq, text mode).
 
 ## Start here
 

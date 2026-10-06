@@ -1,0 +1,719 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Demo build — one browser call</title>
+<meta name="description" content="Engineer guide. Build one browser call with LiveKit, Deepgram, Groq and Cartesia on free tiers. Milestone M1.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Noto+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="demo.css">
+</head>
+<body>
+
+<div class="rule-top"></div>
+
+<div class="shell">
+
+  <header class="masthead">
+    <h1>Demo build: one browser call</h1>
+    <p class="standfirst">A person speaks. An AI voice agent speaks back. This guide shows a new engineer how the parts fit, how fast the reply arrives, and what to measure before you choose a production stack.</p>
+    <dl class="meta">
+      <div><dt>Milestone</dt><dd>M1 web demo</dd></div>
+      <div><dt>Cost</dt><dd>0</dd></div>
+      <div><dt>Calls at once</dt><dd>2</dd></div>
+      <div><dt>Standard</dt><dd>ASD-STE100</dd></div>
+    </dl>
+  </header>
+
+  <div class="page">
+
+    <nav class="rail" aria-label="Contents">
+      <h2>Contents</h2>
+      <ol>
+        <li><a href="#what">What you build</a></li>
+        <li><a href="#path">The call path</a></li>
+        <li><a href="#latency">The latency</a></li>
+        <li><a href="#play">Play one turn</a></li>
+        <li><a href="#stages">The stages</a></li>
+        <li><a href="#build">The build</a></li>
+        <li><a href="#limits">The limits</a></li>
+        <li><a href="#faults">The faults</a></li>
+        <li><a href="#scope">The scope</a></li>
+      </ol>
+    </nav>
+
+    <main>
+
+      <!-- 01 -->
+      <section id="what">
+        <h2><span class="num">01</span>What you build</h2>
+        <p class="lede">Four rented services do the work. Your own code holds the rules. The model never holds the rules.</p>
+
+        <div class="readout">
+          <div><span class="n">0<small> USD</small></span><span class="l">cost of the whole demo, with test data only</span></div>
+          <div><span class="n">1030<small> ms</small></span><span class="l">one turn, from your last word to the first sound</span></div>
+          <div><span class="n">2</span><span class="l">calls the free tiers allow at the same time</span></div>
+          <div><span class="n">500<small> tok</small></span><span class="l">one turn, if you send one stage and not the whole call</span></div>
+        </div>
+
+        <p>You press one button. You speak. The agent replies in a natural English voice. It gives you what you asked for. It offers two meeting times.</p>
+
+        <p>You need no phone. You need no cloud account. You need no Azure. You need four API keys, one Python package and one afternoon.</p>
+
+        <div class="note">
+          <span class="label">The one idea</span>
+          <p>The agent runs five stages. <strong>Your code decides which stage runs next.</strong> The model only writes the words inside the current stage. This is the rule in ADR 0001. It keeps the UAE calling rules true on every call. A prompt cannot do that.</p>
+        </div>
+
+        <h3>The four services</h3>
+
+        <div class="table-scroll">
+          <table>
+            <caption>Services, place and cost for the demo</caption>
+            <thead>
+              <tr><th>Work</th><th>Service</th><th>Place</th><th class="n">Cost</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Your speech becomes words</td><td><span class="who">Deepgram Flux</span></td><td>AWS EU</td><td class="n">0</td></tr>
+              <tr><td>Words become an answer</td><td><span class="who">Groq, Qwen3.8-27B</span></td><td>Helsinki</td><td class="n">0</td></tr>
+              <tr><td>The answer becomes speech</td><td><span class="who">Cartesia Sonic</span></td><td>EU endpoint</td><td class="n">0</td></tr>
+              <tr><td>Audio moves between devices</td><td><span class="who">LiveKit Build</span></td><td>Frankfurt</td><td class="n">0</td></tr>
+              <tr><td>Stages, guards, tools</td><td><span class="who">Your code</span><span class="note-s">Tested by you, not rented</span></td><td>Your machine</td><td class="n">0</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="note note--law">
+          <span class="label">Two conditions</span>
+          <p><strong>Use test data only.</strong> No real name. No real phone number. The Cartesia free plan allows no commercial use. Read the terms on the day you sign up.</p>
+        </div>
+      </section>
+
+      <!-- 02 -->
+      <section id="path">
+        <h2><span class="num">02</span>The call path</h2>
+        <p class="lede">Audio moves one way. Words move the same way. Your code sits in the middle.</p>
+
+        <figure>
+          <svg viewBox="0 0 1100 380" role="img" aria-labelledby="p-t p-d">
+            <title id="p-t">The call path from the browser to the voice</title>
+            <desc id="p-d">The browser sends audio to LiveKit. LiveKit sends audio to Deepgram Flux. Deepgram sends words to the state machine, which is your code. The state machine sends a prompt to Groq and receives reply words. The state machine sends words to Cartesia Sonic. Cartesia sends audio back to LiveKit. LiveKit sends audio to the browser.</desc>
+            <defs>
+              <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+                <path d="M0 1 L9 5 L0 9 z" fill="#5a6577"/>
+              </marker>
+              <marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+                <path d="M0 1 L9 5 L0 9 z" fill="#1f5fbf"/>
+              </marker>
+            </defs>
+
+            <!-- return routes, drawn first so the boxes sit above them -->
+            <path class="flowline" d="M970 258 L970 320 L340 320 L340 264" marker-end="url(#ar)"/>
+            <text class="link" x="655" y="313" text-anchor="middle">speech audio, back to the browser</text>
+
+            <path class="flowline" d="M340 190 L340 150 L130 150 L130 184" marker-end="url(#ar)"/>
+            <text class="link" x="235" y="142" text-anchor="middle">audio out</text>
+
+            <!-- the model side trip -->
+            <path class="flowline-on" d="M732 190 L732 146" marker-end="url(#arb)"/>
+            <path class="flowline-on" d="M788 146 L788 184" marker-end="url(#arb)"/>
+            <text class="link-strong" x="722" y="172" text-anchor="end">prompt</text>
+            <text class="link-strong" x="798" y="172">reply words</text>
+
+            <!-- main chain -->
+            <path class="flowline" d="M223 224 L245 224" marker-end="url(#ar)"/>
+            <path class="flowline" d="M433 224 L455 224" marker-end="url(#ar)"/>
+            <path class="flowline" d="M643 224 L665 224" marker-end="url(#ar)"/>
+            <path class="flowline" d="M853 224 L875 224" marker-end="url(#ar)"/>
+            <text class="link" x="234" y="280" text-anchor="middle">audio</text>
+            <text class="link" x="444" y="280" text-anchor="middle">audio</text>
+            <text class="link" x="654" y="280" text-anchor="middle">words</text>
+            <text class="link" x="864" y="280" text-anchor="middle">words</text>
+
+            <!-- the rented model -->
+            <g class="pnode" data-node="groq">
+              <rect class="halo" x="648" y="68" width="224" height="72" rx="4"/>
+              <rect class="box" x="650" y="70" width="220" height="68" rx="3"/>
+              <text class="role" x="760" y="92" text-anchor="middle">WORDS TO ANSWER</text>
+              <text class="name" x="760" y="112" text-anchor="middle">Groq · Qwen3.8-27B</text>
+              <text class="where" x="760" y="130" text-anchor="middle">Helsinki</text>
+            </g>
+
+            <!-- the chain -->
+            <g class="pnode" data-node="you">
+              <rect class="halo" x="38" y="188" width="184" height="72" rx="4"/>
+              <rect class="box" x="40" y="190" width="180" height="68" rx="3"/>
+              <text class="role" x="130" y="212" text-anchor="middle">THE LEAD</text>
+              <text class="name" x="130" y="232" text-anchor="middle">Browser</text>
+              <text class="where" x="130" y="250" text-anchor="middle">mic and speaker</text>
+            </g>
+
+            <g class="pnode" data-node="livekit">
+              <rect class="halo" x="248" y="188" width="184" height="72" rx="4"/>
+              <rect class="box" x="250" y="190" width="180" height="68" rx="3"/>
+              <text class="role" x="340" y="212" text-anchor="middle">AUDIO MOVES</text>
+              <text class="name" x="340" y="232" text-anchor="middle">LiveKit</text>
+              <text class="where" x="340" y="250" text-anchor="middle">Frankfurt</text>
+            </g>
+
+            <g class="pnode" data-node="deepgram">
+              <rect class="halo" x="458" y="188" width="184" height="72" rx="4"/>
+              <rect class="box" x="460" y="190" width="180" height="68" rx="3"/>
+              <text class="role" x="550" y="212" text-anchor="middle">SPEECH TO WORDS</text>
+              <text class="name" x="550" y="232" text-anchor="middle">Deepgram Flux</text>
+              <text class="where" x="550" y="250" text-anchor="middle">AWS EU</text>
+            </g>
+
+            <g class="pnode" data-node="state">
+              <rect class="halo" x="668" y="188" width="184" height="72" rx="4"/>
+              <rect class="box-ours" x="670" y="190" width="180" height="68" rx="3"/>
+              <text class="role role-on" x="760" y="212" text-anchor="middle">YOU OWN THIS</text>
+              <text class="name name-on" x="760" y="232" text-anchor="middle">State machine</text>
+              <text class="where where-on" x="760" y="250" text-anchor="middle">yours</text>
+            </g>
+
+            <g class="pnode" data-node="cartesia">
+              <rect class="halo" x="878" y="188" width="184" height="72" rx="4"/>
+              <rect class="box" x="880" y="190" width="180" height="68" rx="3"/>
+              <text class="role" x="970" y="212" text-anchor="middle">WORDS TO SPEECH</text>
+              <text class="name" x="970" y="232" text-anchor="middle">Cartesia Sonic</text>
+              <text class="where" x="970" y="250" text-anchor="middle">EU</text>
+            </g>
+
+            <!-- key -->
+            <line x1="40" y1="356" x2="62" y2="356" stroke="#0b2e6b" stroke-width="2.4"/>
+            <text class="link" x="72" y="360">code you own and test</text>
+            <line x1="240" y1="356" x2="262" y2="356" stroke="#d9e1ed" stroke-width="1.2"/>
+            <text class="link" x="272" y="360">service you rent</text>
+          </svg>
+          <figcaption><b>Read the dark box first.</b> Your state machine sits between the model and the voice. The model can write anything it likes. Your code decides what the caller is allowed to hear, and it checks that decision twice.</figcaption>
+        </figure>
+
+        <h3>One turn, step by step</h3>
+
+        <ol class="numbered">
+          <li>You speak into the microphone.</li>
+          <li>The browser sends 16 kHz <code>µ-law</code> audio to LiveKit.</li>
+          <li>LiveKit sends the audio to Deepgram.</li>
+          <li>Deepgram returns the words. It also sends a signal when your turn ended.</li>
+          <li>Your state machine reads the words. It names the stage.</li>
+          <li>The stage sends a prompt to Groq.</li>
+          <li>Groq streams the reply, word by word.</li>
+          <li>The stage checks the guards. Then it sends the words to Cartesia.</li>
+          <li>Cartesia streams speech audio back to LiveKit.</li>
+          <li>LiveKit sends the audio to the browser.</li>
+          <li>You hear the agent.</li>
+        </ol>
+
+        <div class="note">
+          <span class="label">Why the reply can feel slow</span>
+          <p>Steps 4 and 5 wait for each other. Your code cannot act before the words arrive. This is why the speech to text service sets how fast the agent feels, and why the turn detector matters more than the model.</p>
+        </div>
+      </section>
+
+      <!-- 03 -->
+      <section id="latency">
+        <h2><span class="num">03</span>The latency</h2>
+        <p class="lede">Four services each spend part of your budget. Here is the whole turn.</p>
+
+        <figure>
+          <svg viewBox="0 0 1100 250" role="img" aria-labelledby="w-t w-d">
+            <title id="w-t">Where the 1030 milliseconds go</title>
+            <desc id="w-d">The turn takes 1030 milliseconds. Deepgram turn detection takes 220. Deepgram final words take 300. Groq first token takes 330. Cartesia first audio takes 180. The target is 1200 milliseconds.</desc>
+
+            <text class="seg" x="158" y="74">Turn detect</text>
+            <rect x="70" y="86" width="176" height="58" fill="#c6dbf3"/>
+            <text class="ms" x="158" y="166">220 ms</text>
+            <text class="tick" x="158" y="188">Deepgram</text>
+
+            <text class="seg" x="366" y="74">Final words</text>
+            <rect x="246" y="86" width="240" height="58" fill="#93b8e6"/>
+            <text class="ms" x="366" y="166">300 ms</text>
+            <text class="tick" x="366" y="188">Deepgram</text>
+
+            <text class="seg" x="618" y="74">First token</text>
+            <rect x="486" y="86" width="264" height="58" fill="#3f7bcd"/>
+            <text class="ms" x="618" y="166">330 ms</text>
+            <text class="tick" x="618" y="188">Groq</text>
+
+            <text class="seg" x="822" y="74">First audio</text>
+            <rect x="750" y="86" width="144" height="58" fill="#0b2e6b"/>
+            <text class="ms" x="822" y="166">180 ms</text>
+            <text class="tick" x="822" y="188">Cartesia</text>
+
+            <line x1="894" y1="56" x2="894" y2="198" stroke="#0b2e6b" stroke-width="1.4" stroke-dasharray="4 4"/>
+            <line x1="1030" y1="56" x2="1030" y2="198" stroke="#a8431a" stroke-width="1.4" stroke-dasharray="4 4"/>
+            <text class="exit" x="886" y="46" text-anchor="end">1030 ms total</text>
+            <text class="exit" x="1022" y="46" text-anchor="end">1200 ms target</text>
+
+            <line x1="70" y1="198" x2="1030" y2="198" stroke="#d9e1ed" stroke-width="1.2"/>
+            <g stroke="#d9e1ed" stroke-width="1.2">
+              <line x1="70" y1="198" x2="70" y2="205"/>
+              <line x1="390" y1="198" x2="390" y2="205"/>
+              <line x1="710" y1="198" x2="710" y2="205"/>
+              <line x1="1030" y1="198" x2="1030" y2="205"/>
+            </g>
+            <text class="tick" x="70" y="222">0</text>
+            <text class="tick" x="390" y="222">400</text>
+            <text class="tick" x="710" y="222">800</text>
+            <text class="tick" x="1030" y="222">1200 ms</text>
+          </svg>
+          <figcaption><b>The stack meets the target.</b> The turn ends at 1030 ms against a 1200 ms budget, so 170 ms of room is left. Do not spend that room on a slower model. Two numbers here are estimates: nobody has measured Qwen3.8-27B on Groq, or Cartesia from your own region, on your own traffic.</figcaption>
+        </figure>
+
+        <div class="note">
+          <span class="label">Two switches</span>
+          <p>Turn on LiveKit early generation. The agent starts to answer before Deepgram confirms that you stopped talking. Turn on the Deepgram end of turn model. Together they give back about 200 ms.</p>
+        </div>
+      </section>
+
+      <!-- 04 -->
+      <section id="play">
+        <h2><span class="num">04</span>Play one turn</h2>
+        <p class="lede">Press the button. Watch which box speaks and what it says.</p>
+
+        <div class="instrument">
+          <div class="instrument__bar">
+            <div class="instrument__clock"><span id="clock">0</span> <span>ms</span></div>
+            <div class="instrument__state" id="state">Ready.</div>
+            <button class="btn" id="play" type="button">Play one turn</button>
+            <label class="toggle"><input type="checkbox" id="slow"> four times slower</label>
+          </div>
+          <div class="instrument__track"><div class="instrument__fill" id="fill"></div></div>
+          <ol class="trace" id="steps">
+            <li>
+              <span class="t">220 ms</span>
+              <span><span class="what">Deepgram says the turn ended</span><span class="data">turn_end = true</span></span>
+            </li>
+            <li>
+              <span class="t">300 ms</span>
+              <span><span class="what">The final words arrive at your code</span><span class="data">"Hi, this is Hoplon. I asked about your SEO work."</span></span>
+            </li>
+            <li>
+              <span class="t">330 ms</span>
+              <span><span class="what">Your code names the stage, then Groq answers</span><span class="data">stage = Intent · prompt = 480 tokens · thinking off</span></span>
+            </li>
+            <li>
+              <span class="t">180 ms</span>
+              <span><span class="what">Cartesia gives the first sound</span><span class="data">24 kHz audio to 16 kHz µ-law to speaker</span></span>
+            </li>
+          </ol>
+          <div class="instrument__foot">
+            <span>From your last word to the first sound</span>
+            <span><b>1030 ms</b> · <span class="ok">inside the 1200 ms budget</span></span>
+          </div>
+        </div>
+
+        <p>The stage is named before the model runs. That is the whole design. The model never chooses a stage, and it never checks a guard.</p>
+      </section>
+
+      <!-- 05 -->
+      <section id="stages">
+        <h2><span class="num">05</span>The stages</h2>
+        <p class="lede">Code holds the order. The model fills in the words.</p>
+
+        <figure>
+          <svg viewBox="0 0 1100 250" role="img" aria-labelledby="s-t s-d">
+            <title id="s-t">The five call stages and two exits</title>
+            <desc id="s-d">Opening, Consent, Info, Intent, Booking, Close. The agent leaves at Info and goes to Parked when no intent appears after two tries. The agent goes to Callback at Booking when no time is agreed.</desc>
+            <defs>
+              <marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+                <path d="M0 1 L9 5 L0 9 z" fill="#5a6577"/>
+              </marker>
+              <marker id="ar3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+                <path d="M0 1 L9 5 L0 9 z" fill="#a8431a"/>
+              </marker>
+            </defs>
+
+            <path class="flowline" d="M173 94 L191 94" marker-end="url(#ar2)"/>
+            <path class="flowline" d="M357 94 L375 94" marker-end="url(#ar2)"/>
+            <path class="flowline" d="M541 94 L559 94" marker-end="url(#ar2)"/>
+            <path class="flowline" d="M725 94 L743 94" marker-end="url(#ar2)"/>
+            <path class="flowline" d="M909 94 L927 94" marker-end="url(#ar2)"/>
+
+            <rect class="box-stage" x="10" y="64" width="160" height="60" rx="3"/>
+            <text class="stage" x="90" y="90">Opening</text>
+            <text class="stage-sub" x="90" y="108">company, purpose</text>
+
+            <rect class="box-stage-on" x="194" y="64" width="160" height="60" rx="3"/>
+            <text class="stage stage-on" x="274" y="90">Consent</text>
+            <text class="stage-sub stage-sub-on" x="274" y="108">recording, continue</text>
+
+            <rect class="box-stage" x="378" y="64" width="160" height="60" rx="3"/>
+            <text class="stage" x="458" y="90">Info</text>
+            <text class="stage-sub" x="458" y="108">what you asked for</text>
+
+            <rect class="box-stage" x="562" y="64" width="160" height="60" rx="3"/>
+            <text class="stage" x="642" y="90">Intent</text>
+            <text class="stage-sub" x="642" y="108">want the manager</text>
+
+            <rect class="box-stage" x="746" y="64" width="160" height="60" rx="3"/>
+            <text class="stage" x="826" y="90">Booking</text>
+            <text class="stage-sub" x="826" y="108">two free times</text>
+
+            <rect class="box-stage" x="930" y="64" width="160" height="60" rx="3"/>
+            <text class="stage" x="1010" y="90">Close</text>
+            <text class="stage-sub" x="1010" y="108">thank you</text>
+
+            <path class="flowline" d="M458 130 L458 170" stroke="#a8431a" stroke-dasharray="4 3" marker-end="url(#ar3)"/>
+            <text class="exit" x="468" y="156">no intent after two tries</text>
+
+            <path class="flowline" d="M826 130 L826 170" stroke="#a8431a" stroke-dasharray="4 3" marker-end="url(#ar3)"/>
+            <text class="exit" x="836" y="156">no time agreed</text>
+
+            <rect class="box-exit" x="378" y="176" width="160" height="50" rx="3"/>
+            <text class="exit-name" x="458" y="200">Parked</text>
+            <text class="stage-sub" x="458" y="216" fill="#a8431a">set aside</text>
+
+            <rect class="box-exit" x="746" y="176" width="160" height="50" rx="3"/>
+            <text class="exit-name" x="826" y="200">Callback</text>
+            <text class="stage-sub" x="826" y="216" fill="#a8431a">you get a link</text>
+          </svg>
+          <figcaption><b>Consent is dark because it is a legal duty.</b> Cabinet Resolution 56 of 2024 fixes the order: the company and the purpose first, the recording notice second, then the question. Do not reorder it, and do not let a prompt hold this order.</figcaption>
+        </figure>
+
+        <div class="note note--law">
+          <span class="label">Risk T3</span>
+          <p><strong>The agent must never say a meeting is booked.</strong> Every tested model claims a booking now and then. The calendar must confirm first, and your code must block the words when it did not. This is not a prompt instruction. It is a guard.</p>
+        </div>
+      </section>
+
+      <!-- 06 -->
+      <section id="build">
+        <h2><span class="num">06</span>The build</h2>
+        <p class="lede">Eight steps, in this order. Each one works before you start the next one.</p>
+
+        <h3>The four keys</h3>
+        <p>Three of the four need no card. Get them first, then write any code.</p>
+
+<p class="filelabel">.env</p>
+<pre><code><span class="c"># one console each</span>
+<span class="k">DEEPGRAM_API_KEY</span>=...   <span class="c"># console.deepgram.com  ·  $200 credit</span>
+<span class="k">GROQ_API_KEY</span>=...       <span class="c"># console.groq.com      ·  free tier</span>
+<span class="k">CARTESIA_API_KEY</span>=...  <span class="c"># cartesia.ai           ·  20,000 credits</span>
+<span class="k">LIVEKIT_URL</span>=ws://localhost:7880
+<span class="k">LIVEKIT_API_KEY</span>=...   <span class="c"># only for the Cloud plan</span></code></pre>
+
+        <p>Run LiveKit on your own machine first. One binary, one command, no account.</p>
+
+<p class="filelabel">terminal</p>
+<pre><code>livekit-server --dev</code></pre>
+
+        <ol class="steps">
+          <li>
+            <h3>Write the domain model</h3>
+            <p>Put the words from <code>CONTEXT.md</code> into <code>core/domain.py</code>. No logic, only names. <code>Stage</code>, <code>LeadStatus</code>, <code>Turn</code>.</p>
+            <p class="done-when"><b>Done when</b> every enum value matches a word used in the map file.</p>
+          </li>
+          <li>
+            <h3>Write the ports</h3>
+            <p>Put the interfaces in <code>core/ports.py</code>. <code>SttPort</code>, <code>LlmPort</code>, <code>TtsPort</code>, <code>CalendarPort</code>. No vendor import, ever.</p>
+<p class="filelabel">core/ports.py</p>
+<pre><code><span class="k">class</span> <span class="f">SttPort</span>(<span class="n">Protocol</span>):
+    <span class="k">async def</span> <span class="f">start</span>(self) -&gt; <span class="k">None</span>: ...
+    <span class="k">async def</span> <span class="f">push</span>(self, chunk: <span class="k">bytes</span>) -&gt; <span class="k">None</span>: ...
+    <span class="k">def</span> <span class="f">on_final_text</span>(self, cb) -&gt; <span class="k">None</span>: ...
+    <span class="k">def</span> <span class="f">on_turn_end</span>(self, cb) -&gt; <span class="k">None</span>: ...</code></pre>
+            <p class="done-when"><b>Done when</b> <code>core/ports.py</code> contains no vendor package name.</p>
+          </li>
+          <li>
+            <h3>Write the Deepgram adapter</h3>
+            <p>Use the EU endpoint and the Flux model. Turn on the end of turn model. Write two callbacks: one for the final words, one for the turn end signal.</p>
+<p class="filelabel">voice/adapters/stt_deepgram.py</p>
+<pre><code><span class="k">DGRAM</span> = <span class="s">"wss://api.eu.deepgram.com/v1/listen"</span></code></pre>
+            <p class="done-when"><b>Done when</b> you speak into the terminal and you see your own words, then a turn end marker.</p>
+          </li>
+          <li>
+            <h3>Write the Groq adapter</h3>
+            <p>Use the OpenAI style base URL, the model <code>qwen/qwen3.8-27b</code>, and thinking off. Stream the tokens. Never wait for the full reply.</p>
+<p class="filelabel">voice/adapters/llm_groq.py</p>
+<pre><code><span class="k">GROQ</span> = <span class="s">"https://api.groq.com/openai/v1"</span></code></pre>
+            <p class="done-when"><b>Done when</b> the tokens print as they arrive, not in one block at the end.</p>
+          </li>
+          <li>
+            <h3>Write the Cartesia adapter</h3>
+            <p>Stream the audio. Start playback on the first chunk. Do not wait for the last chunk.</p>
+            <p class="done-when"><b>Done when</b> a 200 word reply starts playing in under 300 ms.</p>
+          </li>
+          <li>
+            <h3>Write the state machine and the guards</h3>
+            <p>The most important file in the project. <code>core/machine.py</code> names the next stage. <code>core/guards.py</code> holds pure functions.</p>
+<p class="filelabel">core/guards.py</p>
+<pre><code><span class="n">OPENING_ORDER</span> = [<span class="s">"company_and_purpose"</span>, <span class="s">"recording_notice"</span>, <span class="s">"may_i_continue"</span>]
+
+<span class="k">def</span> <span class="f">legal_opening</span>(events) -&gt; <span class="k">bool</span>:
+    <span class="k">return</span> events[:<span class="n">3</span>] == <span class="n">OPENING_ORDER</span>
+
+<span class="k">def</span> <span class="f">may_say_booked</span>(calendar_confirmed: <span class="k">bool</span>) -&gt; <span class="k">bool</span>:
+    <span class="k">return</span> calendar_confirmed <span class="k">is True</span>
+
+<span class="k">def</span> <span class="f">may_deny_being_ai</span>(text: <span class="k">str</span>) -&gt; <span class="k">bool</span>:
+    <span class="k">return False</span>   <span class="c"># always False</span></code></pre>
+            <p class="done-when"><b>Done when</b> a unit test fails when you reorder the opening. That failing test is the deliverable.</p>
+          </li>
+          <li>
+            <h3>Write the LiveKit worker</h3>
+            <p>Join this order on every turn: audio, Deepgram, machine, guards, Groq, guards, Cartesia, audio. Turn on early generation.</p>
+            <p class="done-when"><b>Done when</b> the browser shows the agent and you hear it.</p>
+          </li>
+          <li>
+            <h3>Write the text seam and five scenarios</h3>
+            <p>Run the whole loop with text only. Same machine, same guards, same prompts, no audio, no network. Then write five YAML scenarios: the happy path to a booking, a price question, a request for a person, a refusal, and a question about whether the agent is human.</p>
+            <p class="done-when"><b>Done when</b> <code>pytest</code> runs all five in under two seconds with the network off.</p>
+          </li>
+        </ol>
+
+        <div class="note">
+          <span class="label">Swap a service</span>
+          <p>Every service sits behind one interface. Change the class in the config and change no other code. This is the decision in ticket 21, and it is the reason a later provider change costs one line.</p>
+        </div>
+      </section>
+
+      <!-- 07 -->
+      <section id="limits">
+        <h2><span class="num">07</span>The limits</h2>
+        <p class="lede">One limit arrives before the others. It is not the one you expect.</p>
+
+        <div class="gauge">
+          <div class="gauge__row">
+            <div class="gauge__head">
+              <span class="gauge__name">Groq, short context</span>
+              <span class="gauge__num">2,000 of 8,000 tokens a minute</span>
+            </div>
+            <div class="gauge__track"><div class="gauge__fill" style="width:25%"></div></div>
+            <p class="gauge__note">Send one stage. Keep the context under 500 tokens.</p>
+          </div>
+          <div class="gauge__row">
+            <div class="gauge__head">
+              <span class="gauge__name">Groq, long context</span>
+              <span class="gauge__num">2 of 3 calls at the same time</span>
+            </div>
+            <div class="gauge__track"><div class="gauge__fill tight" style="width:67%"></div></div>
+            <p class="gauge__note">Send the whole call again on every turn and the demo itself becomes the limit.</p>
+          </div>
+          <div class="gauge__row">
+            <div class="gauge__head">
+              <span class="gauge__name">Cartesia</span>
+              <span class="gauge__num">900 of 20,000 credits a month</span>
+            </div>
+            <div class="gauge__track"><div class="gauge__fill" style="width:5%"></div></div>
+            <p class="gauge__note">One 3-minute demo call uses about 900 credits, so the free plan gives about 22 calls.</p>
+          </div>
+        </div>
+
+        <p>Groq allows 8,000 tokens a minute and 200,000 a day. One turn costs 2,700 tokens if you send the whole call. One turn costs 500 tokens if you send one stage.</p>
+
+        <div class="note">
+          <span class="label">Keep the context short</span>
+          <p>Reset the context at every stage change. Your state machine already gives you stages, so this is a gain from ADR 0001 rather than extra work.</p>
+        </div>
+
+        <div class="table-scroll">
+          <table>
+            <caption>Free tier limits against the load of the demo</caption>
+            <thead>
+              <tr><th>Service</th><th>Free limit</th><th class="n">Demo needs</th><th>Breaks when</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><span class="who">Groq</span></td><td>8,000 tokens a minute</td><td class="n">2,000</td><td>4 calls at the same time</td></tr>
+              <tr><td><span class="who">Groq</span></td><td>200,000 tokens a day</td><td class="n">20,000</td><td>80 calls a day</td></tr>
+              <tr><td><span class="who">LiveKit</span></td><td>1,000 minutes a month</td><td class="n">60</td><td>300 calls a month</td></tr>
+              <tr><td><span class="who">Cartesia</span></td><td>20,000 credits a month</td><td class="n">900 a call</td><td>22 calls a month</td></tr>
+              <tr><td><span class="who">Deepgram</span></td><td>$200 credit</td><td class="n">$0.40 a call</td><td>Never, for the demo</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="note note--law">
+          <span class="label">Do not put Whisper on the live path</span>
+          <p>Whisper on Groq is a batch service. You send a file and you get text back 10 to 30 seconds later for a 3-minute call. Use it to check a call after the call. Use Deepgram for the live path.</p>
+        </div>
+      </section>
+
+      <!-- 08 -->
+      <section id="faults">
+        <h2><span class="num">08</span>The faults</h2>
+        <p class="lede">Six faults cover most of your first day. Know the fix before you meet the fault.</p>
+
+        <div class="table-scroll">
+          <table>
+            <caption>Symptom, cause and repair</caption>
+            <thead>
+              <tr><th>What you see</th><th>Cause</th><th>Repair</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><span class="who">The agent cuts you off</span></td><td>Background noise sounds like speech</td><td>Raise the interruption threshold</td></tr>
+              <tr><td><span class="who">The agent answers too late</span></td><td>The model waits for the whole turn</td><td>Turn on early generation</td></tr>
+              <tr><td><span class="who">The agent claims a booking</span></td><td>The model invented it</td><td>The guard blocks the words</td></tr>
+              <tr><td><span class="who">The agent sounds like a machine</span></td><td>The voice has little expression</td><td>Pick another voice</td></tr>
+              <tr><td><span class="who">The page makes no sound</span></td><td>The browser blocked the sound</td><td>Allow sound for the page</td></tr>
+              <tr><td><span class="who">The model stops mid call</span></td><td>The daily limit ended</td><td>Read the limit in the log</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>The interruption setting is the one you will fight. LiveKit gives it to you in config, not in code.</p>
+
+<p class="filelabel">livekit agent config</p>
+<pre><code><span class="c"># livekit agent config</span>
+<span class="n">min_interruption_duration</span>: <span class="n">0.6</span>    <span class="c"># ignore noise shorter than this</span>
+<span class="n">min_interruption_words</span>: <span class="n">2</span>       <span class="c"># need two real words before a cut</span>
+<span class="n">false_interruption_timeout</span>: <span class="n">8.0</span>  <span class="c"># repair a wrong cut after this wait</span>
+<span class="n">preemptive_generation</span>: <span class="s">true</span>    <span class="c"># start the reply before the turn ends</span></code></pre>
+      </section>
+
+      <!-- 09 -->
+      <section id="scope">
+        <h2><span class="num">09</span>The scope</h2>
+        <p class="lede">Know what this demo must not do. The list is short on purpose.</p>
+
+        <ul>
+          <li>It does not call a phone.</li>
+          <li>It does not read a real calendar.</li>
+          <li>It does not send email.</li>
+          <li>It does not store a lead.</li>
+          <li>It does not run in the cloud.</li>
+          <li>It does not touch a real phone number.</li>
+        </ul>
+
+        <p>Each item belongs to milestone M2 or M3. A demo that tries everything proves nothing.</p>
+
+        <h3>What you must measure</h3>
+        <p>Write down four numbers. They decide the next step for the whole project.</p>
+
+        <ol class="numbered">
+          <li>The time from your last word to the first sound.</li>
+          <li>The number of tokens in one turn.</li>
+          <li>The number of times the agent cut you off.</li>
+          <li>The number of guard blocks in ten calls.</li>
+        </ol>
+
+        <div class="endcard">
+          <h3>Read these three files first</h3>
+          <ol>
+            <li><b>CONTEXT.md</b> holds the words. Use those words in code, in prompts and in tests.</li>
+            <li><b>docs/adr/0001</b> holds the state machine rule.</li>
+            <li><b>docs/adr/0002</b> holds the LiveKit choice.</li>
+          </ol>
+          <p>Then take step one. Get four keys.</p>
+        </div>
+      </section>
+
+      <div class="colophon">
+        <span>Demo build · engineer onboarding · milestone M1</span>
+        <span>Sources in <code>.scratch/calling-agent/</code></span>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<script>
+(function () {
+  var TOTAL = 1030;
+  var plan = [
+    { at: 0,   node: ['deepgram'],         text: 'Deepgram waits for your voice to stop.' },
+    { at: 220, node: ['deepgram'],         text: 'Deepgram sends the final words to your state machine.' },
+    { at: 520, node: ['state', 'groq'],     text: 'Your code named the stage. Groq streams the reply.' },
+    { at: 850, node: ['cartesia'],          text: 'Cartesia streams speech audio. You hear it.' }
+  ];
+
+  var clock = document.getElementById('clock');
+  var stateEl = document.getElementById('state');
+  var fill = document.getElementById('fill');
+  var btn = document.getElementById('play');
+  var slow = document.getElementById('slow');
+  var rows = [].slice.call(document.querySelectorAll('#steps li'));
+  var nodes = [].slice.call(document.querySelectorAll('.pnode'));
+  var raf = null;
+  var t0 = 0;
+
+  function at(ms) {
+    var i = 0, k;
+    for (k = 0; k < plan.length; k++) { if (ms >= plan[k].at) { i = k; } }
+    return i;
+  }
+
+  function paint(ms) {
+    var shown = Math.min(ms, TOTAL);
+    clock.textContent = Math.round(shown);
+    fill.style.transform = 'scaleX(' + (shown / TOTAL).toFixed(4) + ')';
+
+    var i = at(shown);
+    var p = plan[i];
+    stateEl.innerHTML = p.text;
+
+    rows.forEach(function (el, k) {
+      el.classList.toggle('now', k === i);
+      el.classList.toggle('past', k < i);
+    });
+    nodes.forEach(function (el) {
+      var on = p.node.indexOf(el.getAttribute('data-node')) !== -1;
+      el.classList.toggle('live', on);
+      el.classList.toggle('dim', !on);
+    });
+  }
+
+  function frame(now) {
+    var v = (now - t0) / (slow.checked ? 4 : 1);
+    paint(v);
+    if (v >= TOTAL) { stop(); return; }
+    raf = requestAnimationFrame(frame);
+  }
+
+  function stop() {
+    if (raf) { cancelAnimationFrame(raf); raf = null; }
+    btn.disabled = false;
+    btn.textContent = 'Play again';
+  }
+
+  function reset() {
+    clock.textContent = '0';
+    fill.style.transform = 'scaleX(0)';
+    stateEl.textContent = 'Ready.';
+    rows.forEach(function (el) { el.classList.remove('now', 'past'); });
+    nodes.forEach(function (el) { el.classList.remove('live', 'dim'); });
+  }
+
+  btn.addEventListener('click', function () {
+    if (raf) { stop(); reset(); btn.textContent = 'Play one turn'; return; }
+    reset();
+    btn.disabled = true;
+    btn.textContent = 'Playing…';
+    t0 = performance.now();
+    raf = requestAnimationFrame(frame);
+  });
+
+  slow.addEventListener('change', function () {
+    if (raf) { stop(); reset(); btn.textContent = 'Play one turn'; }
+  });
+
+  /* contents rail: mark the section you are reading */
+  var links = [].slice.call(document.querySelectorAll('.rail a'));
+  var sections = links.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+
+  function mark() {
+    var line = window.innerHeight * 0.28, best = 0;
+    sections.forEach(function (s, k) {
+      if (s && s.getBoundingClientRect().top <= line) { best = k; }
+    });
+    links.forEach(function (a, k) {
+      if (k === best) { a.setAttribute('aria-current', 'true'); }
+      else { a.removeAttribute('aria-current'); }
+    });
+  }
+
+  var tick = false;
+  window.addEventListener('scroll', function () {
+    if (tick) { return; }
+    tick = true;
+    requestAnimationFrame(function () { mark(); tick = false; });
+  }, { passive: true });
+  mark();
+})();
+</script>
+
+</body>
+</html>

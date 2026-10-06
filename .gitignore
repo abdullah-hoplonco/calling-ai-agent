@@ -23,3 +23,11 @@ node_modules/
 .DS_Store
 .vscode/
 .idea/
+
+# Demo build output
+voice/logs/
+web/.next/
+web/next-env.d.ts
+*.tsbuildinfo
+.impeccable/review/
+.impeccable/questions/

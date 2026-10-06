@@ -1,0 +1,12 @@
+.git
+.venv
+web
+docs
+evals
+.impeccable
+.claude
+**/__pycache__
+**/.pytest_cache
+voice/logs
+.env
+.env.*
