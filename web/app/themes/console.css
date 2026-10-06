@@ -928,9 +928,12 @@
   color: var(--good);
   font-weight: 600;
 }
-.cn-table td[data-tone="warn"],
-.cn-table td[data-tone="crit"] {
+.cn-table td[data-tone="warn"] {
   color: var(--warn);
+  font-weight: 600;
+}
+.cn-table td[data-tone="crit"] {
+  color: var(--crit);
   font-weight: 600;
 }
 .cn-note {

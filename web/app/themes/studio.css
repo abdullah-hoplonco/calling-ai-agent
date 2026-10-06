@@ -181,6 +181,7 @@
   color: var(--crit);
 }
 .st-synth {
+  display: none;
   font-size: 0.6875rem;
   font-weight: 600;
   color: var(--warn);
@@ -822,6 +823,10 @@
   }
   .st-lcd-st {
     display: none !important;
+  }
+  .st-synth {
+    display: inline-block;
+    order: 3;
   }
   .st-sw {
     margin-left: 0;

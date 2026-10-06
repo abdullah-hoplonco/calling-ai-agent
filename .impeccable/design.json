@@ -1,117 +1,402 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-04T04:06:36+00:00",
-  "title": "Design System: Talk to Omar (Hoplon & Co house world)",
+  "generatedAt": "2026-10-06T14:14:32+00:00",
+  "title": "Design System: Talk to Omar (four themes, one call)",
   "extensions": {
     "colorMeta": {
-      "navy": {
-        "role": "primary",
-        "displayName": "Hoplon Navy",
-        "canonical": "#0b2e6b",
+      "studio-bg": {
+        "role": "neutral",
+        "displayName": "Studio Bg",
+        "canonical": "#111215",
         "tonalRamp": [
-          "#00003a",
-          "#001f5b",
-          "#1b3f7d",
-          "#3a60a1",
-          "#5a82c6",
-          "#7ca5ec",
-          "#aecafb",
-          "#e6efff"
+          "#0a0b0e",
+          "#242528",
+          "#414245",
+          "#606165",
+          "#818286",
+          "#a3a5a9",
+          "#c7c9cd",
+          "#edeef3"
         ]
       },
-      "navy-2": {
-        "role": "primary",
-        "displayName": "Deep Navy",
-        "canonical": "#123a80",
+      "studio-panel": {
+        "role": "neutral",
+        "displayName": "Studio Panel",
+        "canonical": "#17181c",
         "tonalRamp": [
-          "#00003a",
-          "#001f5b",
-          "#163e84",
-          "#355fa8",
-          "#5581ce",
-          "#77a5f4",
-          "#aecafb",
-          "#e6efff"
+          "#0a0b0f",
+          "#242529",
+          "#414246",
+          "#606166",
+          "#818287",
+          "#a3a5aa",
+          "#c7c9ce",
+          "#edeef4"
         ]
       },
-      "blue": {
+      "studio-panel-2": {
+        "role": "neutral",
+        "displayName": "Studio Panel 2",
+        "canonical": "#1d1f24",
+        "tonalRamp": [
+          "#090b0f",
+          "#23252a",
+          "#404247",
+          "#5f6167",
+          "#808289",
+          "#a2a5ac",
+          "#c6c9d0",
+          "#ebeef5"
+        ]
+      },
+      "studio-surface": {
+        "role": "neutral",
+        "displayName": "Studio Surface",
+        "canonical": "#1c1e23",
+        "tonalRamp": [
+          "#090b10",
+          "#23252a",
+          "#404248",
+          "#5f6167",
+          "#808289",
+          "#a2a5ac",
+          "#c6c9d0",
+          "#ebeef5"
+        ]
+      },
+      "studio-lane": {
+        "role": "neutral",
+        "displayName": "Studio Lane",
+        "canonical": "#1a1c21",
+        "tonalRamp": [
+          "#090b10",
+          "#23252a",
+          "#404248",
+          "#5f6167",
+          "#808289",
+          "#a2a5ac",
+          "#c6c9d0",
+          "#ebeef6"
+        ]
+      },
+      "studio-line": {
+        "role": "neutral",
+        "displayName": "Studio Line",
+        "canonical": "#2a2d34",
+        "tonalRamp": [
+          "#090b11",
+          "#22252c",
+          "#3f4249",
+          "#5e6169",
+          "#7f828b",
+          "#a1a5ae",
+          "#c5c9d2",
+          "#eaeef8"
+        ]
+      },
+      "studio-line-2": {
+        "role": "neutral",
+        "displayName": "Studio Line 2",
+        "canonical": "#3a3d46",
+        "tonalRamp": [
+          "#090b12",
+          "#22252d",
+          "#3f424b",
+          "#5e616b",
+          "#7f828c",
+          "#a1a5af",
+          "#c5c9d4",
+          "#eaeefa"
+        ]
+      },
+      "studio-ink": {
+        "role": "neutral",
+        "displayName": "Studio Ink",
+        "canonical": "#e9eaee",
+        "tonalRamp": [
+          "#0a0b0e",
+          "#242528",
+          "#414245",
+          "#606164",
+          "#818286",
+          "#a4a5a8",
+          "#c8c9cd",
+          "#edeef2"
+        ]
+      },
+      "studio-ink-2": {
+        "role": "neutral",
+        "displayName": "Studio Ink 2",
+        "canonical": "#aeb2bc",
+        "tonalRamp": [
+          "#090b12",
+          "#22252d",
+          "#3f424a",
+          "#5e616a",
+          "#7e828c",
+          "#a1a5af",
+          "#c5c9d3",
+          "#eaeef9"
+        ]
+      },
+      "studio-ink-3": {
+        "role": "neutral",
+        "displayName": "Studio Ink 3",
+        "canonical": "#80859a",
+        "tonalRamp": [
+          "#070a19",
+          "#202435",
+          "#3d4153",
+          "#5c6074",
+          "#7c8196",
+          "#9fa4ba",
+          "#c3c8df",
+          "#eaeeff"
+        ]
+      },
+      "studio-lcd": {
+        "role": "neutral",
+        "displayName": "LCD Black",
+        "canonical": "#0a0b0d",
+        "tonalRamp": [
+          "#0a0b0d",
+          "#242527",
+          "#414244",
+          "#606164",
+          "#818285",
+          "#a3a5a8",
+          "#c7c9cc",
+          "#edeef2"
+        ]
+      },
+      "studio-lead": {
         "role": "secondary",
-        "displayName": "Signal Blue",
-        "canonical": "#1f5fbf",
+        "displayName": "Session Sky",
+        "canonical": "#5ab8f0",
         "tonalRamp": [
-          "#00003c",
-          "#002158",
-          "#003c8e",
-          "#1c5cbc",
-          "#4080e3",
-          "#71a5f8",
-          "#abcbfd",
-          "#e6effe"
+          "#000d17",
+          "#01283d",
+          "#084767",
+          "#136894",
+          "#268cc1",
+          "#51afe7",
+          "#93d2fb",
+          "#dff2ff"
         ]
       },
-      "sky": {
-        "role": "tertiary",
-        "displayName": "Sky",
-        "canonical": "#e8f0fb",
+      "studio-omar": {
+        "role": "primary",
+        "displayName": "Session Amber",
+        "canonical": "#f39a3d",
         "tonalRamp": [
-          "#070b12",
-          "#20262d",
-          "#3c434b",
-          "#5b626b",
-          "#7c838d",
-          "#9ea6b0",
-          "#c2cad4",
-          "#e7effa"
+          "#150800",
+          "#391d01",
+          "#603605",
+          "#8b510e",
+          "#ba6d07",
+          "#e58d2d",
+          "#ffb877",
+          "#feebda"
         ]
       },
-      "sky-2": {
-        "role": "tertiary",
-        "displayName": "Sky Deep",
-        "canonical": "#d3e2f7",
+      "studio-omar-hover": {
+        "role": "primary",
+        "displayName": "Studio Omar Hover",
+        "canonical": "#ffad57",
         "tonalRamp": [
-          "#030b19",
-          "#1b2635",
-          "#374354",
-          "#556274",
-          "#768396",
-          "#98a6ba",
-          "#bccadf",
-          "#e4f0ff"
+          "#150800",
+          "#371e03",
+          "#603701",
+          "#8b5205",
+          "#b67018",
+          "#e09037",
+          "#feb974",
+          "#feebd9"
         ]
       },
-      "tint": {
+      "studio-button-2": {
         "role": "neutral",
-        "displayName": "Cool Tint",
-        "canonical": "#f5f8fc",
+        "displayName": "Studio Button 2",
+        "canonical": "#25272d",
         "tonalRamp": [
-          "#090b0e",
-          "#232528",
-          "#404245",
-          "#5f6165",
-          "#808286",
-          "#a2a5a9",
-          "#c6c9cd",
-          "#eceff3"
+          "#090b10",
+          "#23252b",
+          "#404248",
+          "#5f6168",
+          "#808289",
+          "#a2a5ac",
+          "#c6c9d1",
+          "#ebeef6"
         ]
       },
-      "zebra": {
-        "role": "neutral",
-        "displayName": "Zebra",
-        "canonical": "#f6f9fe",
+      "studio-good": {
+        "role": "verdict",
+        "displayName": "Studio Good",
+        "canonical": "#5be08f",
         "tonalRamp": [
-          "#090b0e",
-          "#232529",
-          "#404246",
-          "#5f6166",
-          "#808287",
-          "#a2a5aa",
-          "#c6c9ce",
-          "#eceff4"
+          "#000f05",
+          "#012e15",
+          "#08502a",
+          "#147440",
+          "#0d9b56",
+          "#36c273",
+          "#63e896",
+          "#c7fed7"
         ]
       },
-      "white": {
+      "studio-warn": {
+        "role": "verdict",
+        "displayName": "Studio Warn",
+        "canonical": "#ffd04d",
+        "tonalRamp": [
+          "#100a00",
+          "#2f2302",
+          "#523f09",
+          "#785d01",
+          "#9f7d14",
+          "#c99f1e",
+          "#f1c33c",
+          "#feedc4"
+        ]
+      },
+      "studio-crit": {
+        "role": "verdict",
+        "displayName": "Studio Crit",
+        "canonical": "#ff6b6b",
+        "tonalRamp": [
+          "#1f0002",
+          "#4b040b",
+          "#7c0f1b",
+          "#b11d2c",
+          "#d9484c",
+          "#fc7473",
+          "#fcb4af",
+          "#ffe9e7"
+        ]
+      },
+      "studio-end": {
+        "role": "verdict",
+        "displayName": "Studio End",
+        "canonical": "#e5484d",
+        "tonalRamp": [
+          "#1f0002",
+          "#4a050c",
+          "#7f0317",
+          "#b60d26",
+          "#de4148",
+          "#fb7673",
+          "#fbb4b0",
+          "#fee9e7"
+        ]
+      },
+      "studio-p-detect": {
+        "role": "part-ink",
+        "displayName": "Studio P Detect",
+        "canonical": "#86a1ff",
+        "tonalRamp": [
+          "#030131",
+          "#111367",
+          "#28378b",
+          "#4459b0",
+          "#637bd6",
+          "#849ffd",
+          "#b6c7fd",
+          "#e9eefe"
+        ]
+      },
+      "studio-p-commit": {
+        "role": "part-ink",
+        "displayName": "Studio P Commit",
+        "canonical": "#5b74e8",
+        "tonalRamp": [
+          "#040033",
+          "#120772",
+          "#252e9d",
+          "#3f53c4",
+          "#5d76eb",
+          "#859ffb",
+          "#b6c7fc",
+          "#e9eefe"
+        ]
+      },
+      "studio-p-tool": {
+        "role": "part-ink",
+        "displayName": "Studio P Tool",
+        "canonical": "#d39cf5",
+        "tonalRamp": [
+          "#150021",
+          "#38044f",
+          "#592575",
+          "#7a4698",
+          "#9d68bd",
+          "#c18be2",
+          "#e0b5fb",
+          "#f5e9fe"
+        ]
+      },
+      "studio-p-llm": {
+        "role": "part-ink",
+        "displayName": "Studio P Llm",
+        "canonical": "#a45de6",
+        "tonalRamp": [
+          "#130123",
+          "#350257",
+          "#5a0c8e",
+          "#7d32ba",
+          "#a058e1",
+          "#bf85fa",
+          "#d8bafc",
+          "#f3eafe"
+        ]
+      },
+      "studio-p-guard": {
+        "role": "part-ink",
+        "displayName": "Studio P Guard",
+        "canonical": "#e8d36a",
+        "tonalRamp": [
+          "#0f0b00",
+          "#2c2503",
+          "#4d4201",
+          "#706107",
+          "#95821a",
+          "#baa539",
+          "#dfca61",
+          "#fef0a8"
+        ]
+      },
+      "studio-p-tts": {
+        "role": "part-ink",
+        "displayName": "Studio P Tts",
+        "canonical": "#33c4ae",
+        "tonalRamp": [
+          "#000f0c",
+          "#032c26",
+          "#004e43",
+          "#067163",
+          "#1c9685",
+          "#29bea8",
+          "#5be3cc",
+          "#bcfef0"
+        ]
+      },
+      "console-bg": {
         "role": "neutral",
-        "displayName": "White",
+        "displayName": "Console Bg",
+        "canonical": "#f6f6f7",
+        "tonalRamp": [
+          "#0b0b0c",
+          "#252526",
+          "#424243",
+          "#616162",
+          "#828283",
+          "#a5a5a6",
+          "#c9c9ca",
+          "#eeeeef"
+        ]
+      },
+      "console-surface": {
+        "role": "neutral",
+        "displayName": "Console Surface",
         "canonical": "#ffffff",
         "tonalRamp": [
           "#0b0b0b",
@@ -124,483 +409,1491 @@
           "#eeeeee"
         ]
       },
-      "rule": {
+      "console-surface-2": {
         "role": "neutral",
-        "displayName": "Hairline",
-        "canonical": "#d9e1ed",
+        "displayName": "Console Surface 2",
+        "canonical": "#fafafb",
         "tonalRamp": [
-          "#070b13",
-          "#20252e",
-          "#3c424c",
-          "#5b626c",
-          "#7c838e",
-          "#9ea6b1",
-          "#c2cad5",
-          "#e7effb"
+          "#0b0b0c",
+          "#252526",
+          "#424243",
+          "#616162",
+          "#828283",
+          "#a5a5a6",
+          "#c9c9ca",
+          "#eeeeef"
         ]
       },
-      "rule-soft": {
+      "console-hover": {
         "role": "neutral",
-        "displayName": "Soft Hairline",
-        "canonical": "#eaf0f8",
+        "displayName": "Console Hover",
+        "canonical": "#f2f2f4",
         "tonalRamp": [
-          "#080b10",
-          "#21252b",
-          "#3e4249",
-          "#5d6268",
-          "#7d838a",
-          "#a0a6ad",
-          "#c4cad1",
-          "#e9eff7"
+          "#0b0b0c",
+          "#252526",
+          "#424243",
+          "#616163",
+          "#828284",
+          "#a5a5a7",
+          "#c9c9cb",
+          "#eeeef0"
         ]
       },
-      "ink": {
+      "console-line": {
         "role": "neutral",
-        "displayName": "Ink",
-        "canonical": "#14213d",
+        "displayName": "Console Line",
+        "canonical": "#e6e6ea",
         "tonalRamp": [
-          "#020922",
-          "#172440",
-          "#334260",
-          "#516182",
-          "#7182a5",
-          "#93a5c9",
-          "#b7caef",
+          "#0b0b0d",
+          "#252528",
+          "#424245",
+          "#616164",
+          "#828285",
+          "#a4a4a8",
+          "#c9c9cc",
+          "#eeeef2"
+        ]
+      },
+      "console-line-2": {
+        "role": "neutral",
+        "displayName": "Console Line 2",
+        "canonical": "#d4d5db",
+        "tonalRamp": [
+          "#0a0b0f",
+          "#242529",
+          "#414246",
+          "#606166",
+          "#818287",
+          "#a4a5aa",
+          "#c8c9cf",
+          "#edeef4"
+        ]
+      },
+      "console-ink": {
+        "role": "neutral",
+        "displayName": "Console Ink",
+        "canonical": "#0f1115",
+        "tonalRamp": [
+          "#090b0f",
+          "#232529",
+          "#404247",
+          "#5f6166",
+          "#808288",
+          "#a2a5ab",
+          "#c6c9cf",
+          "#ebeef5"
+        ]
+      },
+      "console-ink-2": {
+        "role": "neutral",
+        "displayName": "Console Ink 2",
+        "canonical": "#4a505e",
+        "tonalRamp": [
+          "#070b16",
+          "#202531",
+          "#3c424f",
+          "#5b6170",
+          "#7c8292",
+          "#9ea5b5",
+          "#c2c9da",
+          "#e8eefe"
+        ]
+      },
+      "console-ink-3": {
+        "role": "neutral",
+        "displayName": "Console Ink 3",
+        "canonical": "#666c7e",
+        "tonalRamp": [
+          "#070a17",
+          "#202433",
+          "#3c4152",
+          "#5b6172",
+          "#7c8294",
+          "#9ea5b8",
+          "#c2c9dd",
+          "#e9eefe"
+        ]
+      },
+      "console-blue": {
+        "role": "primary",
+        "displayName": "Console Blue",
+        "canonical": "#2f56e0",
+        "tonalRamp": [
+          "#010035",
+          "#060974",
+          "#1225b1",
+          "#294ed8",
+          "#4b77f6",
+          "#7ca1fd",
+          "#b2c9fd",
           "#e7effe"
         ]
       },
-      "ink-2": {
-        "role": "neutral",
-        "displayName": "Ink 2",
-        "canonical": "#46526b",
+      "console-blue-hover": {
+        "role": "primary",
+        "displayName": "Console Blue Hover",
+        "canonical": "#2447c4",
         "tonalRamp": [
-          "#040a1e",
-          "#1a243b",
-          "#36425a",
-          "#55617b",
-          "#75829e",
-          "#97a5c2",
-          "#bbc9e7",
-          "#e7efff"
+          "#010035",
+          "#060974",
+          "#132ba9",
+          "#2c52d0",
+          "#4a77f7",
+          "#7ba1fe",
+          "#b1c9fe",
+          "#e7effe"
         ]
       },
-      "ink-3": {
-        "role": "neutral",
-        "displayName": "Ink 3",
-        "canonical": "#5a6577",
+      "console-blue-soft": {
+        "role": "primary",
+        "displayName": "Console Blue Soft",
+        "canonical": "#eef2fe",
         "tonalRamp": [
-          "#040b18",
-          "#1c2535",
-          "#384253",
-          "#576274",
-          "#778396",
-          "#9aa6ba",
-          "#bdcade",
-          "#e6efff"
+          "#090b12",
+          "#22252d",
+          "#3f424b",
+          "#5e616b",
+          "#7e828d",
+          "#a1a5b0",
+          "#c5c9d4",
+          "#eaeefa"
         ]
       },
-      "on-navy": {
-        "role": "neutral",
-        "displayName": "On-Navy",
-        "canonical": "#c9daf5",
+      "console-blue-line": {
+        "role": "primary",
+        "displayName": "Console Blue Line",
+        "canonical": "#c9d5fb",
         "tonalRamp": [
-          "#030b1c",
-          "#192539",
-          "#354358",
-          "#536279",
-          "#74839c",
-          "#96a6c0",
-          "#bacae5",
-          "#e6effe"
+          "#050822",
+          "#1c233f",
+          "#37405f",
+          "#566081",
+          "#7681a4",
+          "#98a4c8",
+          "#bcc8ed",
+          "#e8eeff"
         ]
       },
-      "on-navy-2": {
-        "role": "neutral",
-        "displayName": "On-Navy Muted",
-        "canonical": "#8fa9d6",
+      "console-lead-wave": {
+        "role": "secondary",
+        "displayName": "Console Lead Wave",
+        "canonical": "#a3aabb",
         "tonalRamp": [
-          "#000729",
-          "#102447",
-          "#2c4268",
-          "#4a618a",
-          "#6a83ae",
-          "#8ca6d3",
-          "#afcaf9",
-          "#e6effe"
+          "#070b16",
+          "#202532",
+          "#3c4250",
+          "#5b6170",
+          "#7c8292",
+          "#9ea5b6",
+          "#c2c9db",
+          "#e8eefe"
         ]
       },
-      "good": {
-        "role": "signal",
-        "displayName": "Pass Green",
-        "canonical": "#0e7a3e",
+      "console-good": {
+        "role": "verdict",
+        "displayName": "Console Good",
+        "canonical": "#15803d",
         "tonalRamp": [
-          "#001102",
-          "#012e13",
-          "#095027",
-          "#017539",
-          "#39985a",
-          "#5fbc7c",
-          "#84e19f",
-          "#c9fed5"
+          "#011003",
+          "#022e11",
+          "#095024",
+          "#167438",
+          "#379954",
+          "#5ebd76",
+          "#83e299",
+          "#c7ffd1"
         ]
       },
-      "warn": {
-        "role": "signal",
-        "displayName": "Near Amber",
-        "canonical": "#8a5300",
+      "console-good-bg": {
+        "role": "verdict",
+        "displayName": "Console Good Bg",
+        "canonical": "#e9f7ee",
         "tonalRamp": [
-          "#180600",
-          "#371e00",
-          "#5e3806",
-          "#8a5300",
-          "#ae7431",
-          "#d39756",
-          "#f9bb7a",
-          "#ffebd7"
-        ]
-      },
-      "crit": {
-        "role": "signal",
-        "displayName": "Fail Red",
-        "canonical": "#b42318",
-        "tonalRamp": [
-          "#210000",
-          "#4d0100",
-          "#7e0b05",
-          "#b12015",
-          "#da4a3b",
-          "#fb7866",
-          "#fdb4a8",
-          "#ffe9e5"
-        ]
-      },
-      "good-bg": {
-        "role": "signal",
-        "displayName": "Pass Green Tint",
-        "canonical": "#e6f4ec",
-        "tonalRamp": [
-          "#050e09",
+          "#050e08",
           "#1d2822",
-          "#3a453f",
-          "#59655e",
-          "#79867f",
-          "#9ca9a1",
-          "#bfcdc5",
-          "#e5f2eb"
+          "#3a453e",
+          "#59655d",
+          "#79867e",
+          "#9ca9a0",
+          "#c0cdc4",
+          "#e5f3ea"
         ]
       },
-      "warn-bg": {
-        "role": "signal",
-        "displayName": "Near Amber Tint",
-        "canonical": "#fbf0dc",
+      "console-warn": {
+        "role": "verdict",
+        "displayName": "Console Warn",
+        "canonical": "#b45309",
         "tonalRamp": [
-          "#110a01",
-          "#2c2414",
-          "#4a4130",
-          "#69604f",
-          "#8b816f",
-          "#aea491",
-          "#d2c8b4",
-          "#f8edd9"
+          "#180500",
+          "#3e1801",
+          "#692f07",
+          "#974711",
+          "#c56323",
+          "#ed864b",
+          "#fdb792",
+          "#ffeadf"
         ]
       },
-      "crit-bg": {
-        "role": "signal",
-        "displayName": "Fail Red Tint",
-        "canonical": "#fdf1f0",
+      "console-warn-bg": {
+        "role": "verdict",
+        "displayName": "Console Warn Bg",
+        "canonical": "#fdf4e4",
         "tonalRamp": [
-          "#100909",
-          "#2b2322",
-          "#493f3f",
-          "#695e5e",
-          "#8a7f7f",
-          "#ada2a1",
-          "#d2c6c5",
-          "#f7ebea"
+          "#100a02",
+          "#2b2418",
+          "#484134",
+          "#686053",
+          "#898173",
+          "#aca495",
+          "#d1c8b9",
+          "#f6eddd"
         ]
       },
-      "seg-end": {
-        "role": "measurement",
-        "displayName": "Turn End Ink",
-        "canonical": "#1f5fbf",
+      "console-crit": {
+        "role": "verdict",
+        "displayName": "Console Crit",
+        "canonical": "#c62828",
         "tonalRamp": [
-          "#00003c",
-          "#002158",
-          "#003c8e",
-          "#1c5cbc",
-          "#4080e3",
-          "#71a5f8",
-          "#abcbfd",
+          "#1f0001",
+          "#4d0003",
+          "#7f050d",
+          "#b60f19",
+          "#df433d",
+          "#fb776c",
+          "#fbb5ac",
+          "#fee9e6"
+        ]
+      },
+      "console-crit-bg": {
+        "role": "verdict",
+        "displayName": "Console Crit Bg",
+        "canonical": "#fdecec",
+        "tonalRamp": [
+          "#120808",
+          "#2e2222",
+          "#4b3e3e",
+          "#6b5d5d",
+          "#8d7e7e",
+          "#b0a1a1",
+          "#d5c5c5",
+          "#fbeaea"
+        ]
+      },
+      "console-end": {
+        "role": "verdict",
+        "displayName": "Console End",
+        "canonical": "#d93a3a",
+        "tonalRamp": [
+          "#1f0001",
+          "#4b0408",
+          "#80010f",
+          "#b7091c",
+          "#e0413f",
+          "#fc756d",
+          "#fcb4ad",
+          "#ffe9e6"
+        ]
+      },
+      "console-p-detect": {
+        "role": "part-ink",
+        "displayName": "Console P Detect",
+        "canonical": "#9ab6fb",
+        "tonalRamp": [
+          "#020132",
+          "#0f1e56",
+          "#293e79",
+          "#475e9c",
+          "#6680c1",
+          "#88a3e7",
+          "#b2c8ff",
+          "#e7eeff"
+        ]
+      },
+      "console-p-commit": {
+        "role": "part-ink",
+        "displayName": "Console P Commit",
+        "canonical": "#6f8fef",
+        "tonalRamp": [
+          "#020133",
+          "#0c126b",
+          "#22378f",
+          "#3e59b4",
+          "#5d7cda",
+          "#81a0fa",
+          "#b4c8fb",
+          "#e8eeff"
+        ]
+      },
+      "console-p-tool": {
+        "role": "part-ink",
+        "displayName": "Console P Tool",
+        "canonical": "#c4a6f2",
+        "tonalRamp": [
+          "#120026",
+          "#301050",
+          "#4e3072",
+          "#6d5095",
+          "#8f71b9",
+          "#b294df",
+          "#d4bbfc",
+          "#f2ebfe"
+        ]
+      },
+      "console-p-llm": {
+        "role": "part-ink",
+        "displayName": "Console P Llm",
+        "canonical": "#2f56e0",
+        "tonalRamp": [
+          "#010035",
+          "#060974",
+          "#1225b1",
+          "#294ed8",
+          "#4b77f6",
+          "#7ca1fd",
+          "#b2c9fd",
+          "#e7effe"
+        ]
+      },
+      "console-p-guard": {
+        "role": "part-ink",
+        "displayName": "Console P Guard",
+        "canonical": "#f0b44c",
+        "tonalRamp": [
+          "#120900",
+          "#332100",
+          "#583c04",
+          "#7f590c",
+          "#ab7701",
+          "#d4992a",
+          "#fabd56",
+          "#ffeccf"
+        ]
+      },
+      "console-p-tts": {
+        "role": "part-ink",
+        "displayName": "Console P Tts",
+        "canonical": "#13b5a2",
+        "tonalRamp": [
+          "#000f0c",
+          "#032c27",
+          "#0d4d44",
+          "#047165",
+          "#1b9687",
+          "#27beaa",
+          "#5ae3cf",
+          "#bcfef2"
+        ]
+      },
+      "enterprise-bg": {
+        "role": "neutral",
+        "displayName": "Enterprise Bg",
+        "canonical": "#f3f5fa",
+        "tonalRamp": [
+          "#0a0b0e",
+          "#242529",
+          "#404246",
+          "#5f6165",
+          "#808287",
+          "#a3a5aa",
+          "#c7c9ce",
+          "#eceef3"
+        ]
+      },
+      "enterprise-surface": {
+        "role": "neutral",
+        "displayName": "Enterprise Surface",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ]
+      },
+      "enterprise-surface-2": {
+        "role": "neutral",
+        "displayName": "Enterprise Surface 2",
+        "canonical": "#f8f9fc",
+        "tonalRamp": [
+          "#0a0b0d",
+          "#242527",
+          "#414244",
+          "#606164",
+          "#818285",
+          "#a4a5a8",
+          "#c8c9cc",
+          "#edeef1"
+        ]
+      },
+      "enterprise-line": {
+        "role": "neutral",
+        "displayName": "Enterprise Line",
+        "canonical": "#e4e8f1",
+        "tonalRamp": [
+          "#090b11",
+          "#22252c",
+          "#3f4249",
+          "#5e6169",
+          "#7f828a",
+          "#a1a5ad",
+          "#c5c9d2",
+          "#eaeef7"
+        ]
+      },
+      "enterprise-line-2": {
+        "role": "neutral",
+        "displayName": "Enterprise Line 2",
+        "canonical": "#cfd6e4",
+        "tonalRamp": [
+          "#070b14",
+          "#20252f",
+          "#3c424d",
+          "#5b616d",
+          "#7c828f",
+          "#9fa5b3",
+          "#c2c9d7",
+          "#e8effd"
+        ]
+      },
+      "enterprise-ink": {
+        "role": "neutral",
+        "displayName": "Enterprise Ink",
+        "canonical": "#0d1a33",
+        "tonalRamp": [
+          "#020921",
+          "#17243e",
+          "#33425e",
+          "#51627f",
+          "#7183a2",
+          "#93a6c7",
+          "#b7caec",
           "#e6effe"
         ]
       },
-      "seg-llm": {
-        "role": "measurement",
-        "displayName": "LLM Ink",
+      "enterprise-ink-2": {
+        "role": "neutral",
+        "displayName": "Enterprise Ink 2",
+        "canonical": "#45536e",
+        "tonalRamp": [
+          "#030a1f",
+          "#19253c",
+          "#35425c",
+          "#53617d",
+          "#7383a0",
+          "#95a5c4",
+          "#b9cae9",
+          "#e7effe"
+        ]
+      },
+      "enterprise-ink-3": {
+        "role": "neutral",
+        "displayName": "Enterprise Ink 3",
+        "canonical": "#66728a",
+        "tonalRamp": [
+          "#040a1c",
+          "#1b2539",
+          "#374258",
+          "#566179",
+          "#76839b",
+          "#98a5bf",
+          "#bccae4",
+          "#e7effe"
+        ]
+      },
+      "enterprise-navy": {
+        "role": "secondary",
+        "displayName": "Hoplon Navy",
         "canonical": "#0b2e6b",
         "tonalRamp": [
-          "#00003a",
-          "#001f5b",
+          "#000825",
+          "#032057",
           "#1b3f7d",
           "#3a60a1",
           "#5a82c6",
           "#7ca5ec",
-          "#aecafb",
+          "#abcaff",
           "#e6efff"
         ]
       },
-      "seg-tts": {
-        "role": "measurement",
-        "displayName": "TTS Ink",
-        "canonical": "#1baf7a",
+      "enterprise-navy-deep": {
+        "role": "secondary",
+        "displayName": "Deep Navy",
+        "canonical": "#071d47",
         "tonalRamp": [
-          "#001006",
-          "#002e1c",
-          "#004f34",
-          "#11734f",
-          "#19996b",
-          "#37c08a",
-          "#65e5ad",
-          "#c2ffdf"
+          "#000728",
+          "#0c224d",
+          "#28416e",
+          "#466191",
+          "#6683b5",
+          "#88a6da",
+          "#aecafc",
+          "#e6effe"
         ]
       },
-      "seg-other": {
-        "role": "measurement",
-        "displayName": "Other Ink",
-        "canonical": "#9fb3cf",
+      "enterprise-navy-hover": {
+        "role": "secondary",
+        "displayName": "Enterprise Navy Hover",
+        "canonical": "#123a80",
         "tonalRamp": [
-          "#010b1e",
-          "#16263b",
-          "#32435a",
-          "#50627c",
-          "#71849e",
-          "#93a7c2",
-          "#b6cbe8",
-          "#e5effe"
+          "#000826",
+          "#022058",
+          "#163e84",
+          "#355fa8",
+          "#5581ce",
+          "#77a5f4",
+          "#adcafc",
+          "#e6effe"
+        ]
+      },
+      "enterprise-on-navy": {
+        "role": "secondary",
+        "displayName": "Enterprise On Navy",
+        "canonical": "#c7d4f2",
+        "tonalRamp": [
+          "#040a1d",
+          "#1b243b",
+          "#37415a",
+          "#56617b",
+          "#76829d",
+          "#99a5c1",
+          "#bcc9e7",
+          "#e8eefe"
+        ]
+      },
+      "enterprise-gold": {
+        "role": "primary",
+        "displayName": "Hoplon Gold",
+        "canonical": "#f2c230",
+        "tonalRamp": [
+          "#100a00",
+          "#302300",
+          "#523f04",
+          "#775e0d",
+          "#a07d03",
+          "#ca9f0a",
+          "#f3c331",
+          "#feedc3"
+        ]
+      },
+      "enterprise-gold-hover": {
+        "role": "primary",
+        "displayName": "Enterprise Gold Hover",
+        "canonical": "#ffd24a",
+        "tonalRamp": [
+          "#100a00",
+          "#2f2401",
+          "#514007",
+          "#765e11",
+          "#9e7e0d",
+          "#c8a016",
+          "#f0c437",
+          "#ffeec0"
+        ]
+      },
+      "enterprise-blue": {
+        "role": "primary",
+        "displayName": "Enterprise Blue",
+        "canonical": "#2457d6",
+        "tonalRamp": [
+          "#000036",
+          "#00166a",
+          "#032cab",
+          "#2153d2",
+          "#4078fa",
+          "#7aa3f9",
+          "#aec9ff",
+          "#e7efff"
+        ]
+      },
+      "enterprise-blue-soft": {
+        "role": "primary",
+        "displayName": "Enterprise Blue Soft",
+        "canonical": "#edf2fd",
+        "tonalRamp": [
+          "#080b12",
+          "#21252d",
+          "#3e424b",
+          "#5d616a",
+          "#7e828c",
+          "#a0a5af",
+          "#c4c9d4",
+          "#eaeef9"
+        ]
+      },
+      "enterprise-good": {
+        "role": "verdict",
+        "displayName": "Enterprise Good",
+        "canonical": "#12804a",
+        "tonalRamp": [
+          "#000f05",
+          "#012e16",
+          "#074f2c",
+          "#127443",
+          "#359860",
+          "#5cbc82",
+          "#82e1a5",
+          "#c7fed9"
+        ]
+      },
+      "enterprise-good-bg": {
+        "role": "verdict",
+        "displayName": "Enterprise Good Bg",
+        "canonical": "#e6f5ec",
+        "tonalRamp": [
+          "#050e08",
+          "#1d2822",
+          "#39453e",
+          "#58655d",
+          "#79867e",
+          "#9ba9a1",
+          "#bfcdc5",
+          "#e4f3ea"
+        ]
+      },
+      "enterprise-warn": {
+        "role": "verdict",
+        "displayName": "Enterprise Warn",
+        "canonical": "#a35a00",
+        "tonalRamp": [
+          "#160700",
+          "#3a1d01",
+          "#613607",
+          "#8c5012",
+          "#b86e24",
+          "#de914b",
+          "#fdb980",
+          "#ffeada"
+        ]
+      },
+      "enterprise-warn-bg": {
+        "role": "verdict",
+        "displayName": "Enterprise Warn Bg",
+        "canonical": "#fdf3e2",
+        "tonalRamp": [
+          "#100a02",
+          "#2b2417",
+          "#494133",
+          "#696052",
+          "#8a8172",
+          "#ada494",
+          "#d2c8b7",
+          "#f7eddc"
+        ]
+      },
+      "enterprise-crit": {
+        "role": "verdict",
+        "displayName": "Enterprise Crit",
+        "canonical": "#c0362c",
+        "tonalRamp": [
+          "#1e0000",
+          "#4d0101",
+          "#7f0807",
+          "#af241d",
+          "#d84d40",
+          "#fa7868",
+          "#ffb3a8",
+          "#fee9e5"
+        ]
+      },
+      "enterprise-crit-bg": {
+        "role": "verdict",
+        "displayName": "Enterprise Crit Bg",
+        "canonical": "#fcecea",
+        "tonalRamp": [
+          "#120807",
+          "#2d2221",
+          "#4b3f3d",
+          "#6b5e5c",
+          "#8d7f7d",
+          "#b0a19f",
+          "#d4c5c3",
+          "#faeae8"
+        ]
+      },
+      "enterprise-end": {
+        "role": "verdict",
+        "displayName": "Enterprise End",
+        "canonical": "#d4433a",
+        "tonalRamp": [
+          "#1f0000",
+          "#4b0404",
+          "#7d0f0f",
+          "#b21e1c",
+          "#da493f",
+          "#fd7568",
+          "#fdb4aa",
+          "#ffe9e5"
+        ]
+      },
+      "enterprise-p-detect": {
+        "role": "part-ink",
+        "displayName": "Enterprise P Detect",
+        "canonical": "#9fb8f7",
+        "tonalRamp": [
+          "#020132",
+          "#111f52",
+          "#2c3e74",
+          "#4a5e97",
+          "#6980bb",
+          "#8ba3e1",
+          "#b2c8fe",
+          "#e8eeff"
+        ]
+      },
+      "enterprise-p-commit": {
+        "role": "part-ink",
+        "displayName": "Enterprise P Commit",
+        "canonical": "#5f83e8",
+        "tonalRamp": [
+          "#020132",
+          "#090e6f",
+          "#1d3694",
+          "#3958b9",
+          "#587be0",
+          "#80a1f8",
+          "#b2c8ff",
+          "#e7eeff"
+        ]
+      },
+      "enterprise-p-tool": {
+        "role": "part-ink",
+        "displayName": "Enterprise P Tool",
+        "canonical": "#b9a2ef",
+        "tonalRamp": [
+          "#100027",
+          "#2d1153",
+          "#4a3274",
+          "#695298",
+          "#8a73bc",
+          "#ad96e2",
+          "#cfbefb",
+          "#f0ebff"
+        ]
+      },
+      "enterprise-p-llm": {
+        "role": "part-ink",
+        "displayName": "Enterprise P Llm",
+        "canonical": "#0b2e6b",
+        "tonalRamp": [
+          "#000825",
+          "#032057",
+          "#1b3f7d",
+          "#3a60a1",
+          "#5a82c6",
+          "#7ca5ec",
+          "#abcaff",
+          "#e6efff"
+        ]
+      },
+      "enterprise-p-guard": {
+        "role": "part-ink",
+        "displayName": "Enterprise P Guard",
+        "canonical": "#f2c230",
+        "tonalRamp": [
+          "#100a00",
+          "#302300",
+          "#523f04",
+          "#775e0d",
+          "#a07d03",
+          "#ca9f0a",
+          "#f3c331",
+          "#feedc3"
+        ]
+      },
+      "enterprise-p-tts": {
+        "role": "part-ink",
+        "displayName": "Enterprise P Tts",
+        "canonical": "#19a88f",
+        "tonalRamp": [
+          "#000f0b",
+          "#032c24",
+          "#0c4d41",
+          "#007260",
+          "#189781",
+          "#3bbda3",
+          "#67e2c7",
+          "#bbffed"
+        ]
+      },
+      "showcase-bg": {
+        "role": "neutral",
+        "displayName": "Showcase Bg",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ]
+      },
+      "showcase-surface-2": {
+        "role": "neutral",
+        "displayName": "Showcase Surface 2",
+        "canonical": "#f2f4f9",
+        "tonalRamp": [
+          "#0a0b0e",
+          "#242529",
+          "#404246",
+          "#5f6165",
+          "#808287",
+          "#a3a5aa",
+          "#c7c9ce",
+          "#eceef3"
+        ]
+      },
+      "showcase-line": {
+        "role": "neutral",
+        "displayName": "Showcase Line",
+        "canonical": "#e2e6ef",
+        "tonalRamp": [
+          "#090b11",
+          "#22252c",
+          "#3f4249",
+          "#5e6169",
+          "#7f828a",
+          "#a1a5ad",
+          "#c5c9d2",
+          "#eaeef8"
+        ]
+      },
+      "showcase-line-2": {
+        "role": "neutral",
+        "displayName": "Showcase Line 2",
+        "canonical": "#c9d0de",
+        "tonalRamp": [
+          "#070b14",
+          "#20252f",
+          "#3c424d",
+          "#5b616d",
+          "#7c828f",
+          "#9ea5b3",
+          "#c2c9d7",
+          "#e7effd"
+        ]
+      },
+      "showcase-ink": {
+        "role": "neutral",
+        "displayName": "Showcase Ink",
+        "canonical": "#0b1530",
+        "tonalRamp": [
+          "#030822",
+          "#182440",
+          "#344160",
+          "#526181",
+          "#7382a4",
+          "#95a5c9",
+          "#b8c9ee",
+          "#e8effe"
+        ]
+      },
+      "showcase-ink-2": {
+        "role": "neutral",
+        "displayName": "Showcase Ink 2",
+        "canonical": "#3f4b66",
+        "tonalRamp": [
+          "#03091f",
+          "#1a243c",
+          "#36415c",
+          "#54617d",
+          "#7582a0",
+          "#97a5c4",
+          "#bac9e9",
+          "#e7effe"
+        ]
+      },
+      "showcase-ink-3": {
+        "role": "neutral",
+        "displayName": "Showcase Ink 3",
+        "canonical": "#5f6a82",
+        "tonalRamp": [
+          "#040a1c",
+          "#1c2439",
+          "#384258",
+          "#566179",
+          "#77829b",
+          "#99a5bf",
+          "#bdc9e4",
+          "#e7effe"
+        ]
+      },
+      "showcase-navy": {
+        "role": "secondary",
+        "displayName": "Showcase Navy",
+        "canonical": "#0a1f4e",
+        "tonalRamp": [
+          "#00052d",
+          "#0c2150",
+          "#284072",
+          "#466095",
+          "#6682b9",
+          "#87a5df",
+          "#afcafc",
+          "#e7effe"
+        ]
+      },
+      "showcase-navy-deep": {
+        "role": "secondary",
+        "displayName": "Showcase Deep Navy",
+        "canonical": "#071637",
+        "tonalRamp": [
+          "#010727",
+          "#132346",
+          "#2f4166",
+          "#4d6188",
+          "#6d82ac",
+          "#8fa5d0",
+          "#b2caf6",
+          "#e6efff"
+        ]
+      },
+      "showcase-on-navy": {
+        "role": "secondary",
+        "displayName": "Showcase On Navy",
+        "canonical": "#c9d4f0",
+        "tonalRamp": [
+          "#050a1c",
+          "#1d2439",
+          "#394158",
+          "#576179",
+          "#78829b",
+          "#9aa5bf",
+          "#bec9e4",
+          "#e8eefe"
+        ]
+      },
+      "showcase-on-navy-2": {
+        "role": "secondary",
+        "displayName": "Showcase On Navy 2",
+        "canonical": "#9fb0d8",
+        "tonalRamp": [
+          "#030824",
+          "#182342",
+          "#334163",
+          "#526084",
+          "#7282a8",
+          "#94a5cc",
+          "#b7c9f2",
+          "#e8eefe"
+        ]
+      },
+      "showcase-gold": {
+        "role": "primary",
+        "displayName": "Hoplon Gold (Showcase)",
+        "canonical": "#ffc933",
+        "tonalRamp": [
+          "#110a00",
+          "#302303",
+          "#543f00",
+          "#795d05",
+          "#a07d18",
+          "#ca9e23",
+          "#f7c125",
+          "#ffedc5"
+        ]
+      },
+      "showcase-gold-hover": {
+        "role": "primary",
+        "displayName": "Showcase Gold Hover",
+        "canonical": "#ffd55c",
+        "tonalRamp": [
+          "#100a00",
+          "#2f2301",
+          "#514005",
+          "#765e0e",
+          "#9f7e07",
+          "#c8a00f",
+          "#eec449",
+          "#ffedbf"
+        ]
+      },
+      "showcase-blue": {
+        "role": "primary",
+        "displayName": "Showcase Blue",
+        "canonical": "#1f4fd8",
+        "tonalRamp": [
+          "#000035",
+          "#01007b",
+          "#0527b1",
+          "#2050d9",
+          "#4478f7",
+          "#78a2fe",
+          "#b0c9fe",
+          "#e7effe"
+        ]
+      },
+      "showcase-good": {
+        "role": "verdict",
+        "displayName": "Showcase Good",
+        "canonical": "#0f7a43",
+        "tonalRamp": [
+          "#001004",
+          "#032e16",
+          "#0c4f2b",
+          "#01753e",
+          "#39985e",
+          "#5fbc80",
+          "#84e1a3",
+          "#c8fed7"
+        ]
+      },
+      "showcase-warn": {
+        "role": "verdict",
+        "displayName": "Showcase Warn",
+        "canonical": "#a35a00",
+        "tonalRamp": [
+          "#160700",
+          "#3a1d01",
+          "#613607",
+          "#8c5012",
+          "#b86e24",
+          "#de914b",
+          "#fdb980",
+          "#ffeada"
+        ]
+      },
+      "showcase-crit": {
+        "role": "verdict",
+        "displayName": "Showcase Crit",
+        "canonical": "#c0362c",
+        "tonalRamp": [
+          "#1e0000",
+          "#4d0101",
+          "#7f0807",
+          "#af241d",
+          "#d84d40",
+          "#fa7868",
+          "#ffb3a8",
+          "#fee9e5"
+        ]
+      },
+      "showcase-end": {
+        "role": "verdict",
+        "displayName": "Showcase End",
+        "canonical": "#d4433a",
+        "tonalRamp": [
+          "#1f0000",
+          "#4b0404",
+          "#7d0f0f",
+          "#b21e1c",
+          "#da493f",
+          "#fd7568",
+          "#fdb4aa",
+          "#ffe9e5"
+        ]
+      },
+      "showcase-p-detect": {
+        "role": "part-ink",
+        "displayName": "Showcase P Detect",
+        "canonical": "#8fb0ff",
+        "tonalRamp": [
+          "#010035",
+          "#0a1b5e",
+          "#243c81",
+          "#415da5",
+          "#617fca",
+          "#82a2f0",
+          "#b1c9fe",
+          "#e7effe"
+        ]
+      },
+      "showcase-p-commit": {
+        "role": "part-ink",
+        "displayName": "Showcase P Commit",
+        "canonical": "#4f7cf0",
+        "tonalRamp": [
+          "#010035",
+          "#040a74",
+          "#1331a0",
+          "#2e56c6",
+          "#4d7aed",
+          "#7aa2fd",
+          "#b1c9fd",
+          "#e7effe"
+        ]
+      },
+      "showcase-p-tool": {
+        "role": "part-ink",
+        "displayName": "Showcase P Tool",
+        "canonical": "#b79cf5",
+        "tonalRamp": [
+          "#100127",
+          "#2e095a",
+          "#4b2d7c",
+          "#6a4ea0",
+          "#8b70c5",
+          "#ae93eb",
+          "#cfbdfe",
+          "#f0ebff"
+        ]
+      },
+      "showcase-p-llm": {
+        "role": "part-ink",
+        "displayName": "Showcase P Llm",
+        "canonical": "#0a1f4e",
+        "tonalRamp": [
+          "#00052d",
+          "#0c2150",
+          "#284072",
+          "#466095",
+          "#6682b9",
+          "#87a5df",
+          "#afcafc",
+          "#e7effe"
+        ]
+      },
+      "showcase-p-guard": {
+        "role": "part-ink",
+        "displayName": "Showcase P Guard",
+        "canonical": "#ffc933",
+        "tonalRamp": [
+          "#110a00",
+          "#302303",
+          "#543f00",
+          "#795d05",
+          "#a07d18",
+          "#ca9e23",
+          "#f7c125",
+          "#ffedc5"
+        ]
+      },
+      "showcase-p-tts": {
+        "role": "part-ink",
+        "displayName": "Showcase P Tts",
+        "canonical": "#12b39b",
+        "tonalRamp": [
+          "#000f0b",
+          "#042c25",
+          "#014e42",
+          "#087161",
+          "#1e9683",
+          "#2abea5",
+          "#5ce3ca",
+          "#bdfeef"
         ]
       }
     },
     "typographyMeta": {
-      "title": {
-        "displayName": "Title",
-        "purpose": "Page title in the navy band only."
+      "studio-title": {
+        "displayName": "Studio Title",
+        "purpose": "Studio empty-state card heading only."
       },
-      "figure": {
-        "displayName": "Figure",
-        "purpose": "Summary readouts (p50, p95, replies measured) in navy."
+      "studio-body": {
+        "displayName": "Studio Body",
+        "purpose": "Studio base text, 13.5px, tight tool density."
       },
-      "section": {
-        "displayName": "Section",
-        "purpose": "Main-column section headings with a sky-2 underline."
+      "studio-label": {
+        "displayName": "Studio Label",
+        "purpose": "Uppercase tracked hardware labels: lane headers, panel headers, LCD fields."
       },
-      "body": {
-        "displayName": "Body",
-        "purpose": "Conversation text, Lead names, agent state."
+      "studio-timecode": {
+        "displayName": "Studio Timecode",
+        "purpose": "LCD position clock (mm:ss.mmm)."
       },
-      "body-small": {
-        "displayName": "Body Small",
-        "purpose": "Rail headings, facts, hints, Lead messages, table cells."
+      "studio-readout": {
+        "displayName": "Studio Readout",
+        "purpose": "Selected reply total wait in the Wait editor."
       },
-      "label": {
-        "displayName": "Label",
-        "purpose": "Column heads, figure labels, targets, step chips, notes."
+      "console-title": {
+        "displayName": "Console Title",
+        "purpose": "Call header title."
       },
-      "micro": {
-        "displayName": "Micro",
-        "purpose": "Target tags, stage flags, cut chip, delay-part numbers."
+      "console-metric": {
+        "displayName": "Console Metric",
+        "purpose": "Stat strip and KPI figures."
+      },
+      "console-body": {
+        "displayName": "Console Body",
+        "purpose": "Console base text."
+      },
+      "console-label": {
+        "displayName": "Console Label",
+        "purpose": "Captions and section names, sentence case."
+      },
+      "enterprise-display": {
+        "displayName": "Enterprise Display",
+        "purpose": "Navy band title."
+      },
+      "enterprise-metric": {
+        "displayName": "Enterprise Metric",
+        "purpose": "KPI tile values, navy."
+      },
+      "enterprise-headline": {
+        "displayName": "Enterprise Headline",
+        "purpose": "Card titles, navy."
+      },
+      "enterprise-body": {
+        "displayName": "Enterprise Body",
+        "purpose": "Enterprise base text."
+      },
+      "showcase-display": {
+        "displayName": "Showcase Display",
+        "purpose": "Hero headline, max 13ch, balanced."
+      },
+      "showcase-headline": {
+        "displayName": "Showcase Headline",
+        "purpose": "Section titles."
+      },
+      "showcase-lede": {
+        "displayName": "Showcase Lede",
+        "purpose": "Hero lede, max 50ch."
+      },
+      "showcase-body": {
+        "displayName": "Showcase Body",
+        "purpose": "Showcase base text."
       }
     },
     "shadows": [
       {
-        "name": "selected-lift",
-        "value": "0 1px 3px rgb(11 46 107 / 0.1)",
-        "purpose": "Checked Lead option."
+        "name": "console-hairline",
+        "value": "0 1px 2px rgb(16 24 40 / 0.05)",
+        "purpose": "Console cards, buttons, selected sidebar Lead."
       },
       {
-        "name": "button-seat",
-        "value": "0 1px 2px rgb(11 46 107 / 0.25)",
-        "purpose": "Primary Call button."
+        "name": "enterprise-shadow-1",
+        "value": "0 1px 2px rgb(11 46 107 / 0.06), 0 6px 20px -4px rgb(11 46 107 / 0.08)",
+        "purpose": "Enterprise standard cards."
       },
       {
-        "name": "float",
-        "value": "0 6px 18px rgb(11 46 107 / 0.25)",
-        "purpose": "Only the fixed allow-audio button floating over content."
+        "name": "enterprise-shadow-2",
+        "value": "0 2px 4px rgb(11 46 107 / 0.06), 0 18px 40px -12px rgb(11 46 107 / 0.18)",
+        "purpose": "Enterprise KPI tiles and featured card."
       },
       {
-        "name": "halo-on-navy",
-        "value": "0 0 0 4px rgb(255 255 255 / 0.18)",
-        "purpose": "Current stage-track dot."
+        "name": "enterprise-gold-glow",
+        "value": "0 6px 18px -6px rgb(242 194 48 / 0.6)",
+        "purpose": "Under the Enterprise gold action."
       },
       {
-        "name": "halo-on-white",
-        "value": "0 0 0 3px #d3e2f7",
-        "purpose": "Speaking pulse."
+        "name": "showcase-gold-glow",
+        "value": "0 10px 30px -10px rgb(255 201 51 / 0.7)",
+        "purpose": "Under the Showcase gold action."
+      },
+      {
+        "name": "showcase-window",
+        "value": "0 40px 80px -30px rgb(0 0 0 / 0.55), 0 0 0 1px rgb(255 255 255 / 0.06)",
+        "purpose": "Showcase product window on navy."
+      },
+      {
+        "name": "studio-lcd-inset",
+        "value": "inset 0 1px 6px rgb(0 0 0 / 0.6)",
+        "purpose": "Recessed Studio LCD."
+      },
+      {
+        "name": "studio-float",
+        "value": "0 20px 60px rgb(0 0 0 / 0.5)",
+        "purpose": "Studio empty-state Lead-picker card only."
       }
     ],
     "motion": [
       {
         "name": "ease",
         "value": "cubic-bezier(0.16, 1, 0.3, 1)",
-        "purpose": "House easing for all state transitions and animations."
+        "purpose": "Shared ease-out for growth and entry animations."
       },
       {
-        "name": "hover",
-        "value": "150ms",
-        "purpose": "Button fill, Lead option border and lift."
+        "name": "part-grow",
+        "value": "420ms scaleX from 0, 70ms stagger per part",
+        "purpose": "Parts bar segments draw in from the left."
       },
       {
-        "name": "track",
-        "value": "200ms",
-        "purpose": "Stage-track dot fill and halo."
+        "name": "wait-grow",
+        "value": "500-520ms scaleX from 0",
+        "purpose": "Studio wait lane and wait editor blocks."
       },
       {
-        "name": "draw",
-        "value": "260ms, 90ms stagger",
-        "purpose": "Delay bar segments draw from scaleX(0) in order when a row lands."
+        "name": "entry",
+        "value": "600-700ms fade + translateY(6-8px)",
+        "purpose": "New transcript lines (Console, Enterprise, Showcase)."
       },
       {
-        "name": "land",
-        "value": "1400ms",
-        "purpose": "New ledger row fades from sky to white."
-      },
-      {
-        "name": "breathe",
-        "value": "1.6s listening / 0.6s thinking",
-        "purpose": "Agent-state pulse scale and opacity loop."
+        "name": "state",
+        "value": "150ms background/border/color",
+        "purpose": "Hover and selection transitions."
       },
       {
         "name": "reduced-motion",
-        "value": "1ms, one iteration",
-        "purpose": "All animation and transition collapse under prefers-reduced-motion."
+        "value": "1ms durations",
+        "purpose": "All animation collapses under prefers-reduced-motion."
       }
     ],
     "breakpoints": [
       {
-        "name": "compact",
+        "name": "showcase-sm",
+        "value": "640px"
+      },
+      {
+        "name": "enterprise-sm",
+        "value": "760px"
+      },
+      {
+        "name": "console-sm",
+        "value": "820px"
+      },
+      {
+        "name": "studio-sm",
+        "value": "900px"
+      },
+      {
+        "name": "showcase-md",
+        "value": "1080px"
+      },
+      {
+        "name": "md",
         "value": "1180px"
       },
       {
-        "name": "stacked",
-        "value": "900px"
+        "name": "studio-lg",
+        "value": "1400px"
       }
     ]
   },
   "components": [
     {
-      "name": "Call Button",
+      "name": "Studio Call Button",
       "kind": "button",
-      "refersTo": "button-call",
-      "description": "The one primary action in the rail: start a call with the chosen Lead.",
-      "html": "<button class=\"ds-btn-call\">Call Khalifa</button>",
-      "css": ".ds-btn-call { font-family: 'Noto Sans', system-ui, sans-serif; font-size: 0.9375rem; font-weight: 600; height: 2.75rem; width: 100%; border: 0; border-radius: 6px; color: #fff; background: var(--navy, #0b2e6b); box-shadow: 0 1px 2px rgb(11 46 107 / 0.25); cursor: pointer; transition: background-color 150ms cubic-bezier(0.16,1,0.3,1), transform 150ms cubic-bezier(0.16,1,0.3,1); } .ds-btn-call:hover { background: var(--blue, #1f5fbf); } .ds-btn-call:active { transform: translateY(1px); } .ds-btn-call:focus-visible { outline: 2px solid var(--blue, #1f5fbf); outline-offset: 2px; }"
+      "refersTo": "studio-button-call",
+      "description": "Amber filled action in the Studio transport, paired with a grey secondary.",
+      "html": "<div class=\"ds-st-row\"><button class=\"ds-st-b\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2\"/></svg>Call Khalifa</button><button class=\"ds-st-b ds-st-b2\">Hear sample</button></div>",
+      "css": ".ds-st-row{display:flex;gap:.4rem;background:#17181c;padding:.6rem 1rem;font-family:Geist,system-ui,sans-serif}.ds-st-b{display:inline-flex;align-items:center;gap:.5rem;height:36px;padding:0 .95rem;border-radius:7px;background:#f39a3d;color:#1c0d00;border:1px solid #f39a3d;font-size:.8125rem;font-weight:750;cursor:pointer;transition:background 150ms}.ds-st-b:hover{background:#ffad57}.ds-st-b:active{transform:translateY(1px)}.ds-st-b:focus-visible{outline:2px solid #f39a3d;outline-offset:2px}.ds-st-b2{background:#25272d;color:#e9eaee;border-color:#3a3d46;font-weight:600}.ds-st-b2:hover{background:#2e3138}"
     },
     {
-      "name": "Link Button",
+      "name": "Studio LCD",
+      "kind": "custom",
+      "refersTo": "studio-lcd",
+      "description": "Recessed transport display: position timecode and p50 against target.",
+      "html": "<div class=\"ds-lcd\"><div><label>Position</label><b class=\"ds-tc\">00:42.318</b></div><div><label>Typical · p50</label><b class=\"ds-good\">812 ms</b><small>target 900</small></div></div>",
+      "css": ".ds-lcd{display:inline-flex;height:48px;background:#0a0b0d;border:1px solid #000;border-radius:7px;box-shadow:inset 0 1px 6px rgb(0 0 0/.6);color:#e9eaee}.ds-lcd>div{display:flex;flex-direction:column;justify-content:center;padding:0 .95rem;border-right:1px solid #1f2126}.ds-lcd>div:last-child{border-right:0}.ds-lcd label{font:700 .625rem Geist,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#80859a}.ds-lcd b{font:500 .9375rem/1.2 \"Geist Mono\",monospace}.ds-lcd small{font:.625rem \"Geist Mono\",monospace;color:#80859a}.ds-tc{font-size:1.375rem!important;color:#cfe8ff;letter-spacing:.02em}.ds-good{color:#5be08f}"
+    },
+    {
+      "name": "Parts Bar (Studio inks)",
+      "kind": "custom",
+      "refersTo": "studio-p-detect",
+      "description": "One wait split into the six parts in fixed order, with the 0.9 s tick.",
+      "html": "<div class=\"ds-pb\"><i style=\"width:14%;background:#86a1ff\"></i><i style=\"width:6%;background:#5b74e8\"></i><i style=\"width:4%;background:#d39cf5\"></i><i style=\"width:30%;background:#a45de6\"></i><i style=\"width:8%;background:#e8d36a\"></i><i style=\"width:18%;background:#33c4ae\"></i><span style=\"left:75%\"></span></div>",
+      "css": ".ds-pb{position:relative;display:flex;gap:1px;height:8px;border-radius:3px;width:320px;color:#e9eaee;background:#16171b}.ds-pb i{display:block;height:100%;min-width:2px;transition:filter 150ms}.ds-pb i:hover{filter:brightness(1.2)}.ds-pb span{position:absolute;top:-2px;bottom:-2px;width:2px;margin-left:-1px;background:currentColor;opacity:.6}"
+    },
+    {
+      "name": "Console Primary Button",
       "kind": "button",
-      "refersTo": "button-link",
-      "description": "Secondary action set as underlined blue text.",
-      "html": "<button class=\"ds-btn-link\">Watch a sample call (synthetic data, no keys needed)</button>",
-      "css": ".ds-btn-link { font-family: 'Noto Sans', system-ui, sans-serif; font-size: 0.8125rem; color: var(--blue, #1f5fbf); background: none; border: 0; padding: 0.15rem 0; text-align: left; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: rgb(31 95 191 / 0.35); } .ds-btn-link:hover { text-decoration-color: currentColor; } .ds-btn-link:focus-visible { outline: 2px solid var(--blue, #1f5fbf); outline-offset: 2px; }"
+      "refersTo": "console-button-primary",
+      "description": "The one blue filled action in Console, beside a white secondary.",
+      "html": "<div class=\"ds-cn-row\"><button class=\"ds-cn-btn\">Hear sample call</button><button class=\"ds-cn-btn ds-cn-pri\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2\"/></svg>Call Khalifa</button></div>",
+      "css": ".ds-cn-row{display:flex;gap:.5rem;font-family:Inter,system-ui,sans-serif}.ds-cn-btn{display:inline-flex;align-items:center;gap:.5rem;height:34px;padding:0 .85rem;border-radius:7px;font-size:.8125rem;font-weight:600;border:1px solid #d4d5db;background:#fff;color:#0f1115;box-shadow:0 1px 2px rgb(16 24 40/.05);cursor:pointer;transition:background 150ms}.ds-cn-btn:hover{background:#f2f2f4}.ds-cn-btn:focus-visible{outline:2px solid #2f56e0;outline-offset:2px}.ds-cn-btn:active{transform:translateY(1px)}.ds-cn-pri{background:#2f56e0;border-color:#2f56e0;color:#fff}.ds-cn-pri:hover{background:#2447c4}"
+    },
+    {
+      "name": "Console Delay Badge",
+      "kind": "chip",
+      "refersTo": "console-badge-good",
+      "description": "Verdict badge on each Omar reply; colour only from the 0.9 s / 1.5 s verdict.",
+      "html": "<div class=\"ds-badges\"><span class=\"ds-badge ds-g\">0.82 s</span><span class=\"ds-badge ds-w\">1.21 s</span><span class=\"ds-badge ds-c\">1.74 s</span></div>",
+      "css": ".ds-badges{display:flex;gap:.4rem;font-family:Inter,system-ui,sans-serif}.ds-badge{font-size:.75rem;font-weight:650;padding:.1rem .45rem;border-radius:5px;font-feature-settings:\"tnum\",\"lnum\"}.ds-g{background:#e9f7ee;color:#15803d}.ds-w{background:#fdf4e4;color:#b45309}.ds-c{background:#fdecec;color:#c62828}"
+    },
+    {
+      "name": "Enterprise Gold Button",
+      "kind": "button",
+      "refersTo": "enterprise-button-gold",
+      "description": "Gold filled action on the navy band, with a ghost partner.",
+      "html": "<div class=\"ds-en-band\"><button class=\"ds-en-btn ds-en-gold\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2\"/></svg>Call Khalifa</button><button class=\"ds-en-btn ds-en-ghost\">Hear a sample call</button></div>",
+      "css": ".ds-en-band{display:flex;gap:.6rem;padding:1.5rem;background:linear-gradient(180deg,#071d47,#0b2e6b);font-family:Manrope,system-ui,sans-serif}.ds-en-btn{display:inline-flex;align-items:center;gap:.5rem;height:44px;padding:0 1.25rem;border-radius:12px;font-size:.875rem;font-weight:750;border:1px solid transparent;cursor:pointer;transition:background 150ms,border-color 150ms}.ds-en-btn:focus-visible{outline:2px solid #2457d6;outline-offset:2px}.ds-en-btn:active{transform:translateY(1px)}.ds-en-gold{background:#f2c230;color:#071d47;box-shadow:0 6px 18px -6px rgb(242 194 48/.6)}.ds-en-gold:hover{background:#ffd24a}.ds-en-ghost{background:rgb(255 255 255/.08);border-color:rgb(255 255 255/.22);color:#fff}.ds-en-ghost:hover{background:rgb(255 255 255/.14)}"
+    },
+    {
+      "name": "Enterprise KPI Tile",
+      "kind": "card",
+      "refersTo": "enterprise-kpi",
+      "description": "Raised tile overlapping the band: label, verdict pill, navy figure, target bar.",
+      "html": "<div class=\"ds-kpi\"><div class=\"ds-kpi-l\">Typical reply <em>Within target</em></div><b>0.84 s</b><small>p50 of 6 replies · target 0.9 s</small><div class=\"ds-kpi-bar\"><i style=\"width:62%\"></i><span style=\"left:67%\"></span></div></div>",
+      "css": ".ds-kpi{display:grid;gap:.15rem;width:260px;background:#fff;border-radius:16px;padding:1.1rem 1.25rem 1.2rem;box-shadow:0 2px 4px rgb(11 46 107/.06),0 18px 40px -12px rgb(11 46 107/.18);font-family:Manrope,system-ui,sans-serif;color:#0d1a33}.ds-kpi-l{display:flex;gap:.5rem;align-items:center;font-size:.8125rem;font-weight:700;color:#45536e}.ds-kpi-l em{font-style:normal;font-size:.6875rem;font-weight:800;padding:.1rem .55rem;border-radius:20px;background:#e6f5ec;color:#12804a}.ds-kpi b{font-size:2rem;font-weight:800;letter-spacing:-.03em;line-height:1.15;color:#0b2e6b}.ds-kpi small{font-size:.75rem;color:#66728a}.ds-kpi-bar{position:relative;height:6px;margin-top:.6rem;border-radius:3px;background:#eef1f7}.ds-kpi-bar i{position:absolute;inset:0 auto 0 0;border-radius:3px;background:#12804a}.ds-kpi-bar span{position:absolute;top:-3px;bottom:-3px;width:2px;background:#0d1a33}"
     },
     {
       "name": "Lead Option",
-      "kind": "input",
-      "refersTo": "lead-option",
-      "description": "Radio card for picking the Lead to call: name, form message, note.",
-      "html": "<div class=\"ds-leads\"><label class=\"ds-lead ds-lead-checked\"><input type=\"radio\" name=\"ds-lead\" checked><span class=\"ds-lead-name\">Khalifa Al Dhaheri</span><span class=\"ds-lead-msg\">“We run a chain of 4 laundry shops in Dubai and want a mobile app.”</span><span class=\"ds-lead-note\">Clear project. Good for the booking path.</span></label><label class=\"ds-lead\"><input type=\"radio\" name=\"ds-lead\"><span class=\"ds-lead-name\">Rhea Fernandes</span><span class=\"ds-lead-msg\">“please call me”</span><span class=\"ds-lead-note\">No topic. Omar must find out what she needs.</span></label></div>",
-      "css": ".ds-leads { display: flex; flex-direction: column; gap: 0.5rem; padding: 1rem; background: var(--tint, #f5f8fc); font-family: 'Noto Sans', system-ui, sans-serif; } .ds-lead { display: grid; grid-template-columns: 1.25rem minmax(0,1fr); column-gap: 0.5rem; row-gap: 0.15rem; padding: 0.7rem 0.8rem; border: 1px solid var(--rule, #d9e1ed); border-radius: 6px; background: #fff; cursor: pointer; transition: border-color 150ms cubic-bezier(0.16,1,0.3,1), box-shadow 150ms cubic-bezier(0.16,1,0.3,1); } .ds-lead:hover { border-color: #aebfdb; } .ds-lead-checked { border-color: var(--blue, #1f5fbf); box-shadow: 0 1px 3px rgb(11 46 107 / 0.1); } .ds-lead input { grid-row: 1 / span 3; margin: 0.2rem 0 0; accent-color: var(--blue, #1f5fbf); width: 1rem; height: 1rem; } .ds-lead:focus-within { outline: 2px solid var(--blue, #1f5fbf); outline-offset: 2px; } .ds-lead-name { font-weight: 600; font-size: 0.875rem; color: var(--ink, #14213d); } .ds-lead-msg { color: var(--ink-2, #46526b); font-size: 0.8125rem; } .ds-lead-note { color: var(--ink-3, #5a6577); font-size: 0.75rem; }"
-    },
-    {
-      "name": "Step and Flag Chips",
-      "kind": "chip",
-      "refersTo": "step-chip",
-      "description": "Event chips under a turn (LLM-reported filled, code-recorded outlined) and stage flags.",
-      "html": "<div class=\"ds-chips\"><span class=\"ds-flag\">tool call</span><span class=\"ds-step\">Identity confirmed<span class=\"ds-by\">reported by LLM</span></span><span class=\"ds-step ds-step-code\">Lead answered<span class=\"ds-by\">by code</span></span></div>",
-      "css": ".ds-chips { display: flex; flex-wrap: wrap; gap: 0.35rem; align-items: center; font-family: 'Noto Sans', system-ui, sans-serif; } .ds-step { font-size: 0.75rem; color: var(--navy, #0b2e6b); background: var(--sky, #e8f0fb); border-radius: 3px; padding: 0.05rem 0.45rem; } .ds-step-code { background: transparent; box-shadow: inset 0 0 0 1px var(--sky-2, #d3e2f7); } .ds-by { color: var(--ink-3, #5a6577); margin-left: 0.35rem; } .ds-flag { font-size: 0.6875rem; font-weight: 600; color: var(--ink-2, #46526b); background: var(--sky, #e8f0fb); border-radius: 3px; padding: 0 0.35rem; }"
-    },
-    {
-      "name": "Summary Strip",
-      "kind": "card",
-      "refersTo": "summary-figure",
-      "description": "Readout of p50 and p95 against targets, with pass/fail tags and a verdict.",
-      "html": "<section class=\"ds-summary\"><div class=\"ds-fig\"><span class=\"ds-fig-label\">Typical reply (p50)</span><span class=\"ds-fig-value\">0.82 s<span class=\"ds-tag ds-tag-good\">within</span></span><span class=\"ds-fig-label\">target 0.9 s or less</span></div><div class=\"ds-fig\"><span class=\"ds-fig-label\">Slow reply (p95)</span><span class=\"ds-fig-value\">1.62 s<span class=\"ds-tag ds-tag-crit\">over</span></span><span class=\"ds-fig-label\">target 1.5 s or less</span></div></section>",
-      "css": ".ds-summary { display: inline-flex; border: 1px solid var(--rule, #d9e1ed); border-radius: 6px; font-family: 'Noto Sans', system-ui, sans-serif; font-variant-numeric: tabular-nums lining-nums; } .ds-fig { display: grid; padding: 0.75rem 1.25rem; min-width: 10.5rem; border-right: 1px solid var(--rule, #d9e1ed); } .ds-fig:last-child { border-right: 0; } .ds-fig-label { font-size: 0.75rem; color: var(--ink-3, #5a6577); } .ds-fig-value { font-size: 1.375rem; font-weight: 600; line-height: 1.25; color: var(--navy, #0b2e6b); } .ds-tag { display: inline-block; margin-left: 0.5rem; vertical-align: 0.3em; font-size: 0.6875rem; font-weight: 700; line-height: 1.5; color: #fff; border-radius: 3px; padding: 0 0.4rem; } .ds-tag-good { background: var(--good, #0e7a3e); } .ds-tag-crit { background: var(--crit, #b42318); }"
-    },
-    {
-      "name": "Delay Bar",
       "kind": "custom",
-      "refersTo": "delay-bar",
-      "description": "Signature: one reply's wait split into four fixed inks on a 0 to 1.5 s scale with a 0.9 s target tick; segments draw in order.",
-      "html": "<div class=\"ds-delay\"><div class=\"ds-rail\"><span class=\"ds-seg\" style=\"left:0;width:20.7%;background:#1f5fbf;animation-delay:0ms\"></span><span class=\"ds-seg\" style=\"left:20.7%;width:14.7%;background:#0b2e6b;animation-delay:90ms\"></span><span class=\"ds-seg\" style=\"left:35.4%;width:8%;background:#1baf7a;animation-delay:180ms\"></span><span class=\"ds-seg\" style=\"left:43.4%;width:11.3%;background:#9fb3cf;animation-delay:270ms\"></span><span class=\"ds-tick\" style=\"left:60%\"></span></div><div class=\"ds-parts\"><span><i style=\"background:#1f5fbf\"></i>310</span><span><i style=\"background:#0b2e6b\"></i>220</span><span><i style=\"background:#1baf7a\"></i>120</span><span><i style=\"background:#9fb3cf\"></i>170</span></div></div>",
-      "css": ".ds-delay { width: 15rem; font-family: 'Noto Sans', system-ui, sans-serif; font-variant-numeric: tabular-nums; } .ds-rail { position: relative; height: 10px; background: var(--rule-soft, #eaf0f8); border-radius: 2px; } .ds-seg { position: absolute; top: 0; bottom: 0; transform-origin: left center; animation: ds-draw 260ms cubic-bezier(0.16,1,0.3,1) both; } .ds-seg:first-child { border-radius: 2px 0 0 2px; } @keyframes ds-draw { from { transform: scaleX(0); } } .ds-tick { position: absolute; top: -4px; bottom: -4px; width: 2px; margin-left: -1px; background: var(--ink, #14213d); opacity: 0.55; } .ds-parts { display: flex; gap: 0.7rem; margin-top: 0.45rem; font-size: 0.6875rem; color: var(--ink-3, #5a6577); } .ds-parts span { display: inline-flex; align-items: center; gap: 0.25rem; } .ds-parts i { display: inline-block; width: 7px; height: 7px; border-radius: 1px; } @media (prefers-reduced-motion: reduce) { .ds-seg { animation-duration: 1ms; } }"
+      "refersTo": "enterprise-card",
+      "description": "Radio card for picking a synthetic Lead; selected gets the accent border and ring.",
+      "html": "<label class=\"ds-lp\" data-on><input type=\"radio\" name=\"ds-lead\" checked><span class=\"ds-av\">KA</span><span><b>Khalifa Al Dhaheri</b><small>Synthetic Lead from the website form.</small></span></label>",
+      "css": ".ds-lp{display:grid;grid-template-columns:auto 1fr;gap:.75rem;padding:.75rem .85rem;border-radius:14px;border:1px solid #e4e8f1;background:#fff;cursor:pointer;width:320px;font-family:Manrope,system-ui,sans-serif;color:#0d1a33;transition:border-color 150ms,box-shadow 150ms}.ds-lp:hover{border-color:#cfd6e4}.ds-lp[data-on]{border-color:#0b2e6b;box-shadow:0 0 0 1px #0b2e6b}.ds-lp:has(input:focus-visible){outline:2px solid #2457d6;outline-offset:2px}.ds-lp input{position:absolute;opacity:0}.ds-av{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-size:.75rem;font-weight:700;background:#eaeef7;color:#0b2e6b}.ds-lp b{display:block;font-size:.875rem;font-weight:650}.ds-lp small{font-size:.8125rem;color:#45536e}"
     },
     {
-      "name": "Stage Track",
+      "name": "Showcase Gold CTA",
+      "kind": "button",
+      "refersTo": "showcase-button-gold",
+      "description": "Pill CTA in the navy hero with a line partner.",
+      "html": "<div class=\"ds-sc-hero\"><button class=\"ds-sc-btn ds-sc-gold\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2\"/></svg>Hear a sample call</button><button class=\"ds-sc-btn ds-sc-line\">Call a test Lead</button></div>",
+      "css": ".ds-sc-hero{display:flex;gap:.75rem;padding:2rem;background:linear-gradient(180deg,#071637,#0a1f4e);font-family:Figtree,system-ui,sans-serif}.ds-sc-btn{display:inline-flex;align-items:center;gap:.5rem;height:52px;padding:0 1.5rem;border-radius:999px;font-size:1rem;font-weight:750;border:1.5px solid transparent;cursor:pointer;transition:background 150ms,border-color 150ms}.ds-sc-btn:focus-visible{outline:2px solid #1f4fd8;outline-offset:2px}.ds-sc-btn:active{transform:translateY(1px)}.ds-sc-gold{background:#ffc933;color:#071637;box-shadow:0 10px 30px -10px rgb(255 201 51/.7)}.ds-sc-gold:hover{background:#ffd55c}.ds-sc-line{background:transparent;border-color:rgb(255 255 255/.35);color:#fff}.ds-sc-line:hover{border-color:#fff;background:rgb(255 255 255/.06)}"
+    },
+    {
+      "name": "Theme Switch",
       "kind": "nav",
-      "refersTo": "band",
-      "description": "Progress of the call across six stages on the navy band: done, current, to do.",
-      "html": "<ol class=\"ds-track\"><li data-state=\"done\"><span class=\"ds-dot\"></span>Identity</li><li data-state=\"done\"><span class=\"ds-dot\"></span>Opening</li><li data-state=\"now\"><span class=\"ds-dot\"></span>Information</li><li><span class=\"ds-dot\"></span>Intent</li><li><span class=\"ds-dot\"></span>Booking</li><li><span class=\"ds-dot\"></span>Outcome</li></ol>",
-      "css": ".ds-track { list-style: none; margin: 0; padding: 1rem 2rem; display: grid; grid-template-columns: repeat(6, minmax(0,1fr)); background: var(--navy, #0b2e6b); font-family: 'Noto Sans', system-ui, sans-serif; font-size: 0.8125rem; color: var(--on-navy, #c9daf5); } .ds-track li { position: relative; display: grid; row-gap: 0.35rem; padding-right: 0.75rem; } .ds-track li::after { content: ''; position: absolute; top: 6px; left: 14px; right: 0; height: 2px; background: rgb(255 255 255 / 0.16); } .ds-track li:last-child::after { display: none; } .ds-track li[data-state='done']::after { background: var(--on-navy-2, #8fa9d6); } .ds-dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--on-navy-2, #8fa9d6); background: var(--navy, #0b2e6b); position: relative; z-index: 1; transition: background-color 200ms cubic-bezier(0.16,1,0.3,1), box-shadow 200ms cubic-bezier(0.16,1,0.3,1); } .ds-track li[data-state='done'] .ds-dot { background: var(--on-navy-2, #8fa9d6); } .ds-track li[data-state='now'] { color: #fff; font-weight: 600; } .ds-track li[data-state='now'] .ds-dot { background: #fff; border-color: #fff; box-shadow: 0 0 0 4px rgb(255 255 255 / 0.18); }"
-    },
-    {
-      "name": "Stage Table",
-      "kind": "custom",
-      "refersTo": "table-head",
-      "description": "Navy-headed data table with zebra rows and right-aligned tabular values.",
-      "html": "<table class=\"ds-table\"><thead><tr><th>Stage</th><th>Total p50</th><th>Total p95</th></tr></thead><tbody><tr><th>Legal opening</th><td>1.05 s</td><td>1.05 s</td></tr><tr><th>Information</th><td>0.82 s</td><td>0.82 s</td></tr><tr><th>Intent probe</th><td>1.13 s</td><td>1.13 s</td></tr></tbody></table>",
-      "css": ".ds-table { border-collapse: collapse; width: 100%; font-family: 'Noto Sans', system-ui, sans-serif; font-size: 0.8125rem; font-variant-numeric: tabular-nums lining-nums; color: var(--ink, #14213d); } .ds-table th, .ds-table td { padding: 0.45rem 0.75rem; text-align: right; border-bottom: 1px solid var(--rule-soft, #eaf0f8); white-space: nowrap; } .ds-table th:first-child { text-align: left; } .ds-table thead th { background: var(--navy, #0b2e6b); color: #fff; font-weight: 600; font-size: 0.75rem; border-bottom: 0; } .ds-table tbody tr:nth-child(even) > * { background: var(--zebra, #f6f9fe); } .ds-table tbody th { font-weight: 600; color: var(--navy, #0b2e6b); }"
+      "refersTo": "showcase-button-gold",
+      "description": "Segmented radio group present in every theme; saved per browser and in ?ui=.",
+      "html": "<div class=\"ds-ts\" role=\"radiogroup\" aria-label=\"Theme\"><button class=\"ds-ts-o\" data-on>Studio</button><button class=\"ds-ts-o\">Console</button><button class=\"ds-ts-o\">Enterprise</button><button class=\"ds-ts-o\">Showcase</button></div>",
+      "css": ".ds-ts{display:inline-flex;padding:3px;gap:2px;border-radius:7px;background:#0b0c0e;border:1px solid #000;font-family:Geist,system-ui,sans-serif}.ds-ts-o{padding:.3rem .65rem;border-radius:4px;font-size:.75rem;font-weight:600;color:#9a9fab;background:none;border:0;cursor:pointer;transition:background 150ms,color 150ms}.ds-ts-o:hover{color:#e9eaee}.ds-ts-o:focus-visible{outline:2px solid #f39a3d;outline-offset:2px}.ds-ts-o[data-on]{background:#e9eaee;color:#0b0c0e;box-shadow:0 1px 2px rgb(0 0 0/.12)}"
     }
   ],
   "narrative": {
-    "northStar": "The Measured Ledger",
-    "overview": "The Hoplon house world, first set in print for the executive brief and engineer guide, carried onto a working screen. A navy band holds the logo and the call's progress; below it, a cool tint rail holds the controls and the code's state, and a white main column holds the record. Every surface is flat paper divided by hairline rules. Nothing floats, nothing glows, and decoration is close to zero: the only colour that is not blue is there because it measures something.\n\nDensity is that of a well-set report, not a dashboard. Body text sits at 14px, secondary text at 13px, and every number uses tabular lining figures so columns of milliseconds align. Hierarchy comes from weight (600 on navy) and from the navy band and navy table heads, not from size jumps; the largest type on the page is the 22px summary figure, because the numbers are the point.\n\nThe world rejects the split of chat bubbles on one side and a metrics panel on the other. A conversation turn and its measured delay sit in the same row.",
+    "northStar": "Hear the Call, Then See the Wait",
+    "overview": "One call model wears four complete visual worlds. Studio (the default) is a dark recording session: a transport bar with an LCD clock, stacked lanes for Time, Stages, Lead, Omar, Wait and Events, and an Inspector, Wait editor and Code state below. Console is a light, neutral product console with one blue, a recording card, a transcript with a delay badge on each reply, and a tabbed side panel. Enterprise is a premium workspace: a Hoplon navy band with a gold primary action, a six-step stepper, raised KPI tiles that overlap the band, and soft-shadowed cards. Showcase is a navy landing page where the working call window is the product shot, followed by long editorial sections.\n\nThe worlds share no surface, font or radius. They share the measurement. Every theme shows the gap between the Lead's last word and Omar's first sound as one bar split into six parts in a fixed order, and judges totals against the same two targets (0.9 s typical, 1.5 s slow). The theme switch is a segmented control inside each theme's own chrome; the choice is saved per browser (`localStorage` key `omar-ui`) and in the URL (`?ui=studio|console|enterprise|showcase`), with the URL winning on load. The spoken sample call is labelled synthetic in every theme.\n\nDensity follows the world: Studio and Console are tight tools on a 13.5px base that fill one viewport (`100dvh`, internal scroll), Enterprise is a roomier 14px page with a 1400px content column, and Showcase is a 16px scrolling page with section padding up to 7rem. The old house look (Noto Sans, navy-band ledger) is retired; the Hoplon logo and name stay.",
     "keyCharacteristics": [
-      "Navy band, tint rail, white work column; one family (Noto Sans) in four weights.",
-      "Hairline rules (1px) instead of shadows to separate everything.",
-      "Tabular numerals globally; values right-aligned in tables and totals.",
-      "Blue family for state; green, amber and red only for pass or fail against a target.",
-      "Four fixed measurement inks for the parts of a delay."
+      "Four themes, one call model; theme switch saved per browser and via `?ui=`.",
+      "Six part inks per theme, always in the order Turn detect, Commit, Tool step, LLM first token, Guard, Voice (TTS).",
+      "Green, amber and red read as verdicts against 0.9 s and 1.5 s.",
+      "Numbers use tabular, lining figures everywhere (`tnum`, `lnum` on the root of every theme).",
+      "The sample call is spoken with browser voices and labelled synthetic.",
+      "One SVG icon family (24px grid, 1.75 stroke, round caps) sized 16px by default."
     ],
     "rules": [
       {
-        "name": "The Verdict-Only Signal Rule",
-        "body": "Green, amber and red mean pass, near or fail against a stated target (0.9 s typical, 1.5 s slow) and nothing else. Lead status, stage, guard hits, outcome and agent state use the navy/blue family.",
+        "name": "The Six Inks Rule",
+        "body": "Each theme defines exactly six part inks (`--p-detect`, `--p-commit`, `--p-tool`, `--p-llm`, `--p-guard`, `--p-tts`) and they always appear in that order: in bars, legends, the Studio wait editor and the Showcase anatomy. Detect and Commit are light-to-mid blues, Tool a violet, LLM the theme's strongest ink (violet in Studio, the accent blue in Console, navy in Enterprise and Showcase), Guard a yellow or gold, TTS a teal.",
         "section": "colors"
       },
       {
-        "name": "The Fixed Inks Rule",
-        "body": "The four delay inks never change order or hue, and never carry meaning beyond \"which part of the wait\". The TTS green is a part, not a pass; a pass is shown only in the total and the tags.",
+        "name": "The Verdict Rule",
+        "body": "Green, amber and red say only one thing: how a measured wait compares with 0.9 s and 1.5 s (`tone()` in `web/lib/view.ts`). A dashed green line marks 0.9 s and a dashed red line marks 1.5 s wherever a scale is drawn.",
         "section": "colors"
       },
       {
-        "name": "The Weight-Not-Size Rule",
-        "body": "Emphasis is weight 600 in navy at the same size, not a larger size. The scale steps are 11, 12, 13, 14, 15, 16, 20, 22px; nothing exceeds 22px.",
+        "name": "The One Action Rule",
+        "body": "Each button group has one filled action; its partner is a secondary, outline or ghost button. Studio fills amber, Console fills blue. Enterprise and Showcase fill gold on navy (band, hero) and navy on white (empty state, try-it section).",
+        "section": "colors"
+      },
+      {
+        "name": "The Tabular Figures Rule",
+        "body": "Every theme sets `font-feature-settings: \"tnum\", \"lnum\"` at its root, so milliseconds line up in lists, tables and LCD fields.",
         "section": "typography"
       },
       {
-        "name": "The Tabular Rule",
-        "body": "Every number on screen is tabular and lining; totals and table values right-align.",
+        "name": "The Sentence Case Rule",
+        "body": "Outside Studio's hardware labels, labels and section names are sentence case with no tracking.",
         "section": "typography"
       },
       {
-        "name": "The Hairline Rule",
-        "body": "Separation is a 1px rule (rule or rule-soft); dashed hairlines mark provisional content (the sample row, the pending row).",
+        "name": "The Tonal Studio Rule",
+        "body": "Studio separates surfaces with value steps and black seams, not drop shadows.",
         "section": "elevation"
       }
     ],
     "dos": [
-      "Do keep the three planes: navy band, tint rail, white work column, separated by 1px rule hairlines.",
-      "Do use navy for headings, stage names and emphasised facts, and blue for interaction, focus and liveness.",
-      "Do reserve good/warn/crit (and their -bg tints) for pass, near or fail against a stated target.",
-      "Do draw delay parts in the four fixed inks, in order, on a fixed scale with the target tick.",
-      "Do set every number in tabular lining figures and right-align totals and table values.",
-      "Do use the house ease (cubic-bezier(0.16, 1, 0.3, 1)) at 150 to 260ms for state changes, and honour reduced motion."
+      "**Do** keep the six part inks in the order Turn detect, Commit, Tool step, LLM first token, Guard, Voice (TTS) in every bar, legend and list.",
+      "**Do** colour a total by `tone()`: within 0.9 s green, up to 1.5 s amber (yellow in Studio), over 1.5 s red, and say it in words too (\"Within target\", \"Over 0.9 s\", \"Over 1.5 s\").",
+      "**Do** label the sample call as synthetic wherever its numbers show (\"Status · synthetic sample\", \"Sample · synthetic data\", \"Sample · synthetic numbers\", \"Sample call · preview\").",
+      "**Do** set new values through the theme's variables (`--ac`, `--line`, `--p-*`) so shared blocks keep working in all four themes.",
+      "**Do** keep the theme switch inside each theme's own chrome and keep `?ui=` and the saved choice in step.",
+      "**Do** use the shared SVG icon family (24px grid, 1.75 stroke, round caps)."
     ],
     "donts": [
-      "Don't colour status, stage, guard hits, outcome or agent state green, amber or red.",
-      "Don't separate surfaces with shadows; the only shadows are the four listed in Elevation & Depth.",
-      "Don't set type larger than 22px or add a second family.",
-      "Don't split a turn into chat bubbles apart from its measurements; a turn and its delay share one row."
+      "**Don't** reorder, merge or recolour the six parts per screen; a part keeps its ink across the whole theme.",
+      "**Don't** put two filled actions side by side; pair the filled action with an outline, ghost or secondary button.",
+      "**Don't** use drop shadows to separate Studio panels; use value steps and seams.",
+      "**Don't** show a number the call did not measure; unmeasured values show an en dash.",
+      "**Don't** bring back the retired house ledger look (Noto Sans, navy band over a white ledger table)."
     ]
   }
 }

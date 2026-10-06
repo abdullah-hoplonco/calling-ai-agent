@@ -86,6 +86,7 @@ function Transport({ c, switcher }: { c: CallModel; switcher: React.ReactNode })
           <small>target {SLOW_MS}</small>
         </div>
       </div>
+      {c.source === "sample" && <span className="st-synth">Synthetic sample</span>}
       <div className="st-sw">{switcher}</div>
     </header>
   );
