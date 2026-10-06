@@ -1,0 +1,606 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-04T04:06:36+00:00",
+  "title": "Design System: Talk to Omar (Hoplon & Co house world)",
+  "extensions": {
+    "colorMeta": {
+      "navy": {
+        "role": "primary",
+        "displayName": "Hoplon Navy",
+        "canonical": "#0b2e6b",
+        "tonalRamp": [
+          "#00003a",
+          "#001f5b",
+          "#1b3f7d",
+          "#3a60a1",
+          "#5a82c6",
+          "#7ca5ec",
+          "#aecafb",
+          "#e6efff"
+        ]
+      },
+      "navy-2": {
+        "role": "primary",
+        "displayName": "Deep Navy",
+        "canonical": "#123a80",
+        "tonalRamp": [
+          "#00003a",
+          "#001f5b",
+          "#163e84",
+          "#355fa8",
+          "#5581ce",
+          "#77a5f4",
+          "#aecafb",
+          "#e6efff"
+        ]
+      },
+      "blue": {
+        "role": "secondary",
+        "displayName": "Signal Blue",
+        "canonical": "#1f5fbf",
+        "tonalRamp": [
+          "#00003c",
+          "#002158",
+          "#003c8e",
+          "#1c5cbc",
+          "#4080e3",
+          "#71a5f8",
+          "#abcbfd",
+          "#e6effe"
+        ]
+      },
+      "sky": {
+        "role": "tertiary",
+        "displayName": "Sky",
+        "canonical": "#e8f0fb",
+        "tonalRamp": [
+          "#070b12",
+          "#20262d",
+          "#3c434b",
+          "#5b626b",
+          "#7c838d",
+          "#9ea6b0",
+          "#c2cad4",
+          "#e7effa"
+        ]
+      },
+      "sky-2": {
+        "role": "tertiary",
+        "displayName": "Sky Deep",
+        "canonical": "#d3e2f7",
+        "tonalRamp": [
+          "#030b19",
+          "#1b2635",
+          "#374354",
+          "#556274",
+          "#768396",
+          "#98a6ba",
+          "#bccadf",
+          "#e4f0ff"
+        ]
+      },
+      "tint": {
+        "role": "neutral",
+        "displayName": "Cool Tint",
+        "canonical": "#f5f8fc",
+        "tonalRamp": [
+          "#090b0e",
+          "#232528",
+          "#404245",
+          "#5f6165",
+          "#808286",
+          "#a2a5a9",
+          "#c6c9cd",
+          "#eceff3"
+        ]
+      },
+      "zebra": {
+        "role": "neutral",
+        "displayName": "Zebra",
+        "canonical": "#f6f9fe",
+        "tonalRamp": [
+          "#090b0e",
+          "#232529",
+          "#404246",
+          "#5f6166",
+          "#808287",
+          "#a2a5aa",
+          "#c6c9ce",
+          "#eceff4"
+        ]
+      },
+      "white": {
+        "role": "neutral",
+        "displayName": "White",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ]
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "#d9e1ed",
+        "tonalRamp": [
+          "#070b13",
+          "#20252e",
+          "#3c424c",
+          "#5b626c",
+          "#7c838e",
+          "#9ea6b1",
+          "#c2cad5",
+          "#e7effb"
+        ]
+      },
+      "rule-soft": {
+        "role": "neutral",
+        "displayName": "Soft Hairline",
+        "canonical": "#eaf0f8",
+        "tonalRamp": [
+          "#080b10",
+          "#21252b",
+          "#3e4249",
+          "#5d6268",
+          "#7d838a",
+          "#a0a6ad",
+          "#c4cad1",
+          "#e9eff7"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#14213d",
+        "tonalRamp": [
+          "#020922",
+          "#172440",
+          "#334260",
+          "#516182",
+          "#7182a5",
+          "#93a5c9",
+          "#b7caef",
+          "#e7effe"
+        ]
+      },
+      "ink-2": {
+        "role": "neutral",
+        "displayName": "Ink 2",
+        "canonical": "#46526b",
+        "tonalRamp": [
+          "#040a1e",
+          "#1a243b",
+          "#36425a",
+          "#55617b",
+          "#75829e",
+          "#97a5c2",
+          "#bbc9e7",
+          "#e7efff"
+        ]
+      },
+      "ink-3": {
+        "role": "neutral",
+        "displayName": "Ink 3",
+        "canonical": "#5a6577",
+        "tonalRamp": [
+          "#040b18",
+          "#1c2535",
+          "#384253",
+          "#576274",
+          "#778396",
+          "#9aa6ba",
+          "#bdcade",
+          "#e6efff"
+        ]
+      },
+      "on-navy": {
+        "role": "neutral",
+        "displayName": "On-Navy",
+        "canonical": "#c9daf5",
+        "tonalRamp": [
+          "#030b1c",
+          "#192539",
+          "#354358",
+          "#536279",
+          "#74839c",
+          "#96a6c0",
+          "#bacae5",
+          "#e6effe"
+        ]
+      },
+      "on-navy-2": {
+        "role": "neutral",
+        "displayName": "On-Navy Muted",
+        "canonical": "#8fa9d6",
+        "tonalRamp": [
+          "#000729",
+          "#102447",
+          "#2c4268",
+          "#4a618a",
+          "#6a83ae",
+          "#8ca6d3",
+          "#afcaf9",
+          "#e6effe"
+        ]
+      },
+      "good": {
+        "role": "signal",
+        "displayName": "Pass Green",
+        "canonical": "#0e7a3e",
+        "tonalRamp": [
+          "#001102",
+          "#012e13",
+          "#095027",
+          "#017539",
+          "#39985a",
+          "#5fbc7c",
+          "#84e19f",
+          "#c9fed5"
+        ]
+      },
+      "warn": {
+        "role": "signal",
+        "displayName": "Near Amber",
+        "canonical": "#8a5300",
+        "tonalRamp": [
+          "#180600",
+          "#371e00",
+          "#5e3806",
+          "#8a5300",
+          "#ae7431",
+          "#d39756",
+          "#f9bb7a",
+          "#ffebd7"
+        ]
+      },
+      "crit": {
+        "role": "signal",
+        "displayName": "Fail Red",
+        "canonical": "#b42318",
+        "tonalRamp": [
+          "#210000",
+          "#4d0100",
+          "#7e0b05",
+          "#b12015",
+          "#da4a3b",
+          "#fb7866",
+          "#fdb4a8",
+          "#ffe9e5"
+        ]
+      },
+      "good-bg": {
+        "role": "signal",
+        "displayName": "Pass Green Tint",
+        "canonical": "#e6f4ec",
+        "tonalRamp": [
+          "#050e09",
+          "#1d2822",
+          "#3a453f",
+          "#59655e",
+          "#79867f",
+          "#9ca9a1",
+          "#bfcdc5",
+          "#e5f2eb"
+        ]
+      },
+      "warn-bg": {
+        "role": "signal",
+        "displayName": "Near Amber Tint",
+        "canonical": "#fbf0dc",
+        "tonalRamp": [
+          "#110a01",
+          "#2c2414",
+          "#4a4130",
+          "#69604f",
+          "#8b816f",
+          "#aea491",
+          "#d2c8b4",
+          "#f8edd9"
+        ]
+      },
+      "crit-bg": {
+        "role": "signal",
+        "displayName": "Fail Red Tint",
+        "canonical": "#fdf1f0",
+        "tonalRamp": [
+          "#100909",
+          "#2b2322",
+          "#493f3f",
+          "#695e5e",
+          "#8a7f7f",
+          "#ada2a1",
+          "#d2c6c5",
+          "#f7ebea"
+        ]
+      },
+      "seg-end": {
+        "role": "measurement",
+        "displayName": "Turn End Ink",
+        "canonical": "#1f5fbf",
+        "tonalRamp": [
+          "#00003c",
+          "#002158",
+          "#003c8e",
+          "#1c5cbc",
+          "#4080e3",
+          "#71a5f8",
+          "#abcbfd",
+          "#e6effe"
+        ]
+      },
+      "seg-llm": {
+        "role": "measurement",
+        "displayName": "LLM Ink",
+        "canonical": "#0b2e6b",
+        "tonalRamp": [
+          "#00003a",
+          "#001f5b",
+          "#1b3f7d",
+          "#3a60a1",
+          "#5a82c6",
+          "#7ca5ec",
+          "#aecafb",
+          "#e6efff"
+        ]
+      },
+      "seg-tts": {
+        "role": "measurement",
+        "displayName": "TTS Ink",
+        "canonical": "#1baf7a",
+        "tonalRamp": [
+          "#001006",
+          "#002e1c",
+          "#004f34",
+          "#11734f",
+          "#19996b",
+          "#37c08a",
+          "#65e5ad",
+          "#c2ffdf"
+        ]
+      },
+      "seg-other": {
+        "role": "measurement",
+        "displayName": "Other Ink",
+        "canonical": "#9fb3cf",
+        "tonalRamp": [
+          "#010b1e",
+          "#16263b",
+          "#32435a",
+          "#50627c",
+          "#71849e",
+          "#93a7c2",
+          "#b6cbe8",
+          "#e5effe"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "title": {
+        "displayName": "Title",
+        "purpose": "Page title in the navy band only."
+      },
+      "figure": {
+        "displayName": "Figure",
+        "purpose": "Summary readouts (p50, p95, replies measured) in navy."
+      },
+      "section": {
+        "displayName": "Section",
+        "purpose": "Main-column section headings with a sky-2 underline."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Conversation text, Lead names, agent state."
+      },
+      "body-small": {
+        "displayName": "Body Small",
+        "purpose": "Rail headings, facts, hints, Lead messages, table cells."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Column heads, figure labels, targets, step chips, notes."
+      },
+      "micro": {
+        "displayName": "Micro",
+        "purpose": "Target tags, stage flags, cut chip, delay-part numbers."
+      }
+    },
+    "shadows": [
+      {
+        "name": "selected-lift",
+        "value": "0 1px 3px rgb(11 46 107 / 0.1)",
+        "purpose": "Checked Lead option."
+      },
+      {
+        "name": "button-seat",
+        "value": "0 1px 2px rgb(11 46 107 / 0.25)",
+        "purpose": "Primary Call button."
+      },
+      {
+        "name": "float",
+        "value": "0 6px 18px rgb(11 46 107 / 0.25)",
+        "purpose": "Only the fixed allow-audio button floating over content."
+      },
+      {
+        "name": "halo-on-navy",
+        "value": "0 0 0 4px rgb(255 255 255 / 0.18)",
+        "purpose": "Current stage-track dot."
+      },
+      {
+        "name": "halo-on-white",
+        "value": "0 0 0 3px #d3e2f7",
+        "purpose": "Speaking pulse."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "House easing for all state transitions and animations."
+      },
+      {
+        "name": "hover",
+        "value": "150ms",
+        "purpose": "Button fill, Lead option border and lift."
+      },
+      {
+        "name": "track",
+        "value": "200ms",
+        "purpose": "Stage-track dot fill and halo."
+      },
+      {
+        "name": "draw",
+        "value": "260ms, 90ms stagger",
+        "purpose": "Delay bar segments draw from scaleX(0) in order when a row lands."
+      },
+      {
+        "name": "land",
+        "value": "1400ms",
+        "purpose": "New ledger row fades from sky to white."
+      },
+      {
+        "name": "breathe",
+        "value": "1.6s listening / 0.6s thinking",
+        "purpose": "Agent-state pulse scale and opacity loop."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "1ms, one iteration",
+        "purpose": "All animation and transition collapse under prefers-reduced-motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "compact",
+        "value": "1180px"
+      },
+      {
+        "name": "stacked",
+        "value": "900px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Call Button",
+      "kind": "button",
+      "refersTo": "button-call",
+      "description": "The one primary action in the rail: start a call with the chosen Lead.",
+      "html": "<button class=\"ds-btn-call\">Call Khalifa</button>",
+      "css": ".ds-btn-call { font-family: 'Noto Sans', system-ui, sans-serif; font-size: 0.9375rem; font-weight: 600; height: 2.75rem; width: 100%; border: 0; border-radius: 6px; color: #fff; background: var(--navy, #0b2e6b); box-shadow: 0 1px 2px rgb(11 46 107 / 0.25); cursor: pointer; transition: background-color 150ms cubic-bezier(0.16,1,0.3,1), transform 150ms cubic-bezier(0.16,1,0.3,1); } .ds-btn-call:hover { background: var(--blue, #1f5fbf); } .ds-btn-call:active { transform: translateY(1px); } .ds-btn-call:focus-visible { outline: 2px solid var(--blue, #1f5fbf); outline-offset: 2px; }"
+    },
+    {
+      "name": "Link Button",
+      "kind": "button",
+      "refersTo": "button-link",
+      "description": "Secondary action set as underlined blue text.",
+      "html": "<button class=\"ds-btn-link\">Watch a sample call (synthetic data, no keys needed)</button>",
+      "css": ".ds-btn-link { font-family: 'Noto Sans', system-ui, sans-serif; font-size: 0.8125rem; color: var(--blue, #1f5fbf); background: none; border: 0; padding: 0.15rem 0; text-align: left; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: rgb(31 95 191 / 0.35); } .ds-btn-link:hover { text-decoration-color: currentColor; } .ds-btn-link:focus-visible { outline: 2px solid var(--blue, #1f5fbf); outline-offset: 2px; }"
+    },
+    {
+      "name": "Lead Option",
+      "kind": "input",
+      "refersTo": "lead-option",
+      "description": "Radio card for picking the Lead to call: name, form message, note.",
+      "html": "<div class=\"ds-leads\"><label class=\"ds-lead ds-lead-checked\"><input type=\"radio\" name=\"ds-lead\" checked><span class=\"ds-lead-name\">Khalifa Al Dhaheri</span><span class=\"ds-lead-msg\">“We run a chain of 4 laundry shops in Dubai and want a mobile app.”</span><span class=\"ds-lead-note\">Clear project. Good for the booking path.</span></label><label class=\"ds-lead\"><input type=\"radio\" name=\"ds-lead\"><span class=\"ds-lead-name\">Rhea Fernandes</span><span class=\"ds-lead-msg\">“please call me”</span><span class=\"ds-lead-note\">No topic. Omar must find out what she needs.</span></label></div>",
+      "css": ".ds-leads { display: flex; flex-direction: column; gap: 0.5rem; padding: 1rem; background: var(--tint, #f5f8fc); font-family: 'Noto Sans', system-ui, sans-serif; } .ds-lead { display: grid; grid-template-columns: 1.25rem minmax(0,1fr); column-gap: 0.5rem; row-gap: 0.15rem; padding: 0.7rem 0.8rem; border: 1px solid var(--rule, #d9e1ed); border-radius: 6px; background: #fff; cursor: pointer; transition: border-color 150ms cubic-bezier(0.16,1,0.3,1), box-shadow 150ms cubic-bezier(0.16,1,0.3,1); } .ds-lead:hover { border-color: #aebfdb; } .ds-lead-checked { border-color: var(--blue, #1f5fbf); box-shadow: 0 1px 3px rgb(11 46 107 / 0.1); } .ds-lead input { grid-row: 1 / span 3; margin: 0.2rem 0 0; accent-color: var(--blue, #1f5fbf); width: 1rem; height: 1rem; } .ds-lead:focus-within { outline: 2px solid var(--blue, #1f5fbf); outline-offset: 2px; } .ds-lead-name { font-weight: 600; font-size: 0.875rem; color: var(--ink, #14213d); } .ds-lead-msg { color: var(--ink-2, #46526b); font-size: 0.8125rem; } .ds-lead-note { color: var(--ink-3, #5a6577); font-size: 0.75rem; }"
+    },
+    {
+      "name": "Step and Flag Chips",
+      "kind": "chip",
+      "refersTo": "step-chip",
+      "description": "Event chips under a turn (LLM-reported filled, code-recorded outlined) and stage flags.",
+      "html": "<div class=\"ds-chips\"><span class=\"ds-flag\">tool call</span><span class=\"ds-step\">Identity confirmed<span class=\"ds-by\">reported by LLM</span></span><span class=\"ds-step ds-step-code\">Lead answered<span class=\"ds-by\">by code</span></span></div>",
+      "css": ".ds-chips { display: flex; flex-wrap: wrap; gap: 0.35rem; align-items: center; font-family: 'Noto Sans', system-ui, sans-serif; } .ds-step { font-size: 0.75rem; color: var(--navy, #0b2e6b); background: var(--sky, #e8f0fb); border-radius: 3px; padding: 0.05rem 0.45rem; } .ds-step-code { background: transparent; box-shadow: inset 0 0 0 1px var(--sky-2, #d3e2f7); } .ds-by { color: var(--ink-3, #5a6577); margin-left: 0.35rem; } .ds-flag { font-size: 0.6875rem; font-weight: 600; color: var(--ink-2, #46526b); background: var(--sky, #e8f0fb); border-radius: 3px; padding: 0 0.35rem; }"
+    },
+    {
+      "name": "Summary Strip",
+      "kind": "card",
+      "refersTo": "summary-figure",
+      "description": "Readout of p50 and p95 against targets, with pass/fail tags and a verdict.",
+      "html": "<section class=\"ds-summary\"><div class=\"ds-fig\"><span class=\"ds-fig-label\">Typical reply (p50)</span><span class=\"ds-fig-value\">0.82 s<span class=\"ds-tag ds-tag-good\">within</span></span><span class=\"ds-fig-label\">target 0.9 s or less</span></div><div class=\"ds-fig\"><span class=\"ds-fig-label\">Slow reply (p95)</span><span class=\"ds-fig-value\">1.62 s<span class=\"ds-tag ds-tag-crit\">over</span></span><span class=\"ds-fig-label\">target 1.5 s or less</span></div></section>",
+      "css": ".ds-summary { display: inline-flex; border: 1px solid var(--rule, #d9e1ed); border-radius: 6px; font-family: 'Noto Sans', system-ui, sans-serif; font-variant-numeric: tabular-nums lining-nums; } .ds-fig { display: grid; padding: 0.75rem 1.25rem; min-width: 10.5rem; border-right: 1px solid var(--rule, #d9e1ed); } .ds-fig:last-child { border-right: 0; } .ds-fig-label { font-size: 0.75rem; color: var(--ink-3, #5a6577); } .ds-fig-value { font-size: 1.375rem; font-weight: 600; line-height: 1.25; color: var(--navy, #0b2e6b); } .ds-tag { display: inline-block; margin-left: 0.5rem; vertical-align: 0.3em; font-size: 0.6875rem; font-weight: 700; line-height: 1.5; color: #fff; border-radius: 3px; padding: 0 0.4rem; } .ds-tag-good { background: var(--good, #0e7a3e); } .ds-tag-crit { background: var(--crit, #b42318); }"
+    },
+    {
+      "name": "Delay Bar",
+      "kind": "custom",
+      "refersTo": "delay-bar",
+      "description": "Signature: one reply's wait split into four fixed inks on a 0 to 1.5 s scale with a 0.9 s target tick; segments draw in order.",
+      "html": "<div class=\"ds-delay\"><div class=\"ds-rail\"><span class=\"ds-seg\" style=\"left:0;width:20.7%;background:#1f5fbf;animation-delay:0ms\"></span><span class=\"ds-seg\" style=\"left:20.7%;width:14.7%;background:#0b2e6b;animation-delay:90ms\"></span><span class=\"ds-seg\" style=\"left:35.4%;width:8%;background:#1baf7a;animation-delay:180ms\"></span><span class=\"ds-seg\" style=\"left:43.4%;width:11.3%;background:#9fb3cf;animation-delay:270ms\"></span><span class=\"ds-tick\" style=\"left:60%\"></span></div><div class=\"ds-parts\"><span><i style=\"background:#1f5fbf\"></i>310</span><span><i style=\"background:#0b2e6b\"></i>220</span><span><i style=\"background:#1baf7a\"></i>120</span><span><i style=\"background:#9fb3cf\"></i>170</span></div></div>",
+      "css": ".ds-delay { width: 15rem; font-family: 'Noto Sans', system-ui, sans-serif; font-variant-numeric: tabular-nums; } .ds-rail { position: relative; height: 10px; background: var(--rule-soft, #eaf0f8); border-radius: 2px; } .ds-seg { position: absolute; top: 0; bottom: 0; transform-origin: left center; animation: ds-draw 260ms cubic-bezier(0.16,1,0.3,1) both; } .ds-seg:first-child { border-radius: 2px 0 0 2px; } @keyframes ds-draw { from { transform: scaleX(0); } } .ds-tick { position: absolute; top: -4px; bottom: -4px; width: 2px; margin-left: -1px; background: var(--ink, #14213d); opacity: 0.55; } .ds-parts { display: flex; gap: 0.7rem; margin-top: 0.45rem; font-size: 0.6875rem; color: var(--ink-3, #5a6577); } .ds-parts span { display: inline-flex; align-items: center; gap: 0.25rem; } .ds-parts i { display: inline-block; width: 7px; height: 7px; border-radius: 1px; } @media (prefers-reduced-motion: reduce) { .ds-seg { animation-duration: 1ms; } }"
+    },
+    {
+      "name": "Stage Track",
+      "kind": "nav",
+      "refersTo": "band",
+      "description": "Progress of the call across six stages on the navy band: done, current, to do.",
+      "html": "<ol class=\"ds-track\"><li data-state=\"done\"><span class=\"ds-dot\"></span>Identity</li><li data-state=\"done\"><span class=\"ds-dot\"></span>Opening</li><li data-state=\"now\"><span class=\"ds-dot\"></span>Information</li><li><span class=\"ds-dot\"></span>Intent</li><li><span class=\"ds-dot\"></span>Booking</li><li><span class=\"ds-dot\"></span>Outcome</li></ol>",
+      "css": ".ds-track { list-style: none; margin: 0; padding: 1rem 2rem; display: grid; grid-template-columns: repeat(6, minmax(0,1fr)); background: var(--navy, #0b2e6b); font-family: 'Noto Sans', system-ui, sans-serif; font-size: 0.8125rem; color: var(--on-navy, #c9daf5); } .ds-track li { position: relative; display: grid; row-gap: 0.35rem; padding-right: 0.75rem; } .ds-track li::after { content: ''; position: absolute; top: 6px; left: 14px; right: 0; height: 2px; background: rgb(255 255 255 / 0.16); } .ds-track li:last-child::after { display: none; } .ds-track li[data-state='done']::after { background: var(--on-navy-2, #8fa9d6); } .ds-dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--on-navy-2, #8fa9d6); background: var(--navy, #0b2e6b); position: relative; z-index: 1; transition: background-color 200ms cubic-bezier(0.16,1,0.3,1), box-shadow 200ms cubic-bezier(0.16,1,0.3,1); } .ds-track li[data-state='done'] .ds-dot { background: var(--on-navy-2, #8fa9d6); } .ds-track li[data-state='now'] { color: #fff; font-weight: 600; } .ds-track li[data-state='now'] .ds-dot { background: #fff; border-color: #fff; box-shadow: 0 0 0 4px rgb(255 255 255 / 0.18); }"
+    },
+    {
+      "name": "Stage Table",
+      "kind": "custom",
+      "refersTo": "table-head",
+      "description": "Navy-headed data table with zebra rows and right-aligned tabular values.",
+      "html": "<table class=\"ds-table\"><thead><tr><th>Stage</th><th>Total p50</th><th>Total p95</th></tr></thead><tbody><tr><th>Legal opening</th><td>1.05 s</td><td>1.05 s</td></tr><tr><th>Information</th><td>0.82 s</td><td>0.82 s</td></tr><tr><th>Intent probe</th><td>1.13 s</td><td>1.13 s</td></tr></tbody></table>",
+      "css": ".ds-table { border-collapse: collapse; width: 100%; font-family: 'Noto Sans', system-ui, sans-serif; font-size: 0.8125rem; font-variant-numeric: tabular-nums lining-nums; color: var(--ink, #14213d); } .ds-table th, .ds-table td { padding: 0.45rem 0.75rem; text-align: right; border-bottom: 1px solid var(--rule-soft, #eaf0f8); white-space: nowrap; } .ds-table th:first-child { text-align: left; } .ds-table thead th { background: var(--navy, #0b2e6b); color: #fff; font-weight: 600; font-size: 0.75rem; border-bottom: 0; } .ds-table tbody tr:nth-child(even) > * { background: var(--zebra, #f6f9fe); } .ds-table tbody th { font-weight: 600; color: var(--navy, #0b2e6b); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Measured Ledger",
+    "overview": "The Hoplon house world, first set in print for the executive brief and engineer guide, carried onto a working screen. A navy band holds the logo and the call's progress; below it, a cool tint rail holds the controls and the code's state, and a white main column holds the record. Every surface is flat paper divided by hairline rules. Nothing floats, nothing glows, and decoration is close to zero: the only colour that is not blue is there because it measures something.\n\nDensity is that of a well-set report, not a dashboard. Body text sits at 14px, secondary text at 13px, and every number uses tabular lining figures so columns of milliseconds align. Hierarchy comes from weight (600 on navy) and from the navy band and navy table heads, not from size jumps; the largest type on the page is the 22px summary figure, because the numbers are the point.\n\nThe world rejects the split of chat bubbles on one side and a metrics panel on the other. A conversation turn and its measured delay sit in the same row.",
+    "keyCharacteristics": [
+      "Navy band, tint rail, white work column; one family (Noto Sans) in four weights.",
+      "Hairline rules (1px) instead of shadows to separate everything.",
+      "Tabular numerals globally; values right-aligned in tables and totals.",
+      "Blue family for state; green, amber and red only for pass or fail against a target.",
+      "Four fixed measurement inks for the parts of a delay."
+    ],
+    "rules": [
+      {
+        "name": "The Verdict-Only Signal Rule",
+        "body": "Green, amber and red mean pass, near or fail against a stated target (0.9 s typical, 1.5 s slow) and nothing else. Lead status, stage, guard hits, outcome and agent state use the navy/blue family.",
+        "section": "colors"
+      },
+      {
+        "name": "The Fixed Inks Rule",
+        "body": "The four delay inks never change order or hue, and never carry meaning beyond \"which part of the wait\". The TTS green is a part, not a pass; a pass is shown only in the total and the tags.",
+        "section": "colors"
+      },
+      {
+        "name": "The Weight-Not-Size Rule",
+        "body": "Emphasis is weight 600 in navy at the same size, not a larger size. The scale steps are 11, 12, 13, 14, 15, 16, 20, 22px; nothing exceeds 22px.",
+        "section": "typography"
+      },
+      {
+        "name": "The Tabular Rule",
+        "body": "Every number on screen is tabular and lining; totals and table values right-align.",
+        "section": "typography"
+      },
+      {
+        "name": "The Hairline Rule",
+        "body": "Separation is a 1px rule (rule or rule-soft); dashed hairlines mark provisional content (the sample row, the pending row).",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do keep the three planes: navy band, tint rail, white work column, separated by 1px rule hairlines.",
+      "Do use navy for headings, stage names and emphasised facts, and blue for interaction, focus and liveness.",
+      "Do reserve good/warn/crit (and their -bg tints) for pass, near or fail against a stated target.",
+      "Do draw delay parts in the four fixed inks, in order, on a fixed scale with the target tick.",
+      "Do set every number in tabular lining figures and right-align totals and table values.",
+      "Do use the house ease (cubic-bezier(0.16, 1, 0.3, 1)) at 150 to 260ms for state changes, and honour reduced motion."
+    ],
+    "donts": [
+      "Don't colour status, stage, guard hits, outcome or agent state green, amber or red.",
+      "Don't separate surfaces with shadows; the only shadows are the four listed in Elevation & Depth.",
+      "Don't set type larger than 22px or add a second family.",
+      "Don't split a turn into chat bubbles apart from its measurements; a turn and its delay share one row."
+    ]
+  }
+}

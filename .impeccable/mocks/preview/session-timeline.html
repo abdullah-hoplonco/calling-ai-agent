@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Session Timeline preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#111215; --panel:#18191d; --panel2:#1d1f24; --lane:#1b1d22; --lane2:#17181c; --line:#2a2d34; --line2:#33363e;
+  --tx:#e9eaee; --tx2:#a3a7b1; --tx3:#6f7480;
+  --lead:#5ab8f0; --omar:#f39a3d;
+  --p0:#7c8cff; --p1:#c97cf0; --p2:#34c6b0; --p3:#5d6370;
+  --good:#5be08f; --warn:#ffd04d; --crit:#ff5c5c;
+  --pps:52; /* px per second on the arrangement */
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--tx)}
+body{font-family:"Geist",system-ui,sans-serif;font-size:13.5px;line-height:1.45;font-feature-settings:"tnum";-webkit-font-smoothing:antialiased;display:grid;grid-template-rows:68px minmax(0,1fr) 318px;overflow:hidden}
+.mono{font-family:"Geist Mono",monospace}
+button{font:inherit;cursor:pointer;color:inherit}
+:focus-visible{outline:2px solid var(--omar);outline-offset:2px}
+
+/* transport */
+.tp{display:flex;align-items:center;gap:18px;padding:0 18px;background:linear-gradient(#1e2025,#17181c);border-bottom:1px solid #000;box-shadow:inset 0 -1px 0 var(--line)}
+.wm{font-weight:800;font-size:15px;letter-spacing:-.01em;white-space:nowrap}
+.wm b{color:#f5c518}
+.wm small{display:block;font-weight:500;font-size:11.5px;color:var(--tx3);letter-spacing:0}
+.tbtns{display:flex;gap:2px;background:#0c0d0f;border:1px solid #000;border-radius:7px;padding:3px}
+.tb{width:40px;height:34px;border:0;background:#25272d;border-radius:5px;display:grid;place-items:center;color:var(--tx2)}
+.tb:hover{background:#2e3138;color:var(--tx)}
+.tb.play.on{background:var(--good);color:#06240f}
+.tb svg{width:14px;height:14px}
+.lcd{display:flex;align-items:stretch;background:#0a0b0d;border:1px solid #000;border-radius:7px;box-shadow:inset 0 1px 6px rgb(0 0 0/.6);height:50px;overflow:hidden}
+.lcd>div{padding:5px 16px;border-right:1px solid #1f2126;display:flex;flex-direction:column;justify-content:center}
+.lcd>div:last-child{border-right:0}
+.lcd label{font-size:9.5px;font-weight:700;letter-spacing:.12em;color:var(--tx3);text-transform:uppercase}
+.lcd .big{font-family:"Geist Mono";font-size:24px;font-weight:500;color:#cfe8ff;letter-spacing:.02em;line-height:1.05}
+.lcd .mid{font-family:"Geist Mono";font-size:17px;font-weight:500;line-height:1.1}
+.lcd .mid em{font-style:normal;font-size:11px;color:var(--tx3);margin-left:6px}
+.ok{color:var(--good)} .wn{color:var(--warn)} .bad{color:var(--crit)}
+.sp{flex:1}
+.callbtn{background:var(--omar);color:#1c0d00;border:0;border-radius:7px;padding:0 18px;height:40px;font-weight:800;font-size:14px;display:flex;align-items:center;gap:8px}
+.callbtn.alt{background:#25272d;color:var(--tx);border:1px solid var(--line2);font-weight:600}
+.callbtn svg{width:15px;height:15px}
+.mutebox{display:flex;align-items:center;gap:6px;color:var(--tx3);font-size:12px}
+
+/* arrangement */
+.arr{display:grid;grid-template-columns:236px minmax(0,1fr);min-height:0}
+.heads{background:var(--panel);border-right:1px solid #000;display:flex;flex-direction:column}
+.th{border-bottom:1px solid #0b0c0e;display:flex;align-items:center;gap:10px;padding:0 12px;position:relative}
+.th .sw{width:4px;align-self:stretch;margin:8px 0;border-radius:2px}
+.th .nm{font-weight:700;font-size:13px}
+.th .nm small{display:block;font-weight:500;font-size:11px;color:var(--tx3)}
+.meter{margin-left:auto;display:flex;gap:2px;height:46px;align-items:flex-end}
+.meter i{width:5px;background:#2a2d33;border-radius:1px;height:100%;position:relative;overflow:hidden}
+.meter i b{position:absolute;left:0;right:0;bottom:0;height:0;background:linear-gradient(to top,var(--good) 60%,var(--warn) 85%,var(--crit));transition:height .07s linear}
+.r-ruler{height:30px}.r-mark{height:30px}.r-lead{height:128px}.r-omar{height:128px}.r-gap{height:96px}.r-ev{height:60px}
+.th.r-ruler,.th.r-mark{background:var(--panel2);font-size:10.5px;font-weight:700;letter-spacing:.12em;color:var(--tx3)}
+.scroller{overflow-x:auto;overflow-y:hidden;position:relative;background:var(--lane2)}
+.scroller::-webkit-scrollbar{height:10px}.scroller::-webkit-scrollbar-thumb{background:#33363e;border-radius:5px}
+.tl{position:relative}
+.lane{position:relative;border-bottom:1px solid #0b0c0e;background-image:repeating-linear-gradient(90deg,transparent 0 calc(var(--pps)*5px - 1px),rgb(255 255 255/.035) calc(var(--pps)*5px - 1px) calc(var(--pps)*5px))}
+.lane.alt{background-color:var(--lane)}
+.ruler{background:var(--panel2);font-family:"Geist Mono";font-size:10.5px;color:var(--tx3)}
+.ruler span{position:absolute;top:0;bottom:0;border-left:1px solid var(--line2);padding:5px 0 0 5px}
+.ruler span.minor{border-left-color:#26292f;top:20px;padding:0}
+.mkr{position:absolute;top:5px;bottom:5px;border-radius:4px;font-size:11.5px;font-weight:700;padding:2px 8px;white-space:nowrap;overflow:hidden;color:#0d0e10}
+.rg{position:absolute;top:6px;bottom:6px;border-radius:5px;overflow:hidden;cursor:pointer;transition:filter .15s,opacity .3s}
+.rg .hd{height:17px;font-size:11px;font-weight:700;padding:1px 7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#0d0e10}
+.rg svg{position:absolute;left:0;right:0;top:17px;bottom:0;width:100%;height:calc(100% - 17px)}
+.rg.lead{background:rgb(90 184 240/.16);border:1px solid rgb(90 184 240/.5)}
+.rg.lead .hd{background:var(--lead)}
+.rg.omar{background:rgb(243 154 61/.15);border:1px solid rgb(243 154 61/.5)}
+.rg.omar .hd{background:var(--omar)}
+.rg.sel{box-shadow:0 0 0 2px #fff}
+.rg.future{opacity:.28}
+.rg:hover{filter:brightness(1.2)}
+.cutmark{position:absolute;right:0;top:0;bottom:0;width:3px;background:repeating-linear-gradient(var(--crit) 0 4px,transparent 4px 7px)}
+.gp{position:absolute;top:30px;height:44px;display:flex;border-radius:3px;overflow:visible;cursor:pointer}
+.gp i{height:100%}
+.gp i:first-child{border-radius:3px 0 0 3px}.gp i:last-child{border-radius:0 3px 3px 0}
+.gp b{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);font-family:"Geist Mono";font-size:10.5px;font-weight:600;margin-bottom:2px;white-space:nowrap}
+.gp.scr{background:repeating-linear-gradient(135deg,#3a3d45 0 3px,transparent 3px 6px);border:1px solid #3a3d45}
+.gp.scr b{color:var(--tx3);font-weight:500}
+.gp.future{opacity:.28}
+.ev{position:absolute;top:8px;display:flex;align-items:center;gap:5px;font-size:10.5px;color:var(--tx2);white-space:nowrap}
+.ev i{width:8px;height:8px;background:var(--tx2);flex:none}
+.ev.llm i{transform:rotate(45deg);background:var(--p1)}
+.ev.code i{background:#e9eaee}
+.ev:nth-child(even){top:25px}
+.ph{position:absolute;top:0;bottom:0;width:2px;background:#fff;box-shadow:0 0 0 1px rgb(0 0 0/.4);pointer-events:none;z-index:4}
+.ph::before{content:"";position:absolute;top:0;left:-6px;border:7px solid transparent;border-top:9px solid #fff;border-bottom:0}
+
+/* bottom panels */
+.bot{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1.35fr) 300px;border-top:1px solid #000;background:var(--panel);min-height:0}
+.pn{border-right:1px solid #0b0c0e;display:flex;flex-direction:column;min-height:0}
+.pn:last-child{border-right:0}
+.ph2{height:34px;display:flex;align-items:center;gap:10px;padding:0 14px;background:var(--panel2);border-bottom:1px solid #0b0c0e;font-size:10.5px;font-weight:700;letter-spacing:.12em;color:var(--tx3);text-transform:uppercase}
+.ph2 b{color:var(--tx);letter-spacing:.02em;text-transform:none;font-size:12.5px}
+.pb{padding:14px 16px;overflow:auto;min-height:0}
+.line{display:grid;grid-template-columns:54px 1fr;gap:10px;margin-bottom:12px;font-size:14px}
+.line .who{font-size:11px;font-weight:800;letter-spacing:.08em;padding-top:3px}
+.line.l .who{color:var(--lead)} .line.o .who{color:var(--omar)}
+.line.l .tx{color:var(--tx2)}
+.cut{font-size:10.5px;font-weight:700;color:var(--crit);border:1px dashed var(--crit);padding:0 6px;border-radius:3px;margin-left:6px;white-space:nowrap}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0 0 64px}
+.chip{font-size:11px;font-weight:600;background:#25272d;border:1px solid var(--line2);padding:2px 8px;border-radius:4px}
+.chip em{font-style:normal;color:var(--tx3);font-weight:500;margin-left:5px}
+
+.ge{position:relative;height:100%;padding:18px 22px 10px}
+.gtop{display:flex;align-items:baseline;gap:14px;margin-bottom:6px}
+.gtot{font-family:"Geist Mono";font-size:40px;font-weight:600;letter-spacing:-.02em;line-height:1}
+.gtot small{font-size:16px;margin-left:4px;color:var(--tx2)}
+.pill{font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:20px}
+.pill.good{background:rgb(91 224 143/.14);color:var(--good)}
+.pill.warn{background:rgb(255 208 77/.14);color:var(--warn)}
+.pill.crit{background:rgb(255 92 92/.14);color:var(--crit)}
+.gnote{color:var(--tx3);font-size:12px;margin-left:auto}
+.gscale{position:relative;height:150px;margin-top:10px}
+.gscale .ax{position:absolute;left:0;right:0;bottom:22px;border-top:1px solid var(--line2)}
+.gscale .tk{position:absolute;bottom:0;font-family:"Geist Mono";font-size:10.5px;color:var(--tx3);transform:translateX(-50%)}
+.gscale .tl9{position:absolute;top:0;bottom:22px;border-left:2px dashed var(--good);opacity:.8}
+.gscale .tl9 span,.gscale .tl15 span{position:absolute;top:-2px;left:6px;font-size:10.5px;font-weight:700;white-space:nowrap}
+.gscale .tl9 span{color:var(--good)}
+.gscale .tl15{position:absolute;top:0;bottom:22px;border-left:2px dashed var(--crit);opacity:.6}
+.gscale .tl15 span{color:var(--crit)}
+.gblocks{position:absolute;left:0;top:30px;height:78px;display:flex}
+.gb{height:100%;border-radius:5px;margin-right:2px;padding:8px 9px;font-size:11px;font-weight:700;color:#0d0e10;overflow:hidden;white-space:nowrap;transform-origin:left;display:flex;flex-direction:column;justify-content:space-between}
+.gb span{font-family:"Geist Mono";font-size:15px;font-weight:600}
+.gb.p3{color:var(--tx)}
+.gb.pending{transform:scaleX(0)}
+.gscr{position:absolute;top:50px;left:0;color:var(--tx3);font-size:13px}
+
+.cs{display:grid;grid-template-columns:1fr auto;gap:10px 10px;font-size:13px;align-items:center}
+.cs dt{color:var(--tx2)}
+.cs dd{margin:0;font-weight:700;text-align:right;display:flex;align-items:center;gap:6px;justify-content:flex-end}
+.led{width:9px;height:9px;border-radius:50%;background:#33363e;display:inline-block}
+.led.on{background:var(--omar);box-shadow:0 0 6px var(--omar)}
+.guard{margin-top:16px;border:1px solid #4a2a2a;background:rgb(255 92 92/.06);border-radius:6px;padding:10px 12px;font-size:12.5px}
+.guard b{display:block;font-size:10.5px;letter-spacing:.1em;color:var(--crit);margin-bottom:4px}
+.guard s{color:var(--tx2);text-decoration-color:var(--crit)}
+.outc{margin-top:12px;font-size:12.5px;color:var(--tx3)}
+.outc b{color:var(--good)}
+.synth{font-size:11px;color:var(--tx3);padding:0 14px 10px}
+
+.switch{position:fixed;left:14px;bottom:14px;display:flex;background:#000;padding:4px;gap:4px;border-radius:8px;z-index:9;border:1px solid var(--line2)}
+.switch a{color:#888;text-decoration:none;font-size:12px;font-weight:700;padding:6px 12px;border-radius:5px}
+.switch a.on{background:var(--tx);color:#000}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="tp">
+  <div class="wm">hoplon <b>&amp;</b> co.<small>Talk to Omar · session</small></div>
+  <div class="tbtns">
+    <button class="tb" id="rew" aria-label="Back to start"><svg viewBox="0 0 16 16"><path d="M2 2h2v12H2zM14 2v12L5 8z" fill="currentColor"/></svg></button>
+    <button class="tb play" id="play" aria-label="Play the sample call"><svg viewBox="0 0 16 16"><path d="M3 1.5v13L14 8z" fill="currentColor"/></svg></button>
+    <button class="tb" id="stop" aria-label="Stop"><svg viewBox="0 0 16 16"><rect x="3" y="3" width="10" height="10" fill="currentColor"/></svg></button>
+  </div>
+  <div class="lcd">
+    <div><label>Position</label><div class="big" id="tc">00:00.000</div></div>
+    <div><label>Turn · stage</label><div class="mid" id="where">6 · Intent</div></div>
+    <div><label>Typical reply p50</label><div class="mid" id="p50"></div></div>
+    <div><label>Slow reply p95</label><div class="mid" id="p95"></div></div>
+  </div>
+  <div class="sp"></div>
+  <label class="mutebox"><input type="checkbox" id="mute"> Silent</label>
+  <button class="callbtn alt" id="play2"><svg viewBox="0 0 16 16"><path d="M2 6h3l4-4v12l-4-4H2z" fill="currentColor"/><path d="M11 5c1.3 1.6 1.3 4.4 0 6" stroke="currentColor" stroke-width="1.6" fill="none"/></svg>Hear the sample call</button>
+  <button class="callbtn" title="Needs LiveKit keys; not in this preview"><svg viewBox="0 0 16 16"><path d="M4 1.5l2.5 3-1.6 1.7a9 9 0 004.9 4.9l1.7-1.6 3 2.5-1.6 2.3C6.5 14.3 1.7 9.5 1.7 3.1z" fill="currentColor"/></svg>Call Khalifa</button>
+</header>
+
+<section class="arr">
+  <div class="heads">
+    <div class="th r-ruler">TIME</div>
+    <div class="th r-mark">STAGES</div>
+    <div class="th r-lead"><span class="sw" style="background:var(--lead)"></span><div class="nm">Lead<small>Khalifa Al Dhaheri</small></div><div class="meter" id="mLead"></div></div>
+    <div class="th r-omar"><span class="sw" style="background:var(--omar)"></span><div class="nm">Omar<small>AI agent · en-GB voice</small></div><div class="meter" id="mOmar"></div></div>
+    <div class="th r-gap"><span class="sw" style="background:linear-gradient(var(--p0),var(--p1),var(--p2),var(--p3))"></span><div class="nm">Wait<small>Lead stops → Omar speaks</small></div></div>
+    <div class="th r-ev"><span class="sw" style="background:#e9eaee"></span><div class="nm">Events<small>■ code · ◆ LLM</small></div></div>
+  </div>
+  <div class="scroller" id="scroller">
+    <div class="tl" id="tl">
+      <div class="lane ruler r-ruler" id="ruler"></div>
+      <div class="lane r-mark" id="mark"></div>
+      <div class="lane alt r-lead" id="laneLead"></div>
+      <div class="lane r-omar" id="laneOmar"></div>
+      <div class="lane alt r-gap" id="laneGap"></div>
+      <div class="lane r-ev" id="laneEv"></div>
+      <div class="ph" id="ph"></div>
+    </div>
+  </div>
+</section>
+
+<section class="bot">
+  <div class="pn">
+    <div class="ph2">Inspector <b id="iTitle"></b></div>
+    <div class="pb" id="insp"></div>
+  </div>
+  <div class="pn">
+    <div class="ph2">Wait editor <b>0 to 1.5 s, true scale</b></div>
+    <div class="ge" id="ge"></div>
+  </div>
+  <div class="pn">
+    <div class="ph2">Code state <b>what the code enforces</b></div>
+    <div class="pb">
+      <dl class="cs" id="cs"></dl>
+      <div class="guard"><b>BLOCKED BEFORE SPEECH · TURN 6</b><s>A first version usually starts at around AED 40,000.</s><br><span style="color:var(--tx3)">Rule: no prices on the call.</span></div>
+      <div class="outc" id="outc">Outcome: <b>Discovery Call booked · Wed 3pm</b></div>
+    </div>
+    <div class="synth">Sample call. Words and every number are synthetic. Voices are your browser's own.</div>
+  </div>
+</section>
+
+<nav class="switch"><a href="call-score.html">Call Score</a><a class="on" href="session-timeline.html">Session Timeline</a><a href="saas-console.html">SaaS Console</a></nav>
+
+<script src="call-data.js"></script>
+<script>
+const C = window.CALL, $ = (id) => document.getElementById(id);
+const PPS = 52, x = (ms) => ms / 1000 * PPS;
+const INK = ["var(--p0)","var(--p1)","var(--p2)","var(--p3)"];
+const STC = { IDENTITY:"#8f9bb3", OPENING:"#7c8cff", INFO:"#5ab8f0", INTENT:"#c97cf0", BOOKING:"#f39a3d", OUTCOME:"#5be08f" };
+const W = x(C.LENGTH) + 400;
+$("tl").style.width = W + "px";
+const vcls = (v) => v === "good" ? "ok" : v === "warn" ? "wn" : "bad";
+$("p50").innerHTML = `<span class="${vcls(C.verdict(C.P50))}">${C.P50} ms</span><em>≤ 900</em>`;
+$("p95").innerHTML = `<span class="${vcls(C.verdict(C.P95))}">${C.P95} ms</span><em>≤ 1500</em>`;
+
+// ruler
+let r = ""; for (let s = 0; s * 1000 < C.LENGTH + 8000; s++){ r += s % 5 === 0 ? `<span style="left:${s*PPS}px">${String(Math.floor(s/60)).padStart(2,"0")}:${String(s%60).padStart(2,"0")}</span>` : `<span class="minor" style="left:${s*PPS}px"></span>`; }
+$("ruler").innerHTML = r;
+
+// stage markers
+let mk = "", cur = null, st = 0;
+C.TURNS.forEach((t,i) => { if (t.stage !== cur){ if (cur) mk += mkr(cur, st, t.leadAt); cur = t.stage; st = t.leadAt; } });
+mk += mkr(cur, st, C.LENGTH);
+function mkr(id, a, b){ const s = C.STAGES.find(z => z.id === id); return `<div class="mkr" style="left:${x(a)}px;width:${x(b-a)-3}px;background:${STC[id]}">${s.mark} · ${s.label}</div>`; }
+$("mark").innerHTML = mk;
+
+// seeded waveform
+function wave(seed, w, h, color){
+  let s = seed * 9301 + 49297; const rnd = () => (s = (s * 9301 + 49297) % 233280) / 233280;
+  const n = Math.max(4, Math.floor(w / 3)); let d = "";
+  for (let i = 0; i < n; i++){
+    const env = Math.sin(Math.PI * (i / n)) ** .35 * (0.35 + 0.65 * Math.abs(Math.sin(i / 3.7 + seed)));
+    const a = Math.max(.06, env * (0.45 + rnd() * 0.55)) * (h / 2 - 3);
+    d += `M${i*3+1.5} ${h/2 - a}V${h/2 + a}`;
+  }
+  return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><path d="${d}" stroke="${color}" stroke-width="2" stroke-linecap="round"/></svg>`;
+}
+const LH = 128 - 12 - 17;
+let lead = "", omar = "", gap = "", ev = "";
+C.TURNS.forEach((t,i) => {
+  if (t.lead){ const w = x(t.leadMs); lead += `<div class="rg lead" data-i="${i}" style="left:${x(t.leadAt)}px;width:${w}px"><div class="hd">${t.lead}</div>${wave(i+1, w, LH, "var(--lead)")}</div>`; }
+  const om = t.endAt - t.omarAt, w = x(om);
+  omar += `<div class="rg omar" data-i="${i}" style="left:${x(t.omarAt)}px;width:${w}px"><div class="hd">${t.omar}</div>${wave(i+20, w, LH, "var(--omar)")}${t.cut?'<span class="cutmark"></span>':""}</div>`;
+  if (t.parts){ const v = C.verdict(t.total); gap += `<div class="gp" data-i="${i}" style="left:${x(t.gapAt)}px;width:${x(t.total)}px">${t.parts.map((p,k)=>`<i style="flex:${p};background:${INK[k]}"></i>`).join("")}<b class="${vcls(v)}">${t.total}</b></div>`; }
+  else gap += `<div class="gp scr" data-i="${i}" style="left:${x(t.gapAt)}px;width:${x(t.gapMs)}px"><b>script</b></div>`;
+  t.events.forEach((e,k) => { ev += `<div class="ev ${e.by==='code'?'code':'llm'}" style="left:${x(t.omarAt + k*1600)}px"><i></i>${e.t}</div>`; });
+});
+$("laneLead").innerHTML = lead; $("laneOmar").innerHTML = omar; $("laneGap").innerHTML = gap; $("laneEv").innerHTML = ev;
+
+// meters
+["mLead","mOmar"].forEach(id => $(id).innerHTML = "<i><b></b></i>".repeat(2));
+let speaking = null;
+function meterLoop(){
+  ["mLead","mOmar"].forEach(id => {
+    const on = (id === "mLead" && speaking === "lead") || (id === "mOmar" && speaking === "omar");
+    $(id).querySelectorAll("b").forEach(b => b.style.height = on ? (35 + Math.random()*60) + "%" : "0%");
+  });
+  setTimeout(() => requestAnimationFrame(meterLoop), 70);
+}
+meterLoop();
+
+// inspector + wait editor + code state
+const GX = 0.26; // wait editor px per ms (≈1.5 s = 390px)
+function select(i, opts = {}){
+  const t = C.TURNS[i];
+  document.querySelectorAll(".rg").forEach(el => el.classList.toggle("sel", +el.dataset.i === i));
+  $("iTitle").textContent = `Turn ${t.n} · ${t.stageObj.label}`;
+  $("where").textContent = `${t.n} · ${t.stageObj.label}`;
+  $("insp").innerHTML = `
+    <div class="line l"><span class="who">LEAD</span><span class="tx">${t.lead || "<em>(picks up the phone)</em>"}</span></div>
+    <div class="line o"><span class="who">OMAR</span><span class="tx">${t.omar}${t.cut?'<span class="cut">cut off by the Lead</span>':""}</span></div>
+    <div class="chips">${t.events.map(e=>`<span class="chip">${e.t}<em>${e.by==='code'?'by code':'LLM'}</em></span>`).join("")}${t.tool?'<span class="chip">tool call<em>LLM</em></span>':""}</div>`;
+  const v = C.verdict(t.total);
+  const ge = $("ge"); const gw = ge.clientWidth - 44;
+  const gx = Math.min(GX, gw / 1550);
+  ge.innerHTML = t.parts ? `
+    <div class="gtop"><div class="gtot" id="gtot">${opts.live ? 0 : t.total}<small>ms</small></div><span class="pill ${v}">${v==='good'?'within 0.9 s target':v==='warn'?'over 0.9 s target':'over 1.5 s'}</span><span class="gnote">Turn ${t.n} · ${t.tool?'with tool call':'plain turn'}</span></div>
+    <div class="gscale">
+      <div class="tl9" style="left:${900*gx}px"><span>target 0.9 s</span></div>
+      <div class="tl15" style="left:${1500*gx}px"><span>slow 1.5 s</span></div>
+      <div class="gblocks">${t.parts.map((p,k)=>`<div class="gb p${k} ${opts.live?'pending':''}" style="width:${p*gx-2}px;background:${INK[k]}">${p*gx>70?C.PARTS[k].split(" ").slice(0,2).join(" "):""}<span>${p}</span></div>`).join("")}</div>
+      <div class="ax"></div>
+      ${[0,300,600,900,1200,1500].map(m=>`<span class="tk" style="left:${m*gx}px">${m}</span>`).join("")}
+    </div>` : `<div class="gtop"><div class="gtot" style="color:var(--tx3)">—</div><span class="gnote">Turn ${t.n}</span></div><div class="gscr">Scripted line. Spoken by code, so this wait is not measured or counted.</div>`;
+  const rp = Math.min(2, Math.max(0, i - 2));
+  $("cs").innerHTML = `
+    <dt>Lead status</dt><dd>${i>=8?"Qualified · booked":i>=5?"Qualified Lead":"Lead (calling)"}</dd>
+    <dt>Rapport turns</dt><dd><span class="led ${rp>0?'on':''}"></span><span class="led ${rp>1?'on':''}"></span>${rp} / 2</dd>
+    <dt>Objections handled</dt><dd><span class="led"></span><span class="led"></span>0 / 2</dd>
+    <dt>Asked if AI</dt><dd>No</dd>
+    <dt>Slots offered</dt><dd>${i>=6?"Wed 3pm · Thu 4:30pm":"—"}</dd>`;
+}
+document.querySelectorAll(".rg,.gp").forEach(el => el.onclick = () => { select(+el.dataset.i); setPH(C.TURNS[+el.dataset.i].gapAt); });
+
+// playhead
+let phMs = 0;
+function setPH(ms, follow){
+  phMs = ms; $("ph").style.left = x(ms) + "px";
+  const m = Math.floor(ms/60000), s = Math.floor(ms/1000)%60, f = Math.floor(ms%1000);
+  $("tc").textContent = `${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}.${String(f).padStart(3,"0")}`;
+  if (follow){ const sc = $("scroller"); const target = x(ms) - sc.clientWidth * .35; if (Math.abs(sc.scrollLeft - target) > 4) sc.scrollLeft = target; }
+}
+let seg = null;
+function runPH(){ if (seg){ const e = performance.now() - seg.t0; setPH(Math.min(seg.to, seg.from + e), true); } requestAnimationFrame(runPH); }
+runPH();
+function segTo(from, to){ seg = { from, to, t0: performance.now() }; }
+function futures(i){ document.querySelectorAll(".rg,.gp").forEach(el => el.classList.toggle("future", +el.dataset.i > i)); }
+
+// initial: show turn 6
+select(5); setPH(C.TURNS[5].gapAt); $("scroller").scrollLeft = x(C.TURNS[5].gapAt) - 380;
+
+let playing = false;
+function start(){
+  if (playing) return stopAll();
+  playing = true; $("play").classList.add("on"); $("play2").lastChild.textContent = "Stop";
+  futures(0); $("outc").style.opacity = .3;
+  C.play({
+    turn(t,i){ futures(i); select(i, { live: true }); },
+    lead(t){ speaking = t.lead ? "lead" : null; segTo(t.leadAt, t.gapAt); },
+    gap(t){
+      speaking = null; segTo(t.gapAt, t.omarAt);
+      if (!t.parts) return;
+      let off = 0;
+      document.querySelectorAll("#ge .gb").forEach((b,k) => { b.animate([{transform:"scaleX(0)"},{transform:"scaleX(1)"}], { duration: t.parts[k], delay: off, fill: "forwards", easing: "linear" }); off += t.parts[k]; });
+      const t0 = performance.now(); const id = setInterval(() => { const e = Math.min(t.total, Math.round(performance.now()-t0)); const g = $("gtot"); if (g) g.innerHTML = `${e}<small>ms</small>`; if (e >= t.total) clearInterval(id); }, 16);
+    },
+    omar(t){ speaking = "omar"; segTo(t.omarAt, t.endAt); },
+    done(t){ speaking = null; },
+    end(){ stopAll(true); },
+  }, { muted: $("mute").checked });
+}
+function stopAll(finished){
+  C.stop(); playing = false; speaking = null; seg = null;
+  $("play").classList.remove("on"); $("play2").lastChild.textContent = finished ? "Hear it again" : "Hear the sample call";
+  futures(99); $("outc").style.opacity = 1;
+}
+$("play").onclick = start; $("play2").onclick = start; $("stop").onclick = () => stopAll();
+$("rew").onclick = () => { stopAll(); setPH(0); $("scroller").scrollLeft = 0; select(0); };
+</script>
+</body>
+</html>

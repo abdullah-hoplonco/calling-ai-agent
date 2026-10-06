@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Call Score preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#fafaf8; --ink:#121212; --ink2:#4e5258; --ink3:#8a8e95; --staff:#c9ccd2; --rule:#e3e4e7;
+  --ultra:#2b44ff; --p0:#9aa8ff; --p1:#2b44ff; --p2:#0b1a8c; --p3:#c2c6cd; --over:#ff4f1a;
+  --pxms:.30; /* hero: px per ms (1.5 s = 450px) */
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--paper);color:var(--ink)}
+body{font-family:"Hanken Grotesk",system-ui,sans-serif;font-size:15px;line-height:1.5;font-feature-settings:"tnum","lnum";-webkit-font-smoothing:antialiased}
+.x{font-family:"Archivo",sans-serif;font-stretch:125%}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--ultra);outline-offset:3px}
+
+/* masthead */
+.mast{display:grid;grid-template-columns:auto 1fr auto;gap:40px;align-items:end;padding:26px 48px 22px;border-bottom:2px solid var(--ink)}
+.brand{display:flex;align-items:baseline;gap:18px}
+.wordmark{font-family:"Archivo";font-weight:700;font-size:17px;letter-spacing:-.01em}
+.wordmark b{color:var(--ultra)}
+.title{font-family:"Archivo";font-stretch:125%;font-weight:850;font-size:30px;line-height:1;letter-spacing:-.02em;margin:0}
+.title small{display:block;font-family:"Hanken Grotesk";font-stretch:100%;font-weight:500;font-size:13px;letter-spacing:0;color:var(--ink3);margin-top:8px}
+.programme{font-size:13.5px;color:var(--ink2);max-width:46ch;justify-self:center;align-self:end;border-left:1px solid var(--rule);padding-left:20px}
+.programme strong{color:var(--ink);font-weight:700}
+.tempo{text-align:right;font-size:12.5px;color:var(--ink3)}
+.tempo .tm{font-family:"Archivo";font-stretch:125%;font-weight:800;font-size:15px;color:var(--ink);display:block;margin-bottom:2px}
+
+/* rehearsal marks */
+.marks{display:grid;grid-template-columns:repeat(6,1fr);padding:18px 48px 0;position:relative}
+.mk{display:flex;align-items:center;gap:12px;position:relative}
+.mk::after{content:"";flex:1;height:1px;background:var(--staff);margin-right:12px}
+.mk:last-child::after{display:none}
+.box{width:38px;height:38px;border:2px solid var(--staff);display:grid;place-items:center;font-family:"Archivo";font-stretch:125%;font-weight:850;font-size:18px;color:var(--ink3);transition:all .3s var(--ease);flex:none}
+.mk span{font-size:13px;color:var(--ink3);font-weight:600;white-space:nowrap}
+.mk.done .box{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.mk.done span{color:var(--ink)}
+.mk.now .box{background:var(--ultra);border-color:var(--ultra);color:#fff;box-shadow:0 0 0 5px rgb(43 68 255/.14)}
+.mk.now span{color:var(--ultra)}
+
+/* hero system */
+.hero{padding:30px 48px 34px;border-bottom:1px solid var(--rule)}
+.hhead{display:flex;align-items:center;gap:18px;margin-bottom:22px}
+.bigmark{width:64px;height:64px;border:3px solid var(--ink);display:grid;place-items:center;font-family:"Archivo";font-stretch:125%;font-weight:900;font-size:32px}
+.hk{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3)}
+.hs{font-family:"Archivo";font-stretch:125%;font-weight:800;font-size:22px;letter-spacing:-.01em}
+.hs .live{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--ultra);margin-right:10px;vertical-align:middle;animation:breathe 1.2s var(--ease) infinite}
+.hs.idle .live{background:var(--staff);animation:none}
+@keyframes breathe{50%{transform:scale(.55);opacity:.5}}
+.actions{margin-left:auto;display:flex;gap:10px;align-items:center}
+.btn{border:2px solid var(--ink);background:var(--ink);color:var(--paper);padding:12px 20px;font-family:"Archivo";font-stretch:115%;font-weight:800;font-size:14.5px;letter-spacing:.01em;display:inline-flex;gap:10px;align-items:center;transition:background .15s,border-color .15s,transform .1s}
+.btn:hover{background:var(--ultra);border-color:var(--ultra)}
+.btn:active{transform:translateY(1px)}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.ghost:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.btn svg{width:16px;height:16px}
+.mute{font-size:12.5px;color:var(--ink3);display:flex;gap:6px;align-items:center;margin-right:6px}
+
+.system{display:grid;grid-template-columns:72px minmax(0,1fr) 450px minmax(0,1.25fr);grid-template-rows:minmax(110px,auto) 0 150px 0 minmax(80px,auto);position:relative}
+.vl{grid-column:1;font-size:11px;font-weight:800;letter-spacing:.14em;color:var(--ink3);align-self:center;transform:translateY(-50%)}
+.vl.u{grid-row:2}.vl.d{grid-row:4}
+.staff{grid-column:2/5;border-top:1px solid var(--staff);height:0}
+.staff.u{grid-row:2}.staff.d{grid-row:4}
+.phr{height:9px;background:var(--ink);transform-origin:left;position:relative;top:-5px}
+.phr i{position:absolute;top:-6px;left:22px;width:14px;height:21px;background:var(--paper);transform:skewX(-24deg)}
+.phr i::before,.phr i::after{content:"";position:absolute;top:0;bottom:0;width:2px;background:var(--ink)}
+.phr i::before{left:2px}.phr i::after{right:2px}
+.lead-ph{grid-row:4;grid-column:2}
+.omar-ph{grid-row:2;grid-column:3/5}
+.omar-ph .phr{background:var(--ink)}
+.lyric{margin:0;font-size:21px;line-height:1.38;letter-spacing:-.005em;max-width:60ch}
+.lyric .w{transition:color .18s,opacity .18s}
+.lyric .w.dim{color:#d6d8dc}
+.lead-ly{grid-row:5;grid-column:2;text-align:right;color:var(--ink2);padding:18px 26px 0 0;justify-self:end}
+.omar-ly{grid-row:1;grid-column:3/5;align-self:end;padding:0 0 18px}
+.cut{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;border:1.5px dashed var(--ink);padding:1px 7px;margin-left:8px;vertical-align:middle}
+
+.rest{grid-row:2/5;grid-column:3;position:relative}
+.budget{position:absolute;left:0;top:10px;bottom:10px;width:calc(900px * var(--pxms));border:1.5px dashed var(--staff);border-left:0}
+.budget b{position:absolute;right:-2px;top:-18px;font-size:11px;font-weight:700;color:var(--ink3);letter-spacing:.04em}
+.slowline{position:absolute;right:0;top:10px;bottom:10px;border-right:1px solid var(--rule)}
+.bar{position:absolute;left:0;top:73px;height:28px;display:flex}
+.seg{height:100%;transform-origin:left;transform:scaleX(0)}
+.seg.on{transform:scaleX(1)}
+.bar .ovr{position:absolute;top:-6px;bottom:-6px;background:repeating-linear-gradient(135deg,var(--over) 0 2px,transparent 2px 6px);border-left:2px solid var(--over);opacity:0;transition:opacity .2s}
+.brk{position:absolute;left:0;top:30px;height:12px;border:2px solid var(--ink);border-bottom:0;transform-origin:left;transition:width .1s linear}
+.tot{position:absolute;left:0;top:-50px;font-family:"Archivo";font-stretch:125%;font-weight:900;font-size:38px;line-height:1;letter-spacing:-.03em;white-space:nowrap}
+.tot small{font-size:15px;font-weight:700;margin-left:3px;letter-spacing:0}
+.tot.warn,.tot.crit{color:var(--over)}
+.scr{position:absolute;left:0;top:58px;font-size:13px;color:var(--ink3);font-style:italic;max-width:30ch}
+.ticks{position:absolute;left:0;right:0;bottom:-26px;height:16px;font-size:11px;color:var(--ink3)}
+.ticks span{position:absolute;transform:translateX(-50%);white-space:nowrap}
+.plabels{position:absolute;left:0;top:108px;display:flex;font-size:11.5px;font-weight:700}
+.plabels span{overflow:visible;white-space:nowrap}
+
+.legend{display:flex;gap:16px;font-size:12px;color:var(--ink2);margin-top:44px;padding-left:72px}
+.legend i{display:inline-block;width:12px;height:12px;margin-right:6px;vertical-align:-2px}
+
+/* score + notes */
+.body{display:grid;grid-template-columns:minmax(0,1fr) 340px}
+.score{padding:12px 48px 80px}
+.sh{display:flex;justify-content:space-between;align-items:baseline;padding:22px 0 10px;border-bottom:2px solid var(--ink)}
+.sh h2{margin:0;font-family:"Archivo";font-stretch:125%;font-weight:850;font-size:15px;letter-spacing:.02em;text-transform:uppercase}
+.sh p{margin:0;font-size:12.5px;color:var(--ink3)}
+.sys{display:grid;grid-template-columns:60px minmax(0,1fr) 270px minmax(0,1.3fr) 82px;column-gap:22px;padding:20px 0;border-bottom:1px solid var(--rule);transition:opacity .4s,color .4s;position:relative}
+.sys.hidden{display:none}
+.sys.past{color:var(--ink3)}
+.sys.past .s-omar{color:var(--ink2)}
+.sys.now{background:linear-gradient(90deg,rgb(43 68 255/.05),transparent 60%)}
+.sys.now::before{content:"";position:absolute;left:-48px;top:0;bottom:0;width:4px;background:var(--ultra)}
+.s-mark{display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+.s-mark .box{width:30px;height:30px;font-size:14px;border-color:var(--ink);color:var(--ink)}
+.s-mark small{font-size:11px;color:var(--ink3);font-weight:700}
+.s-lead{font-size:14px;color:var(--ink2);text-align:right;align-self:end;padding-top:26px}
+.s-omar{font-size:14.5px;align-self:start;padding-bottom:22px}
+.s-rest{position:relative;height:100%;min-height:62px}
+.s-rest .sbud{position:absolute;left:0;top:50%;height:26px;margin-top:-13px;width:calc(900px * .18);border:1px dashed var(--staff);border-left:0}
+.s-rest .sbar{position:absolute;left:0;top:50%;margin-top:-5px;height:10px;display:flex}
+.s-rest .sline{position:absolute;left:-22px;right:-22px;top:50%;border-top:1px solid var(--rule)}
+.s-rest .sscr{position:absolute;left:0;top:50%;transform:translateY(-50%);font-size:12px;font-style:italic;color:var(--ink3);background:var(--paper);padding-right:8px}
+.s-tot{text-align:right;font-family:"Archivo";font-stretch:125%;font-weight:850;font-size:17px;align-self:center}
+.s-tot.warn{color:var(--over)}
+.s-tot small{display:block;font-family:"Hanken Grotesk";font-stretch:100%;font-size:11px;font-weight:600;color:var(--ink3)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{font-size:11.5px;font-weight:600;border:1px solid var(--staff);padding:1px 7px;color:var(--ink2)}
+.chip.code{border-color:var(--ink);color:var(--ink)}
+.chip em{font-style:normal;color:var(--ink3);font-weight:500;margin-left:4px}
+
+.notes{border-left:1px solid var(--rule);padding:30px 32px 80px;position:sticky;top:0;align-self:start;max-height:100vh;overflow:auto}
+.notes h3{margin:0 0 14px;font-family:"Archivo";font-stretch:125%;font-weight:850;font-size:13px;letter-spacing:.04em;text-transform:uppercase}
+.nblock{padding-bottom:26px;margin-bottom:26px;border-bottom:1px solid var(--rule)}
+.fig{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px}
+.fig .k{font-size:13px;color:var(--ink2)}
+.fig .k small{display:block;font-size:11.5px;color:var(--ink3)}
+.fig .v{font-family:"Archivo";font-stretch:125%;font-weight:900;font-size:34px;letter-spacing:-.03em;line-height:1}
+.fig .v small{font-size:14px;margin-left:2px}
+.pass{display:inline-flex;gap:8px;align-items:center;font-weight:700;font-size:13px;border:2px solid var(--ink);padding:4px 10px}
+.prow{display:grid;grid-template-columns:12px 1fr auto;gap:10px;align-items:center;font-size:13px;margin:7px 0}
+.prow i{width:12px;height:12px}
+.prow b{font-weight:700}
+.pbars{display:flex;height:12px;margin:12px 0 4px}
+.kv{display:grid;grid-template-columns:1fr auto;gap:8px 12px;font-size:13.5px}
+.kv dt{color:var(--ink2)}
+.kv dd{margin:0;font-weight:700;text-align:right}
+.dots{display:inline-flex;gap:4px;vertical-align:middle;margin-right:6px}
+.dots i{width:9px;height:9px;border:1.5px solid var(--ink)}
+.dots i.f{background:var(--ink)}
+.strike{font-size:14px;line-height:1.45}
+.strike s{text-decoration-color:var(--over);text-decoration-thickness:2px;color:var(--ink3)}
+.strike .why{display:block;font-size:12px;color:var(--ink3);margin-top:6px}
+.outcome{border:2px solid var(--ink);padding:14px 16px;font-weight:700;font-size:14px}
+.outcome span{display:block;font-family:"Archivo";font-stretch:125%;font-weight:900;font-size:20px;letter-spacing:-.01em;margin-top:4px}
+.synth{font-size:11.5px;color:var(--ink3);margin-top:20px}
+
+.switch{position:fixed;right:18px;bottom:18px;display:flex;background:var(--ink);padding:4px;gap:4px;z-index:5}
+.switch a{color:#aaa;text-decoration:none;font-size:12px;font-weight:700;padding:6px 12px}
+.switch a.on{background:var(--paper);color:var(--ink)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<header class="mast">
+  <div class="brand">
+    <div class="wordmark">hoplon <b>&amp;</b> co.</div>
+    <h1 class="title">Talk to Omar<small>The call, engraved as it happens</small></h1>
+  </div>
+  <div class="programme">Calling <strong>Khalifa Al Dhaheri</strong>. Wrote: “We run a chain of 4 laundry shops in Dubai and want a mobile app where customers book pickups.”</div>
+  <div class="tempo"><span class="tm">Tempo: reply ≤ 0.9 s</span>typical (p50) · slow (p95) ≤ 1.5 s</div>
+</header>
+
+<nav class="marks" id="marks" aria-label="Call stages"></nav>
+
+<section class="hero" aria-live="polite">
+  <div class="hhead">
+    <div class="bigmark" id="hMark">C</div>
+    <div>
+      <div class="hk" id="hKick">Bar 4 · Information</div>
+      <div class="hs idle" id="hState"><span class="live"></span><span id="hStateTxt">Press play to hear the call</span></div>
+    </div>
+    <div class="actions">
+      <label class="mute"><input type="checkbox" id="mute"> Silent</label>
+      <button class="btn" id="play"><svg viewBox="0 0 16 16"><path d="M3 1.5v13L14 8z" fill="currentColor"/></svg><span>Hear the sample call</span></button>
+      <button class="btn ghost" title="Needs LiveKit keys; not in this preview">Call Khalifa</button>
+    </div>
+  </div>
+
+  <div class="system" id="sys">
+    <div class="vl u">OMAR</div><div class="vl d">LEAD</div>
+    <div class="staff u"></div><div class="staff d"></div>
+    <p class="lyric omar-ly" id="omarLy"></p>
+    <div class="omar-ph" id="omarPhWrap"><div class="phr" id="omarPh"><i></i></div></div>
+    <div class="lead-ph"><div class="phr" id="leadPh"><i></i></div></div>
+    <p class="lyric lead-ly" id="leadLy"></p>
+    <div class="rest" id="rest">
+      <div class="budget"><b>BUDGET 0.9 s</b></div>
+      <div class="slowline"></div>
+      <div class="brk" id="brk" style="width:0"><div class="tot" id="tot"></div></div>
+      <div class="bar" id="bar"></div>
+      <div class="plabels" id="plabels"></div>
+      <div class="scr" id="scr" hidden>Scripted line. Spoken by code, so the wait is not measured.</div>
+      <div class="ticks"><span style="left:0">0</span><span style="left:150px">0.5 s</span><span style="left:270px">0.9</span><span style="left:450px">1.5 s</span></div>
+    </div>
+  </div>
+  <div class="legend" id="legend"></div>
+</section>
+
+<div class="body">
+  <main class="score">
+    <div class="sh"><h2>Full score</h2><p>Speech is compressed; silence is drawn to scale. Dashed box = the 0.9 s budget.</p></div>
+    <div id="score"></div>
+  </main>
+  <aside class="notes">
+    <div class="nblock">
+      <h3>Tempo</h3>
+      <div class="fig"><div class="k">Typical reply<small>p50 · target 0.9 s</small></div><div class="v" id="p50"></div></div>
+      <div class="fig"><div class="k">Slow reply<small>p95 · target 1.5 s</small></div><div class="v" id="p95"></div></div>
+      <div class="pass" id="pass">✓ Within target · 6 replies measured</div>
+    </div>
+    <div class="nblock">
+      <h3>Where the wait goes</h3>
+      <div class="pbars" id="pbars"></div>
+      <div id="prows"></div>
+    </div>
+    <div class="nblock">
+      <h3>What the code holds</h3>
+      <dl class="kv" id="kv"></dl>
+    </div>
+    <div class="nblock">
+      <h3>Stopped before speech</h3>
+      <div class="strike"><s>A first version usually starts at around AED 40,000.</s><span class="why">Rule “No prices on the call” blocked the LLM's line at bar 6. Omar said the safe line instead.</span></div>
+    </div>
+    <div class="outcome" id="outcome">Outcome<span>Discovery Call booked · Wed 3pm</span></div>
+    <p class="synth">Sample call. Words, outcome and every number are synthetic. Voices are your browser's own.</p>
+  </aside>
+</div>
+
+<nav class="switch"><a class="on" href="call-score.html">Call Score</a><a href="session-timeline.html">Session Timeline</a><a href="saas-console.html">SaaS Console</a></nav>
+
+<script src="call-data.js"></script>
+<script>
+const C = window.CALL, $ = (id) => document.getElementById(id);
+const INK = ["var(--p0)","var(--p1)","var(--p2)","var(--p3)"];
+const PX = .30, SPX = .18;
+const sec = (ms) => (ms/1000).toFixed(2).replace(/0$/,"");
+
+// rehearsal marks
+$("marks").innerHTML = C.STAGES.map(s => `<div class="mk" data-id="${s.id}"><div class="box">${s.mark}</div><span>${s.label}</span></div>`).join("");
+function setMarks(stageId, ended){
+  const idx = C.STAGES.findIndex(s => s.id === stageId);
+  document.querySelectorAll(".mk").forEach((el,i) => { el.className = "mk" + (ended || i < idx ? " done" : i === idx ? " now" : ""); });
+}
+
+// legend + notes
+$("legend").innerHTML = C.PARTS.map((p,i)=>`<span><i style="background:${INK[i]}"></i>${p}</span>`).join("");
+$("p50").innerHTML = `${sec(C.P50)}<small>s</small>`;
+$("p95").innerHTML = `${sec(C.P95)}<small>s</small>`;
+const ps = C.PART_P50.reduce((a,b)=>a+b,0);
+$("pbars").innerHTML = C.PART_P50.map((v,i)=>`<div style="flex:${v};background:${INK[i]}"></div>`).join("");
+$("prows").innerHTML = C.PART_P50.map((v,i)=>`<div class="prow"><i style="background:${INK[i]}"></i><span>${C.PARTS[i]}</span><b>${v} ms</b></div>`).join("");
+function setKV(i){
+  const r = Math.min(2, Math.max(0, i - 2)), ended = i >= 8;
+  const status = i >= 8 ? "Qualified · booked" : i >= 5 ? "Qualified Lead" : "Lead (calling)";
+  $("kv").innerHTML = `
+    <dt>Lead status</dt><dd>${status}</dd>
+    <dt>Rapport turns</dt><dd><span class="dots"><i class="${r>0?'f':''}"></i><i class="${r>1?'f':''}"></i></span>${r} of 2</dd>
+    <dt>Objections handled</dt><dd>0 of 2</dd>
+    <dt>Asked if AI</dt><dd>Not yet</dd>
+    <dt>Slots offered</dt><dd>${i >= 6 ? "Wed 3pm · Thu 4:30pm" : "None yet"}</dd>`;
+}
+
+// full score
+function systemHTML(t){
+  const first = C.TURNS.findIndex(x => x.stage === t.stage) === t.n - 1;
+  const v = C.verdict(t.total);
+  const rest = t.parts
+    ? `<div class="sline"></div><div class="sbud"></div><div class="sbar">${t.parts.map((p,i)=>`<div style="width:${p*SPX}px;background:${INK[i]}"></div>`).join("")}</div>`
+    : `<div class="sline"></div><span class="sscr">scripted, by code</span>`;
+  const chips = t.events.map(e => `<span class="chip ${e.by==='code'?'code':''}">${e.t}<em>${e.by==='code'?'by code':'LLM'}</em></span>`).join("");
+  return `<div class="sys" id="s${t.n}">
+    <div class="s-mark">${first ? `<div class="box">${t.stageObj.mark}</div>` : ""}<small>Bar ${t.n}</small></div>
+    <div class="s-lead">${t.lead || "<em>(picks up)</em>"}</div>
+    <div class="s-rest">${rest}</div>
+    <div class="s-omar">${t.omar}${t.cut ? '<span class="cut">cut off</span>' : ""}<div class="chips">${chips}</div></div>
+    <div class="s-tot ${v||''}">${t.total ? sec(t.total)+" s" : "–"}<small>${t.total ? (v==='good'?'✓ in budget':'over 0.9 s') : 'not measured'}</small></div>
+  </div>`;
+}
+$("score").innerHTML = C.TURNS.map(systemHTML).join("");
+
+// hero renderer
+const words = (s) => s.split(/\s+/).map(w => `<span class="w">${w}</span>`).join(" ");
+let anim = [];
+function clearAnim(){ anim.forEach(a => a.cancel && a.cancel()); anim.forEach(a => typeof a === "number" && clearInterval(a)); anim = []; }
+function hero(t, phase){
+  $("hMark").textContent = t.stageObj.mark;
+  $("hKick").textContent = `Bar ${t.n} · ${t.stageObj.label}`;
+  $("leadLy").innerHTML = t.lead ? words(t.lead) : "<em>(phone rings, Khalifa picks up)</em>";
+  $("omarLy").innerHTML = words(t.omar) + (t.cut ? '<span class="cut">cut off by the Lead</span>' : "");
+  const gap = t.parts ? t.total : 0;
+  $("omarPhWrap").style.paddingLeft = (t.parts ? gap*PX : 0) + "px";
+  $("omarLy").style.paddingLeft = (t.parts ? gap*PX : 0) + "px";
+  $("scr").hidden = !!t.parts;
+  $("bar").innerHTML = t.parts ? t.parts.map((p,i)=>`<div class="seg" style="width:${p*PX}px;background:${INK[i]}"></div>`).join("") + (t.total>900?`<div class="ovr" style="left:${900*PX}px;width:${(t.total-900)*PX}px"></div>`:"") : "";
+  $("plabels").innerHTML = t.parts ? t.parts.map((p,i)=>`<span style="width:${p*PX}px;color:${i===3?'var(--ink3)':INK[i]}">${p}</span>`).join("") : "";
+  $("tot").className = "tot " + (C.verdict(t.total)||"");
+  $("brk").style.display = t.parts ? "" : "none";
+  if (phase === "full"){
+    $("brk").style.width = gap*PX + "px";
+    $("tot").innerHTML = t.parts ? `${C.fmt(t.total)}<small>ms</small>` : "";
+    document.querySelectorAll("#bar .seg").forEach(s => s.classList.add("on"));
+    const o = document.querySelector("#bar .ovr"); if (o) o.style.opacity = 1;
+    $("leadPh").style.transform = "scaleX(1)"; $("omarPh").style.transform = "scaleX(1)";
+  } else {
+    $("brk").style.width = "0px"; $("tot").innerHTML = "";
+    $("leadPh").style.transform = "scaleX(0)"; $("omarPh").style.transform = "scaleX(0)";
+    document.querySelectorAll("#leadLy .w, #omarLy .w").forEach(w => w.classList.add("dim"));
+  }
+}
+function revealWords(el, ms){
+  const ws = [...el.querySelectorAll(".w")]; if (!ws.length) return;
+  const step = ms / ws.length; let k = 0;
+  const id = setInterval(() => { if (k < ws.length) ws[k++].classList.remove("dim"); else clearInterval(id); }, step);
+  anim.push(id);
+}
+function grow(el, ms){ const a = el.animate([{transform:"scaleX(0)"},{transform:"scaleX(1)"}], {duration: ms, easing:"linear", fill:"forwards"}); anim.push(a); }
+function state(txt, live=true){ $("hStateTxt").textContent = txt; $("hState").classList.toggle("idle", !live); }
+
+const show = (n) => C.TURNS.forEach(t => { const el = $("s"+t.n); el.classList.toggle("hidden", t.n > n); el.classList.toggle("past", t.n < n); el.classList.toggle("now", t.n === n); });
+
+// initial: full engraved call, bar 6 on the hero
+function still(){ const t = C.TURNS[5]; hero(t, "full"); setMarks(t.stage); setKV(5); C.TURNS.forEach(x => $("s"+x.n).className = "sys" + (x.n===6?" now":"")); }
+still();
+
+let playing = false;
+$("play").onclick = () => {
+  if (playing){ C.stop(); clearAnim(); playing = false; $("play").querySelector("span").textContent = "Hear the sample call"; state("Stopped", false); return; }
+  playing = true; $("play").querySelector("span").textContent = "Stop";
+  $("outcome").style.opacity = .25;
+  C.play({
+    turn(t,i){ clearAnim(); hero(t, "empty"); setMarks(t.stage); setKV(i); show(t.n); },
+    lead(t){ state(t.lead ? "Khalifa is speaking" : "Ringing…"); grow($("leadPh"), t.leadMs); revealWords($("leadLy"), t.leadMs); },
+    gap(t){
+      if (!t.parts){ state("Code speaks the scripted line"); return; }
+      state("Omar is preparing the reply");
+      const segs = [...document.querySelectorAll("#bar .seg")]; let off = 0;
+      segs.forEach((s,i) => { const a = s.animate([{transform:"scaleX(0)"},{transform:"scaleX(1)"}], {duration: t.parts[i], delay: off, easing:"linear", fill:"forwards"}); anim.push(a); off += t.parts[i]; });
+      const t0 = performance.now();
+      const id = setInterval(() => { const e = Math.min(t.total, performance.now()-t0); $("brk").style.width = e*PX+"px"; $("tot").innerHTML = `${C.fmt(Math.round(e))}<small>ms</small>`; const o=document.querySelector("#bar .ovr"); if(o && e>900) o.style.opacity=1; if (e >= t.total) clearInterval(id); }, 16);
+      anim.push(id);
+    },
+    omar(t){ state("Omar is speaking"); const ms = t.cut ? t.omarMs*.72 : t.omarMs; grow($("omarPh"), ms); revealWords($("omarLy"), ms * (t.cut ? 1.15 : 1)); },
+    done(t){ $("s"+t.n).classList.add("past"); },
+    end(){ playing = false; setMarks("OUTCOME", true); $("outcome").style.opacity = 1; state("Call ended · Discovery Call booked", false); $("play").querySelector("span").textContent = "Hear it again"; },
+  }, { muted: $("mute").checked });
+};
+</script>
+</body>
+</html>
