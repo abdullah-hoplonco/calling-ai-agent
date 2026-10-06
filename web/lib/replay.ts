@@ -191,3 +191,11 @@ export function playSample(h: SampleHandlers, opts: { muted: boolean; speed?: nu
     stopSpeech();
   };
 }
+
+// The sample call's turns and summary without playing it, for a labelled preview.
+export function samplePreview(): { turns: Turn[]; summary: LatencySummary } {
+  const turns = SAMPLE_CALL.flatMap((b) => (b.kind === "turn" ? [b.turn] : [])).map(
+    (t, i) => ({ ...t, turn: i + 1, at: 0 }) as Turn,
+  );
+  return { turns, summary: summary(turns) };
+}

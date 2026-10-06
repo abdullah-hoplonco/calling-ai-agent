@@ -7,7 +7,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
 import { CallButton, CodeState, ErrorNote, GuardList, LeadPicker, MuteToggle, Opening, SampleButton, StepChips, statusWord } from "@/components/blocks";
-import { IconCheck, IconClock, IconShield, IconUser } from "@/components/icons";
+import { IconCheck } from "@/components/icons";
 import { Meter, PartList, PartsBar, Waveform, medianParts, useNow } from "@/components/shared";
 import { TRACK, shortStatus, trackIndex } from "@/lib/stages";
 import type { CallModel, TurnView } from "@/lib/useCall";
@@ -31,9 +31,6 @@ export function EnterpriseView({ c, switcher }: { c: CallModel; switcher: React.
         </div>
         <div className="en-nav-r">
           {switcher}
-          <span className="en-me" title="Owner">
-            AB
-          </span>
         </div>
       </header>
 
@@ -63,21 +60,27 @@ export function EnterpriseView({ c, switcher }: { c: CallModel; switcher: React.
             <Conversation c={c} sel={sel} onPick={setPicked} />
           </div>
           <div className="en-col">
-            <Card title="Response time" icon={<IconClock />} sub={selTurn ? `Turn ${selTurn.turn.turn}` : undefined}>
-              <Response c={c} t={selTurn} />
-            </Card>
-            <Card title={c.busy ? "Lead" : "Choose a Lead"} icon={<IconUser />}>
+            <Card title={c.busy ? "On the line" : "Choose a Lead"} sub={c.busy ? undefined : "3 synthetic Leads"}>
               {c.busy ? <LeadProfile c={c} /> : <LeadPicker c={c} />}
             </Card>
-            <Card title="Compliance" icon={<IconShield />}>
-              <Opening snap={c.snap} />
-              <div className="en-sub-h">Guard</div>
-              <GuardList snap={c.snap} />
-            </Card>
-            <Card title="Pipeline">
-              <CodeState snap={c.snap} />
-              {c.snap?.outcome && <p className="en-outcome">{c.snap.outcome}</p>}
-            </Card>
+            {selTurn && (
+              <Card title="Response time" sub={`Turn ${selTurn.turn.turn}`} feature>
+                <Response c={c} t={selTurn} />
+              </Card>
+            )}
+            {c.snap && (
+              <>
+                <Card title="Compliance" sub="checked by code">
+                  <Opening snap={c.snap} />
+                  <div className="en-sub-h">Guard</div>
+                  <GuardList snap={c.snap} />
+                </Card>
+                <Card title="Pipeline">
+                  <CodeState snap={c.snap} />
+                  {c.snap.outcome && <p className="en-outcome">{c.snap.outcome}</p>}
+                </Card>
+              </>
+            )}
           </div>
         </div>
         <footer className="en-foot">
@@ -152,11 +155,10 @@ function Kpi({ label, sub, value, scale, target, max }: { label: string; sub: st
   );
 }
 
-function Card({ title, icon, sub, children }: { title: string; icon?: React.ReactNode; sub?: string; children: React.ReactNode }) {
+function Card({ title, sub, feature, children }: { title: string; sub?: string; feature?: boolean; children: React.ReactNode }) {
   return (
-    <section className="en-card">
+    <section className="en-card" data-feature={feature || undefined}>
       <div className="en-card-h">
-        {icon && <span className="en-card-ic">{icon}</span>}
         <h2>{title}</h2>
         {sub && <span className="en-card-sub">{sub}</span>}
       </div>

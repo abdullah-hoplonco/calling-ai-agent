@@ -474,19 +474,6 @@
   font-size: 1.0625rem;
   max-width: 54ch;
 }
-.sc-ic {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  display: grid;
-  place-items: center;
-  background: var(--navy);
-  color: var(--gold);
-}
-.sc-ic .ic {
-  width: 22px;
-  height: 22px;
-}
 .sc-rules h3 {
   display: flex;
   align-items: center;

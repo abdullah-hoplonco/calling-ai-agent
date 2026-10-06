@@ -13,7 +13,7 @@ import { SLOW_MS, TARGET_MS, ms, partsOf, stageName, stepWord, timecode, tone, t
 
 const PPS = 60; // px per second on the arrangement
 const px = (t: number) => (t / 1000) * PPS;
-const LANE_H = 112;
+const FIXED_H = 30 + 30 + 76 + 56 + 2; // ruler, stages, wait, events, borders
 
 export function StudioView({ c, switcher }: { c: CallModel; switcher: React.ReactNode }) {
   const [picked, setPicked] = useState<number | null>(null);
@@ -28,7 +28,10 @@ export function StudioView({ c, switcher }: { c: CallModel; switcher: React.Reac
     <div className="st">
       <Transport c={c} switcher={switcher} />
       <ErrorNote c={c} />
-      <Arrangement c={c} sel={sel} onPick={setPicked} />
+      <div className="st-stage" data-empty={(!c.busy && c.turns.length === 0) || undefined}>
+        <Arrangement c={c} sel={sel} onPick={setPicked} />
+        {!c.busy && c.turns.length === 0 && <EmptyState c={c} />}
+      </div>
       <section className="st-bot">
         <Panel title="Inspector" sub={turn ? `Turn ${turn.turn.turn} · ${stageName(turn.turn.stage)}` : undefined}>
           <Inspector c={c} t={turn} />
@@ -93,14 +96,23 @@ type Span = { key: string; i: number; who: "lead" | "omar"; a: number; b: number
 function Arrangement({ c, sel, onPick }: { c: CallModel; sel: number; onPick: (i: number) => void }) {
   const now = useNow(c, c.busy);
   const scroller = useRef<HTMLDivElement>(null);
+  const box = useRef<HTMLElement>(null);
   const [vw, setVw] = useState(1200);
+  const [vh, setVh] = useState(420);
   useEffect(() => {
     const el = scroller.current;
-    if (!el) return;
-    const ro = new ResizeObserver(() => setVw(el.clientWidth));
+    const b = box.current;
+    if (!el || !b) return;
+    const ro = new ResizeObserver(() => {
+      setVw(el.clientWidth);
+      setVh(b.clientHeight);
+    });
     ro.observe(el);
+    ro.observe(b);
     return () => ro.disconnect();
   }, []);
+  // the two voice lanes take the free height
+  const laneH = Math.round(Math.min(170, Math.max(84, (vh - FIXED_H) / 2)));
 
   const end = c.busy ? now : c.length;
   const width = Math.max(vw, px(end) + vw * 0.5);
@@ -132,14 +144,22 @@ function Arrangement({ c, sel, onPick }: { c: CallModel; sel: number; onPick: (i
     spans.push({ key: "lnow", i: -1, who: "lead", a: c.speaking.since, b: now, text: c.source === "sample" ? "…" : "You", open: true });
 
   const markers = stageMarkers(c, end);
-  const empty = !c.busy && c.turns.length === 0;
+  // events packed in three rows; a label stops where the next one in its row starts
+  const evs = c.turns
+    .flatMap((t) => t.steps.map((s, k) => ({ s, x: px(t.omarAt) + k * 10 })))
+    .sort((a, b) => a.x - b.x)
+    .map((e, i) => ({ ...e, row: i % 3, w: 160 }));
+  evs.forEach((e, i) => {
+    const next = evs.slice(i + 1).find((n) => n.row === e.row);
+    if (next) e.w = Math.max(12, next.x - e.x - 6);
+  });
 
   return (
-    <section className="st-arr" aria-label="Call timeline">
+    <section className="st-arr" aria-label="Call timeline" ref={box}>
       <div className="st-heads" aria-hidden="true">
         <div className="st-th st-th-sm">Time</div>
         <div className="st-th st-th-sm">Stages</div>
-        <div className="st-th" style={{ height: LANE_H }}>
+        <div className="st-th" style={{ height: laneH }}>
           <span className="st-sw-c" data-who="lead" />
           <div>
             <b>{c.lead.name.split(" ")[0]}</b>
@@ -147,7 +167,7 @@ function Arrangement({ c, sel, onPick }: { c: CallModel; sel: number; onPick: (i
           </div>
           <Meter who="lead" bars={8} />
         </div>
-        <div className="st-th" style={{ height: LANE_H }}>
+        <div className="st-th" style={{ height: laneH }}>
           <span className="st-sw-c" data-who="omar" />
           <div>
             <b>Omar</b>
@@ -183,11 +203,11 @@ function Arrangement({ c, sel, onPick }: { c: CallModel; sel: number; onPick: (i
             ))}
           </div>
           {(["lead", "omar"] as const).map((who) => (
-            <div key={who} className="st-lane" data-lane={who} style={{ height: LANE_H }}>
+            <div key={who} className="st-lane" data-lane={who} style={{ height: laneH }}>
               {spans
                 .filter((s) => s.who === who)
                 .map((s) => (
-                  <Region key={s.key} s={s} sel={s.i === sel} onPick={onPick} />
+                  <Region key={s.key} s={s} h={laneH - 12 - 18} sel={s.i === sel} onPick={onPick} />
                 ))}
             </div>
           ))}
@@ -197,24 +217,21 @@ function Arrangement({ c, sel, onPick }: { c: CallModel; sel: number; onPick: (i
             ))}
           </div>
           <div className="st-lane st-lane-ev">
-            {c.turns.flatMap((t) =>
-              t.steps.map((s, k) => (
-                <span
-                  key={`${s.at}-${s.event}`}
-                  className="st-ev"
-                  data-by={s.by}
-                  title={stepWord(s)}
-                  style={{ left: px(t.omarAt) + k * 14, top: 6 + (k % 3) * 15 }}
-                >
-                  <i />
-                  {stepWord(s)}
-                </span>
-              )),
-            )}
+            {evs.map(({ s, x, row, w }) => (
+              <span
+                key={`${s.at}-${s.event}`}
+                className="st-ev"
+                data-by={s.by}
+                title={stepWord(s)}
+                style={{ left: x, top: 6 + row * 15, maxWidth: w }}
+              >
+                <i />
+                <span>{stepWord(s)}</span>
+              </span>
+            ))}
           </div>
           {c.phase !== "idle" && <div className="st-ph" style={{ left: px(c.busy ? now : end) }} aria-hidden="true" />}
         </div>
-        {empty && <EmptyState c={c} />}
       </div>
     </section>
   );
@@ -236,9 +253,8 @@ function Ruler({ width }: { width: number }) {
   return <div className="st-lane st-ruler">{ticks}</div>;
 }
 
-function Region({ s, sel, onPick }: { s: Span; sel: boolean; onPick: (i: number) => void }) {
+function Region({ s, h, sel, onPick }: { s: Span; h: number; sel: boolean; onPick: (i: number) => void }) {
   const w = Math.max(px(s.b - s.a), 6);
-  const h = LANE_H - 12 - 18;
   const seed = s.i * 7 + (s.who === "omar" ? 31 : 3);
   const bucket = s.open ? Math.ceil(w / 120) * 120 : Math.round(w);
   const d = useMemo(() => wavePath(seed, bucket, h), [seed, bucket, h]);
@@ -268,7 +284,7 @@ function Gap({ t, i, sel, onPick }: { t: TurnView; i: number; sel: boolean; onPi
     if (t.leadEnd == null) return null;
     return (
       <span className="st-gap st-gap-scr" style={{ left: px(t.leadEnd), width: Math.max(px(t.omarAt - t.leadEnd), 10) }}>
-        <b>script</b>
+        {px(t.omarAt - t.leadEnd) >= 40 && <b>script</b>}
       </span>
     );
   }

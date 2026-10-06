@@ -6,14 +6,18 @@ import Image from "next/image";
 import { useEffect, useRef } from "react";
 
 import { CallButton, ErrorNote, GuardList, LeadPicker, MuteToggle, Opening, SampleButton, StepChips, statusWord } from "@/components/blocks";
-import { IconArrow, IconCode, IconShield } from "@/components/icons";
+import { IconArrow, IconShield } from "@/components/icons";
 import { PartsBar, Waveform, medianParts } from "@/components/shared";
+import { previewModel } from "@/lib/preview";
 import { RULE_WORDS, TRACK, trackIndex } from "@/lib/stages";
 import type { CallModel } from "@/lib/useCall";
 import { PARTS, TARGET_MS, clock, initials, ms, partsOf, sec, stageName, tone } from "@/lib/view";
 
 export function ShowcaseView({ c, switcher }: { c: CallModel; switcher: React.ReactNode }) {
   const tryRef = useRef<HTMLElement>(null);
+  // Before the first call, the page shows the sample call as a labelled preview.
+  const preview = !c.busy && c.turns.length === 0;
+  const v = preview ? previewModel(c) : c;
   return (
     <div className="sc">
       <header className="sc-nav">
@@ -42,11 +46,11 @@ export function ShowcaseView({ c, switcher }: { c: CallModel; switcher: React.Re
           <p className="sc-small">Every reply is timed on this page. Target: {TARGET_MS / 1000} s for a typical reply.</p>
           <ErrorNote c={c} />
         </div>
-        <Window c={c} />
+        <Window c={v} preview={preview} />
       </section>
 
-      <Numbers c={c} />
-      <How c={c} />
+      <Numbers c={v} preview={preview} />
+      <How c={v} />
       <Rules c={c} />
 
       <section className="sc-sec sc-try" id="try" ref={tryRef}>
@@ -76,7 +80,7 @@ export function ShowcaseView({ c, switcher }: { c: CallModel; switcher: React.Re
   );
 }
 
-function Window({ c }: { c: CallModel }) {
+function Window({ c, preview }: { c: CallModel; preview: boolean }) {
   const lines = c.turns.slice(-2);
   const last = [...c.turns].reverse().find((t) => t.turn.totalMs != null);
   const cur = trackIndex(c.snap?.stage);
@@ -84,7 +88,7 @@ function Window({ c }: { c: CallModel }) {
     <div className="sc-win" aria-label="Live call">
       <div className="sc-win-bar">
         <span className="sc-live" data-on={c.busy || undefined} />
-        <b>{c.busy ? "Live call" : c.phase === "ended" ? "Call ended" : "Ready to call"}</b>
+        <b>{c.busy ? "Live call" : preview ? "Sample call · preview" : "Call ended"}</b>
         <span className="sc-win-who">
           <span className="sc-av">{initials(c.lead.name)}</span>
           {c.lead.name}
@@ -92,7 +96,6 @@ function Window({ c }: { c: CallModel }) {
       </div>
       <div className="sc-win-wave">
         <Waveform c={c} height={88} />
-        {!c.busy && c.turns.length === 0 && <p>Press “Hear a sample call”. The call draws here as it is spoken.</p>}
       </div>
       <div className="sc-win-stages">
         {TRACK.map((s, i) => (
@@ -126,14 +129,14 @@ function Window({ c }: { c: CallModel }) {
             <PartsBar turn={last.turn} scaleMs={2000} animate={last.fresh} className="sc-win-pb" />
           </>
         ) : (
-          <span>{c.busy ? statusWord(c) : "The wait before each reply shows here."}</span>
+          <span>{statusWord(c)}</span>
         )}
       </div>
     </div>
   );
 }
 
-function Numbers({ c }: { c: CallModel }) {
+function Numbers({ c, preview }: { c: CallModel; preview: boolean }) {
   const o = c.summary?.overall;
   const p50 = o?.totalMs.p50 ?? null;
   const p95 = o?.totalMs.p95 ?? null;
@@ -143,7 +146,7 @@ function Numbers({ c }: { c: CallModel }) {
       <h2 className="sc-big">
         {p50 != null ? (
           <>
-            On this call, Omar&apos;s typical reply came in <em data-tone={tone(p50)}>{sec(p50)}</em> after the Lead
+            {preview ? "On the sample call" : "On this call"}, Omar&apos;s typical reply came in <em data-tone={tone(p50)}>{sec(p50)}</em> after the Lead
             stopped talking. The slowest took <em data-tone={tone(p95)}>{sec(p95)}</em>.
           </>
         ) : (
@@ -164,7 +167,11 @@ function Numbers({ c }: { c: CallModel }) {
           ))}
         </ol>
       )}
-      {c.source === "sample" && <p className="sc-small">Sample call: synthetic numbers, to show how the page reads.</p>}
+      {(preview || c.source === "sample") && (
+        <p className="sc-small">
+          Sample call: synthetic numbers, to show how the page reads.{preview && " Press “Hear a sample call” to hear it."}
+        </p>
+      )}
     </section>
   );
 }
@@ -217,9 +224,6 @@ function Rules({ c }: { c: CallModel }) {
   return (
     <section className="sc-sec sc-rules" id="rules">
       <div className="sc-rules-l">
-        <span className="sc-ic">
-          <IconCode />
-        </span>
         <h2>The code owns the call.</h2>
         <p>
           A state machine decides the stage, the next question and when the call ends. The LLM writes the sentences, and

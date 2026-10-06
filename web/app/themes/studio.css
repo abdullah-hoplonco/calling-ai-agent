@@ -195,8 +195,15 @@
 }
 
 /* arrangement */
+.st-stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+}
 .st-arr {
   flex: 1;
+  min-width: 0;
   min-height: 0;
   display: grid;
   grid-template-columns: 224px minmax(0, 1fr);
@@ -466,11 +473,13 @@
   font-weight: 500;
 }
 
-.st-ev {
-  position: absolute;
-  max-width: 150px;
+.st-ev > span {
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.st-ev {
+  position: absolute;
+  overflow: hidden;
   display: flex;
   align-items: center;
   gap: 0.35rem;
@@ -513,7 +522,7 @@
 /* empty state */
 .st-empty {
   position: absolute;
-  inset: 0;
+  inset: 0 0 0 224px;
   display: grid;
   place-items: center;
   padding: 1.5rem;
@@ -566,7 +575,7 @@
 
 /* bottom panels */
 .st-bot {
-  height: 300px;
+  height: clamp(300px, 42vh, 430px);
   flex: none;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr) minmax(280px, 0.8fr);
@@ -819,6 +828,18 @@
     order: 4;
     overflow-x: auto;
     max-width: 100%;
+  }
+  .st-stage {
+    flex: none;
+    flex-direction: column;
+  }
+  .st-stage[data-empty] .st-arr {
+    display: none;
+  }
+  .st-empty {
+    position: static;
+    background: none;
+    padding: 1rem;
   }
   .st-arr {
     flex: none;

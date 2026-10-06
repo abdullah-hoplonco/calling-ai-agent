@@ -6,9 +6,9 @@
 import { useEffect, useRef, useState } from "react";
 
 import { CallButton, CodeState, ConfigLine, ErrorNote, GuardList, MuteToggle, Opening, SampleButton, statusWord } from "@/components/blocks";
-import { IconCalendar, IconCheck } from "@/components/icons";
+import { IconCheck } from "@/components/icons";
 import { Meter, PartList, PartsBar, Waveform, medianParts, useNow, waveX } from "@/components/shared";
-import { TRACK, shortStatus, trackIndex } from "@/lib/stages";
+import { TRACK, trackIndex } from "@/lib/stages";
 import type { CallModel, TurnView } from "@/lib/useCall";
 import { SLOW_MS, TARGET_MS, clock, initials, ms, num, partsOf, stageName, stepWord, tone } from "@/lib/view";
 
@@ -144,7 +144,6 @@ function Header({ c }: { c: CallModel }) {
   const o = c.summary?.overall;
   const p50 = o?.totalMs.p50 ?? null;
   const p95 = o?.totalMs.p95 ?? null;
-  const ended = c.snap?.ended;
   return (
     <section className="cn-card">
       <div className="cn-hdr">
@@ -153,18 +152,11 @@ function Header({ c }: { c: CallModel }) {
           <h1>
             {c.lead.name}
             <span className="cn-tag">Website form</span>
-            {c.snap && <span className="cn-tag">{shortStatus(c.snap.status)}</span>}
           </h1>
           <p>
             “<bdi>{c.lead.message}</bdi>”
           </p>
         </div>
-        {ended && c.snap?.outcome && (
-          <div className="cn-outcome">
-            <IconCalendar />
-            {shortStatus(c.snap.status)}
-          </div>
-        )}
       </div>
       <div className="cn-stats">
         <Stat label="Duration" value={c.phase === "idle" ? "–" : clock(c.busy ? now : c.length)} />

@@ -1002,6 +1002,12 @@
   .cn {
     grid-template-columns: 1fr;
   }
+  .cn-main {
+    order: 1;
+  }
+  .cn-side {
+    order: 2;
+  }
   .cn-side {
     border-right: 0;
     border-bottom: 1px solid var(--line);
