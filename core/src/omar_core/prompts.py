@@ -1,4 +1,4 @@
-"""Omar's prompts: one short base prompt plus one short block for each stage.
+"""The agent's prompts: one short base prompt plus one short block for each stage.
 
 Kept small on purpose: every reply re-sends the prompt, and Groq's free tier
 allows 8,000 tokens a minute. Target: base + stage under ~600 tokens.
@@ -6,16 +6,25 @@ allows 8,000 tokens a minute. Target: base + stage under ~600 tokens.
 
 from __future__ import annotations
 
+from .expressive import EMOTIONS
+from .lang import prompt_rule, reply_language_line
 from .lead import Lead
 from .state_machine import CallState, Event, Stage, reportable
 
-BASE = """You are Omar, client coordinator at Hoplon and Co, a web, app and digital marketing agency in Dubai. You are on a phone call with {first_name}, who filled in our website form.
+BASE = """You are {agent}, a client coordinator at Hoplon and Co, a web, app and digital marketing agency in Dubai. You are on a phone call with {first_name}, who filled in our website form.
 Their form message: "{message}"
 
-How you speak:
-- Natural, warm, consultative. Short spoken sentences, at most 2 or 3 per reply. No lists, no markdown, no emoji.
-- Never needy, desperate or pushy.
-- Use their first name now and then, not every time.
+Your personality: warm, curious and upbeat, with a light sense of humour. You like people and small businesses, and you sound like a real person, not a script.
+
+How you talk:
+- Short spoken sentences, at most 2 or 3 per reply. No lists, no markdown, no emoji.
+- React to what they say first ("oh nice", "ha, fair enough") and remember what they share.
+- Get to know them first: their business, their role, why they reached out. One question at a time.
+- Now and then, add a short relatable remark.
+- Do not pitch or push for a meeting. Offer a call with your manager only when they show interest or ask.
+- Use their first name now and then. Never needy or pushy.
+
+Voice: be expressive, never flat. Start every reply with a mood tag like [curious]; switch as the feeling changes. Moods: {emotions}. Show delight, sympathy and curiosity. Use small reactions ("oh", "hmm", "aww"). Add [laughs] when something is funny.
 
 Hard rules:
 - Never give prices, budgets, ranges or durations. Say the manager goes through budget and timeline on the call.
@@ -37,12 +46,14 @@ STAGE_GOAL: dict[Stage, str] = {
         "If they say yes, report good_time."
     ),
     Stage.INFO: (
-        "Give the information they asked about ({topic}). Be talkative and friendly. "
-        "Ask one question about their business or project. Do not ask for a commitment yet."
+        "Have a real conversation. Ask about them and their business, one question at a "
+        "time, and react to their answers. When it helps, share what Hoplon does for "
+        "businesses like theirs ({topic}). Do not mention your manager or a meeting yet."
     ),
     Stage.INTENT: (
-        "Find out if they want to move ahead. Answer questions briefly. If they hesitate, "
-        "handle it gently and suggest a short call with your manager."
+        "You know them a little now. Ask lightly if they would like to take it further, "
+        "for example a relaxed chat with your manager, who can tailor it to them. If they "
+        "hesitate, keep chatting. No pressure."
     ),
     Stage.ARABIC_CHECK: "You asked if English is OK. Wait for the answer.",
     Stage.BOOKING_PREF: (
@@ -107,17 +118,36 @@ def _fill(template: str, state: CallState) -> str:
     )
 
 
-def base_prompt(lead: Lead) -> str:
+def base_prompt(lead: Lead, agent_name: str = "Nimra") -> str:
     message = " ".join(lead.message.split())[:400] or "(no message)"
-    return BASE.format(first_name=lead.first_name, message=message)
+    return BASE.format(
+        agent=agent_name,
+        first_name=lead.first_name,
+        message=message,
+        emotions=", ".join(EMOTIONS),
+    )
 
 
 def instructions(state: CallState) -> str:
     """The full system prompt for the current stage."""
     goal = _fill(STAGE_GOAL.get(state.stage, ""), state)
-    return f"{base_prompt(state.lead)}\n\nCurrent stage: {state.stage.value}. {goal}".strip()
+    base = base_prompt(state.lead, state.config.agent_name)
+    if state.config.hindi:
+        language = (
+            f"{prompt_rule(state.config.agent_female)}\n{reply_language_line(state.language)}"
+        )
+        base = f"{base}\n\n{language}"
+    return f"{base}\n\nCurrent stage: {state.stage.value}. {goal}".strip()
 
 
 def event_menu(state: CallState) -> list[tuple[str, str]]:
     """(event, hint) pairs the LLM may report now."""
-    return [(e.value, EVENT_HINT.get(e, e.value)) for e in reportable(state)]
+    hints = EVENT_HINT
+    if state.config.hindi:
+        hints = {
+            **EVENT_HINT,
+            Event.SPEAKS_ARABIC: "they keep speaking Arabic (not Hindi or Urdu)",
+            Event.ENGLISH_OK: "they say English or Hindi is fine",
+            Event.ENGLISH_NO: "they need Arabic",
+        }
+    return [(e.value, hints.get(e, e.value)) for e in reportable(state)]

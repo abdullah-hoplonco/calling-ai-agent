@@ -106,3 +106,72 @@ def test_audio_based_end_wins_over_word_times(agent):
     a._note_final_transcript(alt, audio)
     assert a._pending_user["user_end_source"] == "audio"
     assert a._pending_user["user_end"] == pytest.approx(998.98)
+
+
+def test_llm_request_gets_provider_tokens_and_cost(agent):
+    a, clock = agent
+    clock["t"] = 1000.0
+    a._start_turn("Tell me more", {"stopped_speaking_at": 999.0})
+    a.marks.requests.append(LlmRequest(start=1000.0, first_token=1000.6, end=1001.0))
+    a.on_llm_metrics("api.deepseek.com", "deepseek-flash", 0.6, 1.0, 1300, 60)
+    req = a.marks.requests[0]
+    assert req.provider == "deepseek" and req.prompt_tokens == 1300 and req.cost_usd > 0
+    u = a.usage["deepseek"]
+    assert u["requests"] == 1 and u["costUsd"] == pytest.approx(req.cost_usd)
+    a.on_llm_metrics("api.groq.com", "qwen/qwen3.8-27b", 0.2, 0.5, 1200, 50)
+    assert a.usage["groq"]["costUsd"] == 0.0  # free tier
+
+
+async def test_key_format_checked_before_any_network_call():
+    from omar_voice.agent import check_deepseek_key
+
+    assert "does not look like" in await check_deepseek_key("hello")
+    assert "does not look like" in await check_deepseek_key("")
+
+
+def test_preemptive_draft_changes_no_state_until_the_turn_commits(agent):
+    """Voice calls: a draft LLM request before the commit is held aside, then adopted."""
+    a, _clock = agent
+    a.turn_hook = True
+    stage = a.controller.stage
+    draft = LlmRequest(start=999.0, first_token=999.3, user_id="draft-1")
+    a._track_request(draft)
+    assert draft.early and a._early_reqs == [draft]
+    assert a.controller.stage is stage and a.marks is None  # nothing committed yet
+    a._note_first_out(draft)
+    assert draft.first_out == 1000.0 and a.marks is None
+
+
+def test_dropped_draft_is_replaced_by_the_fresh_request(agent):
+    a, _clock = agent
+    a.turn_hook = True
+    a._start_turn("we mostly use whatsapp", {})
+    draft = LlmRequest(start=999.0, first_token=999.3, user_id="draft-1", early=True)
+    a.marks.requests.append(draft)
+    a._committed_ids.update({"draft-1", "final-1"})
+    fresh = LlmRequest(start=1000.0, user_id="final-1")
+    a._track_request(fresh)
+    assert a.marks.requests == [fresh]
+
+
+def test_adopted_draft_counts_from_the_commit(agent):
+    """Text the draft made before the commit cannot be heard earlier than the commit."""
+    a, clock = agent
+    clock["t"] = 1000.0
+    a._start_turn("we mostly use whatsapp", {})
+    a.marks.stt_final = 999.8
+    a.marks.user_end = 999.0
+    draft = LlmRequest(start=999.4, first_token=999.7, user_id="d", early=True)
+    a.marks.requests.append(draft)
+    a.marks.first_out = 999.8
+    a.on_assistant_message(
+        SimpleNamespace(
+            metrics={"started_speaking_at": 1000.3}, text_content="Ha.", interrupted=False
+        )
+    )
+    a.finish()
+    row = a.book.rows[1]
+    assert row["preemptive"] and row["headStartMs"] == pytest.approx(600.0)
+    assert row["llmMs"] == 0.0 and row["guardMs"] == 0.0
+    assert row["ttsMs"] == pytest.approx(300.0)
+    assert row["unexplainedMs"] == pytest.approx(0.0, abs=0.2)

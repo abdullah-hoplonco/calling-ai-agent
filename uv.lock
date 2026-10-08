@@ -945,6 +945,9 @@ codecs = [
 deepgram = [
     { name = "livekit-plugins-deepgram" },
 ]
+elevenlabs = [
+    { name = "livekit-plugins-elevenlabs" },
+]
 images = [
     { name = "pillow" },
 ]
@@ -1046,6 +1049,18 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/9e/08/d17a0e4964a7f0ac915fd0fb577f4d27cd46feefee10cd51a2cacecaf923/livekit_plugins_deepgram-1.8.4.tar.gz", hash = "sha256:df4af9cd54c04cee2a21077f5a62589dc4a3c419f71bf1904c3cfb164b728d12", size = 26207, upload-time = "2026-10-01T22:40:28.406Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/2d/53/d76d40b2aa107f4866a5265e1e23207dd0871bdcec6e73ea24dd1e65242a/livekit_plugins_deepgram-1.8.4-py3-none-any.whl", hash = "sha256:6c033ced9c36c16587acb2d7b313cd4a5a8bdf0bdb05b79a3d8dd999e84ac116", size = 33138, upload-time = "2026-10-01T22:40:27.08Z" },
+]
+
+[[package]]
+name = "livekit-plugins-elevenlabs"
+version = "1.8.4"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "livekit-agents", extra = ["codecs"] },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/f8/62/5fcd4ebc68397adecf1d888a960ee89fbdd645281e385f5c682166a08ea8/livekit_plugins_elevenlabs-1.8.4.tar.gz", hash = "sha256:472e8479c81e59299d2502d0a900960454bf030d6ecea0cd45607dc1b12192da", size = 23892, upload-time = "2026-10-01T22:40:36.485Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/4b/06/7b773ad82713557d8d7ab6af1e98269340226898b1a7f1fcc3f106be0490/livekit_plugins_elevenlabs-1.8.4-py3-none-any.whl", hash = "sha256:a3b81896985084c7649dc64f4a2f2791167695c3a28c78ec18a72af98998fb4b", size = 25673, upload-time = "2026-10-01T22:40:35.001Z" },
 ]
 
 [[package]]
@@ -1468,7 +1483,7 @@ name = "omar-voice"
 version = "0.1.0"
 source = { editable = "voice" }
 dependencies = [
-    { name = "livekit-agents", extra = ["cartesia", "deepgram", "openai", "silero", "turn-detector"] },
+    { name = "livekit-agents", extra = ["cartesia", "deepgram", "elevenlabs", "openai", "silero", "turn-detector"] },
     { name = "numpy" },
     { name = "omar-core" },
     { name = "python-dotenv" },
@@ -1476,7 +1491,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "livekit-agents", extras = ["deepgram", "openai", "cartesia", "silero", "turn-detector"], specifier = ">=1.2" },
+    { name = "livekit-agents", extras = ["deepgram", "openai", "cartesia", "elevenlabs", "silero", "turn-detector"], specifier = ">=1.2" },
     { name = "numpy", specifier = ">=1.26" },
     { name = "omar-core", editable = "core" },
     { name = "python-dotenv", specifier = ">=1.0" },

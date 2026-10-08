@@ -39,7 +39,7 @@ export function EnterpriseView({ c, switcher }: { c: CallModel; switcher: React.
           <div className="en-title">
             <h1>Live call review</h1>
             <p>
-              Omar calling <b>{c.lead.name}</b> · {statusWord(c)}
+              Nimra calling <b>{c.lead.name}</b> · {statusWord(c)}
               {c.source === "sample" && <span className="en-synth">Sample · synthetic numbers</span>}
             </p>
           </div>
@@ -76,7 +76,7 @@ export function EnterpriseView({ c, switcher }: { c: CallModel; switcher: React.
                   <GuardList snap={c.snap} />
                 </Card>
                 <Card title="Pipeline">
-                  <CodeState snap={c.snap} />
+                  <CodeState snap={c.snap} c={c} />
                   {c.snap.outcome && <p className="en-outcome">{c.snap.outcome}</p>}
                 </Card>
               </>
@@ -84,7 +84,7 @@ export function EnterpriseView({ c, switcher }: { c: CallModel; switcher: React.
           </div>
         </div>
         <footer className="en-foot">
-          Hoplon &amp; Co · Omar demo, milestone M1. Browser calls only; the calendar is simulated.
+          Hoplon &amp; Co · Nimra demo, milestone M1. Browser calls only; the calendar is simulated.
           {c.source === "sample" && " The sample call's words and numbers are synthetic."}
         </footer>
       </div>
@@ -183,7 +183,7 @@ function Conversation({ c, sel, onPick }: { c: CallModel; sel: number; onPick: (
             {first} <Meter who="lead" bars={7} />
           </span>
           <span>
-            Omar <Meter who="omar" bars={7} />
+            Nimra <Meter who="omar" bars={7} />
           </span>
         </div>
       </div>
@@ -194,7 +194,7 @@ function Conversation({ c, sel, onPick }: { c: CallModel; sel: number; onPick: (
         <div className="en-empty">
           <h3>Start a call to see it here</h3>
           <p>
-            Call {first} and talk to Omar with your microphone, or hear the sample call first. Each reply shows how long
+            Call {first} and talk to Nimra with your microphone, or hear the sample call first. Each reply shows how long
             the Lead waited, and where the time went.
           </p>
           <div className="en-empty-b">
@@ -257,7 +257,7 @@ function Exchange({ t, first, sel, onPick }: { t: TurnView; first: string; sel: 
         </span>
         <div>
           <span className="en-who">
-            Omar <time>{clock(t.omarAt)}</time>
+            Nimra <time>{clock(t.omarAt)}</time>
             <span className="en-stage">{stageName(t.turn.stage)}</span>
             {t.turn.interrupted && <span className="en-cut">Interrupted</span>}
           </span>
@@ -272,7 +272,7 @@ function Exchange({ t, first, sel, onPick }: { t: TurnView; first: string; sel: 
 function Response({ c, t }: { c: CallModel; t: TurnView | undefined }) {
   const med = medianParts(c.turns);
   if (!t || t.turn.totalMs == null)
-    return <p className="muted">After Omar&apos;s first measured reply, this card splits the wait into its parts.</p>;
+    return <p className="muted">After Nimra&apos;s first measured reply, this card splits the wait into its parts.</p>;
   const total = t.turn.totalMs;
   return (
     <div className="en-resp">
@@ -290,7 +290,7 @@ function Response({ c, t }: { c: CallModel; t: TurnView | undefined }) {
           <PartList parts={med} totalLabel="Sum of medians" />
         </details>
       )}
-      <p className="en-src">Measured on the voice worker, from the Lead&apos;s last word to Omar&apos;s first audio. {num(c.summary?.overall.n)} replies.</p>
+      <p className="en-src">Measured on the voice worker, from the Lead&apos;s last word to Nimra&apos;s first audio. {num(c.summary?.overall.n)} replies.</p>
     </div>
   );
 }

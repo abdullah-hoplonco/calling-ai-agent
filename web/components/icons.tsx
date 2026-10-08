@@ -101,6 +101,11 @@ export const IconArrow = (p: P) => (
     <path d="M5 12h14M13 6l6 6-6 6" />
   </S>
 );
+export const IconChevron = (p: P) => (
+  <S {...p}>
+    <path d="m9 6 6 6-6 6" />
+  </S>
+);
 export const IconAlert = (p: P) => (
   <S {...p}>
     <path d="M12 4 2.5 20h19z" />

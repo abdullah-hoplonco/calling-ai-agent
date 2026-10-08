@@ -166,7 +166,7 @@ export function wavePath(seed: number, w: number, h: number, step = 3): string {
   return d;
 }
 
-// The whole call as one recording: the Lead above the line, Omar below.
+// The whole call as one recording: the Lead above the line, Nimra below.
 export function Waveform({ c, height = 96 }: { c: CallModel; height?: number }) {
   const ref = useRef<HTMLCanvasElement>(null);
   const live = c.busy;

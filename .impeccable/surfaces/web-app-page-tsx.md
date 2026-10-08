@@ -7,7 +7,7 @@ related_targets: ["web/components/App.tsx","web/components/views/StudioView.tsx"
 
 # Surface brief: "Talk to Omar" demo (web/app/page.tsx)
 
-Scope: the whole M1 browser demo page, shipped in four switchable themes (toggle in each theme's chrome; saved per browser; `?ui=studio|console|enterprise|showcase`). Default: Studio.
+Scope: the whole M1 browser demo page, shipped in four switchable themes (toggle in each theme's chrome; saved per browser; `?ui=studio|console|enterprise|showcase`). Default: Console (changed from Studio by the user on 2026-10-07).
 Visitor mode: Operate (Studio, Console, Enterprise); Persuade (Showcase), all running the same live call.
 Audience: C-suite on their own MacBooks (impress first, with sound), and engineers who need the measured detail.
 Task: pick a Lead, call Omar or hear the spoken sample, and read stage, rules and the wait before every reply.
@@ -19,7 +19,7 @@ Decided by the user on 2026-10-06: "Session Timeline" as default with SaaS conso
 
 THESIS: Hear the call first, then see the wait. Every theme shows the gap between the Lead's last word and Omar's first sound, measured and split into six parts, next to the words. Refuses the old static ledger and the glowing-orb voice-demo cliché.
 
-OWN-WORLD: Studio: dark recording session (Geist / Geist Mono), Lead sky blue, Omar amber, transport LCD, lanes, wait editor. Console: light neutral product console (Inter), one blue, recording card, transcript with a delay badge per reply, tabbed side panel. Enterprise: Hoplon navy band and gold primary action (Manrope), stepper, raised KPI tiles, compliance and pipeline cards. Showcase: navy landing page (Bricolage Grotesque + Figtree), gold CTA, the live call window as the product shot. Six fixed part inks per theme; green/amber/red only for target verdicts.
+OWN-WORLD: Studio: dark recording session (Geist / Geist Mono), Lead sky blue, Omar amber, transport LCD, lanes, wait editor. Console (default): the hoplonco.com identity (black, white, electric lime, Epilogue, pill buttons, real wordmark); a black call deck with the recording and stage track, a transcript with a verdict badge per reply, a tabbed side panel. Rebranded at the user's request on 2026-10-07. Enterprise: Hoplon navy band and gold primary action (Manrope), stepper, raised KPI tiles, compliance and pipeline cards. Showcase: navy landing page (Bricolage Grotesque + Figtree), gold CTA, the live call window as the product shot. Six fixed part inks per theme; green/amber/red only for target verdicts.
 
 STORY: The visitor presses one button and hears Omar and the Lead talk; while it plays, each wait draws itself and the totals land against the 0.9 s / 1.5 s targets; the close shows the outcome and the code's state.
 

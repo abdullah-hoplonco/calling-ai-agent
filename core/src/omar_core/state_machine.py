@@ -16,6 +16,7 @@ from enum import StrEnum
 from typing import Literal
 
 from .config import CallConfig
+from .lang import LINES_HI, Lang, gendered
 from .lead import Lead
 
 
@@ -212,6 +213,7 @@ class CallState:
     ai_disclosed: bool = False
     booking_confirmed: bool = False
     price_deflections: int = 0
+    language: Lang = "en"  # the language the Lead speaks now (changes only with config.hindi)
 
     @property
     def ended(self) -> bool:
@@ -275,8 +277,71 @@ NO_TIMELINE_LINE = (
 )
 
 
+# Scripted lines, by key. Hindi versions: lang.LINES_HI. {first_name} and {agent} are filled
+# for every line; other fields are passed to line().
+LINES_EN: dict[str, str] = {
+    "identity": "Hi, is this {first_name}?",
+    "identity_unclear_1": "This is {agent} from Hoplon and Co. Am I speaking with {first_name}?",
+    "identity_unclear_2": "Sorry, just to check, am I speaking with {first_name}?",
+    "wrong_number": "Sorry about that, I must have the wrong number. Have a good day!",
+    "objects_recording": (
+        "Totally understand. I can't continue without recording, but I'll email you "
+        "the information instead. Thanks for your time!"
+    ),
+    "parked_objections": (
+        "Completely fair. I'll email you the details, and you can reach us whenever "
+        "the timing's right. Thanks, {first_name}!"
+    ),
+    "no_intent": (
+        "No problem. I'll send you some information by email so you have it when "
+        "you're ready. Thanks!"
+    ),
+    "max_callbacks": "No problem. I'll email you the details instead. Thanks!",
+    "callback_booked": "Perfect, I'll call you {time}. Speak then!",
+    "not_interested": "Understood, I won't call again. Have a great day!",
+    "no_slots": (
+        "I can't see a good time right now, so I'll email you a link to pick any "
+        "time that suits you. Thanks, {first_name}!"
+    ),
+    "no_slot_agreed": (
+        "No worries. I'll email you a link so you can pick any time that suits you. "
+        "Thanks, {first_name}!"
+    ),
+    "lock_in": "One moment while I lock that in.",
+    "booked": (
+        "You're booked for {slot} with my manager. The invite with the Google Meet "
+        "link is on its way. Thanks, {first_name}!"
+    ),
+    "slot_taken": "Ah, it looks like that time was just taken, sorry about that.",
+    "calendar_error": (
+        "I'm having trouble with the calendar right now, so I'll email you a link to "
+        "pick a time. Sorry about that!"
+    ),
+    "no_budget": NO_BUDGET_LINE,
+    "no_timeline": NO_TIMELINE_LINE,
+}
+
+
+def line(key: str, state: CallState, **fields: str) -> str:
+    """A scripted line in the Lead's language: Hindi only when the call allows it."""
+    cfg = state.config
+    hindi = cfg.hindi and state.language == "hi" and key in LINES_HI
+    template = gendered(LINES_HI[key], cfg.agent_female) if hindi else LINES_EN[key]
+    return template.format(first_name=state.lead.first_name, agent=cfg.agent_name, **fields)
+
+
 def opening_line(state: CallState) -> str:
     lead = state.lead
+    if state.config.hindi and state.language == "hi":
+        old = lead.lead_type == "old" and lead.submitted_month
+        key = "opening_old" if old else "opening_new"
+        template = gendered(LINES_HI[key], state.config.agent_female)
+        return template.format(
+            first_name=lead.first_name,
+            agent=state.config.agent_name,
+            topic=lead.topic_phrase,
+            month=lead.submitted_month or "",
+        )
     if state.lead.lead_type == "old" and lead.submitted_month:
         why = (
             f"You reached out to us back in {lead.submitted_month} about {lead.topic_phrase}, "
@@ -288,7 +353,7 @@ def opening_line(state: CallState) -> str:
             "so I'm calling with the information you asked for."
         )
     return (
-        f"Hi {lead.first_name}, this is Omar from Hoplon and Co. {why} "
+        f"Hi {lead.first_name}, this is {state.config.agent_name} from Hoplon and Co. {why} "
         "Just so you know, this call is recorded. Is now a good time for two minutes?"
     )
 
@@ -319,26 +384,22 @@ def transition(
     match event:
         case Event.ANSWERED:
             s.stage = Stage.IDENTITY
-            fx.say = f"Hi, is this {lead.first_name}?"
+            fx.say = line("identity", s)
         case Event.NO_ANSWER:
             _end(s, LeadStatus.RETRY, "No answer. Next attempt tomorrow at the opposite time.")
         case Event.VOICEMAIL:
             _end(s, LeadStatus.RETRY, "Voicemail left (attempt 1 only) and booking link emailed.")
             fx.say = (
-                f"Hi {lead.first_name}, Omar from Hoplon and Co, following up on the form you "
+                f"Hi {lead.first_name}, {cfg.agent_name} from Hoplon and Co, following up on the form you "
                 f"sent us {lead.topic_clause}. I'll try you again tomorrow, or you can reply "
                 "to our email."
             )
         case Event.WRONG_PERSON:
             _end(s, LeadStatus.WRONG_NUMBER, "Wrong person. Apologised and ended.")
-            fx.say = "Sorry about that, I must have the wrong number. Have a good day!"
+            fx.say = line("wrong_number", s)
         case Event.IDENTITY_UNCLEAR:
             s.identity_asks += 1
-            fx.say = (
-                f"This is Omar from Hoplon and Co. Am I speaking with {lead.first_name}?"
-                if s.identity_asks == 1
-                else f"Sorry, just to check, am I speaking with {lead.first_name}?"
-            )
+            fx.say = line("identity_unclear_1" if s.identity_asks == 1 else "identity_unclear_2", s)
         case Event.HANG_UP_SILENT:
             _end(s, LeadStatus.RETRY, "Hung up before speaking. Counts as no answer.")
         case Event.LINE_DROPS:
@@ -356,16 +417,16 @@ def transition(
             )
         case Event.OBJECTS_RECORDING:
             _end(s, LeadStatus.PARKED_RECORDING, "Declined recording. Information sent by email.")
-            fx.say = (
-                "Totally understand. I can't continue without recording, but I'll email you "
-                "the information instead. Thanks for your time!"
-            )
+            fx.say = line("objects_recording", s)
 
         case Event.SPEAKS_ARABIC:
             s.prev_stage = s.stage
             s.stage = Stage.ARABIC_CHECK
             fx.say = (
-                "Wa alaikum assalam! I'm sorry, I can only continue in English. "
+                "Wa alaikum assalam! I'm sorry, I can only continue in English or Hindi. "
+                "Would one of those work for you?"
+                if cfg.hindi
+                else "Wa alaikum assalam! I'm sorry, I can only continue in English. "
                 "My manager speaks English too. Would that work for you?"
             )
         case Event.ENGLISH_OK:
@@ -403,10 +464,7 @@ def transition(
             s.objections += 1
             if s.objections > cfg.max_objections:
                 _end(s, LeadStatus.PARKED, f"Parked after {cfg.max_objections} objection attempts.")
-                fx.say = (
-                    "Completely fair. I'll email you the details, and you can reach us whenever "
-                    f"the timing's right. Thanks, {lead.first_name}!"
-                )
+                fx.say = line("parked_objections", s)
             elif s.objections == 1:
                 fx.guide = (
                     "Agree to send the email, then explain gently that a short call with your "
@@ -422,24 +480,21 @@ def transition(
             _end(
                 s, LeadStatus.PARKED, "No Intent to Buy. Did not reject contact. Re-nurture later."
             )
-            fx.say = (
-                "No problem. I'll send you some information by email so you have it when "
-                "you're ready. Thanks!"
-            )
+            fx.say = line("no_intent", s)
         case Event.ASK_PRICE:
             s.price_deflections += 1
             if s.stage in (Stage.INFO, Stage.INTENT):
                 s.stage = Stage.BOOKING_PREF
                 s.status = LeadStatus.QUALIFIED
                 fx.guide = (
-                    f"Say: '{NO_BUDGET_LINE}' Then offer a quick 30-minute call with your "
+                    f"Say: '{line('no_budget', s)}' Then offer a quick 30-minute call with your "
                     "manager and ask whether earlier or later this week works, morning or "
                     "afternoon. Never give a number."
                 )
             else:
-                fx.guide = f"Say: '{NO_BUDGET_LINE}' Then continue with the booking."
+                fx.guide = f"Say: '{line('no_budget', s)}' Then continue with the booking."
         case Event.ASK_TIMELINE:
-            fx.guide = f"Say: '{NO_TIMELINE_LINE}' Never give a duration. Then continue."
+            fx.guide = f"Say: '{line('no_timeline', s)}' Never give a duration. Then continue."
         case Event.ASK_BOT:
             s.ai_disclosed = True
             fx.guide = (
@@ -449,7 +504,7 @@ def transition(
         case Event.NOT_NOW:
             if s.callbacks_used >= cfg.max_callbacks:
                 _end(s, LeadStatus.PARKED, "Maximum callbacks reached. Parked.")
-                fx.say = "No problem. I'll email you the details instead. Thanks!"
+                fx.say = line("max_callbacks", s)
             else:
                 s.prev_stage = s.stage
                 s.stage = Stage.CALLBACK
@@ -470,10 +525,10 @@ def transition(
                 f"Callback booked for {s.callback_time} "
                 f"({s.callbacks_used}/{cfg.max_callbacks}; not a retry).",
             )
-            fx.say = f"Perfect, I'll call you {s.callback_time}. Speak then!"
+            fx.say = line("callback_booked", s, time=s.callback_time)
         case Event.NOT_INTERESTED:
             _end(s, LeadStatus.OPTED_OUT, "Opted out. Never called again.")
-            fx.say = "Understood, I won't call again. Have a great day!"
+            fx.say = line("not_interested", s)
         case Event.HANG_UP_NEGATIVE:
             _end(s, LeadStatus.OPTED_OUT, "Negative statement, then hang-up. Opted out.")
 
@@ -486,10 +541,7 @@ def transition(
             s.offered = [x for x in (detail or "").split("|") if x][:2]
             if len(s.offered) < 2:
                 _end(s, LeadStatus.LINK_SENT, "No free slots found. Booking link emailed.")
-                fx.say = (
-                    "I can't see a good time right now, so I'll email you a link to pick any "
-                    f"time that suits you. Thanks, {lead.first_name}!"
-                )
+                fx.say = line("no_slots", s)
             else:
                 fx.guide = (
                     f"Offer exactly these two times: {s.offered[0]} or {s.offered[1]}. "
@@ -500,10 +552,7 @@ def transition(
                 _end(
                     s, LeadStatus.LINK_SENT, "No slot agreed after 2 rounds. Booking link emailed."
                 )
-                fx.say = (
-                    "No worries. I'll email you a link so you can pick any time that suits you. "
-                    f"Thanks, {lead.first_name}!"
-                )
+                fx.say = line("no_slot_agreed", s)
             else:
                 s.slot_round += 1
                 fx.action = "find_slots"
@@ -524,20 +573,17 @@ def transition(
         case Event.EMAIL_OK:
             s.stage = Stage.BOOKING_PENDING
             s.email = s.email or lead.email
-            fx.say = "One moment while I lock that in."
+            fx.say = line("lock_in", s)
             fx.action = "book"
             fx.action_arg = s.chosen
         case Event.CALENDAR_CONFIRMS:
             s.booking_confirmed = True
             _end(s, LeadStatus.BOOKED, f"Discovery Call booked: {s.chosen}. Invite sent.")
-            fx.say = (
-                f"You're booked for {s.chosen} with my manager. The invite with the Google Meet "
-                f"link is on its way. Thanks, {lead.first_name}!"
-            )
+            fx.say = line("booked", s, slot=s.chosen or "")
         case Event.CALENDAR_SLOT_TAKEN:
             s.stage = Stage.BOOKING_OFFER
             s.slot_round = min(s.slot_round + 1, cfg.max_slot_rounds)
-            fx.say = "Ah, it looks like that time was just taken, sorry about that."
+            fx.say = line("slot_taken", s)
             fx.action = "find_slots"
             fx.action_arg = ""
         case Event.CALENDAR_ERROR:
@@ -546,10 +592,7 @@ def transition(
                 LeadStatus.LINK_SENT,
                 "Calendar failed. Booking link emailed. Never claimed booked.",
             )
-            fx.say = (
-                "I'm having trouble with the calendar right now, so I'll email you a link to "
-                "pick a time. Sorry about that!"
-            )
+            fx.say = line("calendar_error", s)
 
     return s, fx
 

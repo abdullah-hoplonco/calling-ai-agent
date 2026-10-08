@@ -34,6 +34,15 @@ export type CallSnapshot = {
     guard: boolean;
     preemptive: boolean;
   };
+  llmUsage?: {
+    label: string;
+    pricing: string;
+    byProvider: Record<
+      string,
+      { model: string; requests: number; promptTokens: number; completionTokens: number; costUsd: number; ttftMs: number[] }
+    >;
+    totalCostUsd: number;
+  };
 };
 
 export type Turn = {
@@ -48,8 +57,8 @@ export type Turn = {
   toolMs?: number | null; // tool step before the reply (extra LLM request)
   llmMs?: number | null; // reply request -> first token
   guardMs?: number | null; // first token -> first full sentence handed to TTS
-  ttsMs?: number | null; // first sentence -> Omar's first audio frame
-  totalMs: number | null; // last word ends -> Omar's first audio frame (worker)
+  ttsMs?: number | null; // first sentence -> Nimra's first audio frame
+  totalMs: number | null; // last word ends -> Nimra's first audio frame (worker)
   serverTotalMs?: number | null;
   unexplainedMs?: number | null; // total minus the parts; near 0 when all marks exist
   userEndSource?: "audio" | "words" | "window" | "livekit" | "none";
@@ -59,7 +68,12 @@ export type Turn = {
   toolTurn?: boolean;
   scripted: boolean;
   interrupted: boolean;
-  heardMs?: number | null; // browser: your voice ends -> Omar's voice heard (mouth to ear)
+  heardMs?: number | null; // browser: your voice ends -> Nimra's voice heard (mouth to ear)
+  llmProvider?: string | null; // "groq" | "deepseek": who served the reply (also with Auto)
+  llmModel?: string | null;
+  promptTokens?: number;
+  completionTokens?: number;
+  llmCostUsd?: number; // all LLM requests of this turn, cache miss assumed
 };
 
 type Pct = { p50: number | null; p95: number | null };

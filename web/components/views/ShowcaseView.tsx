@@ -35,7 +35,7 @@ export function ShowcaseView({ c, switcher }: { c: CallModel; switcher: React.Re
         <div className="sc-hero-copy">
           <h1>The AI caller that books the meeting.</h1>
           <p className="sc-lede">
-            Omar phones the people who filled in your form, answers what they asked, and books a Discovery Call with your
+            Nimra phones the people who filled in your form, answers what they asked, and books a Discovery Call with your
             manager. The code runs the call. The AI only writes the words.
           </p>
           <div className="sc-cta">
@@ -72,7 +72,7 @@ export function ShowcaseView({ c, switcher }: { c: CallModel; switcher: React.Re
       <footer className="sc-foot">
         <Image src="/hoplon-logo.png" alt="" width={104} height={19} />
         <p>
-          Omar demo, milestone M1. Browser calls only; the calendar is simulated.
+          Nimra demo, milestone M1. Browser calls only; the calendar is simulated.
           {c.source === "sample" && " The sample call's words and numbers are synthetic."}
         </p>
       </footer>
@@ -115,7 +115,7 @@ function Window({ c, preview }: { c: CallModel; preview: boolean }) {
               </p>
             )}
             <p data-who="omar">
-              <b>Omar</b>
+              <b>Nimra</b>
               {t.turn.omar_text}
             </p>
           </div>
@@ -146,7 +146,7 @@ function Numbers({ c, preview }: { c: CallModel; preview: boolean }) {
       <h2 className="sc-big">
         {p50 != null ? (
           <>
-            {preview ? "On the sample call" : "On this call"}, Omar&apos;s typical reply came in <em data-tone={tone(p50)}>{sec(p50)}</em> after the Lead
+            {preview ? "On the sample call" : "On this call"}, Nimra&apos;s typical reply came in <em data-tone={tone(p50)}>{sec(p50)}</em> after the Lead
             stopped talking. The slowest took <em data-tone={tone(p95)}>{sec(p95)}</em>.
           </>
         ) : (
@@ -180,9 +180,9 @@ const PLAIN: Record<string, string> = {
   detect: "Hears that you finished. Deepgram decides your turn is over.",
   commit: "Commits the turn and hands your words to the call logic.",
   tool: "When the call logic needs it, one extra LLM step first.",
-  llm: "The LLM starts writing Omar's reply.",
+  llm: "The LLM starts writing Nimra's reply.",
   guard: "The guard checks the first sentence against the rules.",
-  tts: "The voice engine turns that sentence into Omar's first audio.",
+  tts: "The voice engine turns that sentence into Nimra's first audio.",
 };
 
 function How({ c }: { c: CallModel }) {
@@ -194,7 +194,7 @@ function How({ c }: { c: CallModel }) {
       <div className="sc-how-h">
         <h2>Anatomy of one wait.</h2>
         <p>
-          From your last word to Omar&apos;s first sound, six steps run one after another. The page measures each one on
+          From your last word to Nimra&apos;s first sound, six steps run one after another. The page measures each one on
           every reply{total ? `; below is the median for this call, ${total.toLocaleString("en-US")} ms in all.` : "."}
         </p>
       </div>
@@ -227,7 +227,7 @@ function Rules({ c }: { c: CallModel }) {
         <h2>The code owns the call.</h2>
         <p>
           A state machine decides the stage, the next question and when the call ends. The LLM writes the sentences, and
-          every sentence passes the guard before Omar says it. When a rule blocks a sentence, you see it here.
+          every sentence passes the guard before Nimra says it. When a rule blocks a sentence, you see it here.
         </p>
         <h3>Legal opening</h3>
         <Opening snap={c.snap} />
@@ -281,7 +281,7 @@ function Transcript({ c }: { c: CallModel }) {
           )}
           <p data-who="omar">
             <b>
-              Omar
+              Nimra
               {t.turn.totalMs != null ? <em data-tone={tone(t.turn.totalMs)}>{ms(t.turn.totalMs)}</em> : <em>scripted</em>}
             </b>
             {t.turn.omar_text}

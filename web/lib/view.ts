@@ -13,7 +13,7 @@ export const PARTS = [
   { key: "toolMs", label: "Tool step", hint: "Extra LLM request before the reply", cls: "tool" },
   { key: "llmMs", label: "LLM first token", hint: "Reply request to first token", cls: "llm" },
   { key: "guardMs", label: "Guard", hint: "First token to first checked sentence", cls: "guard" },
-  { key: "ttsMs", label: "Voice (TTS)", hint: "Sentence to Omar's first audio", cls: "tts" },
+  { key: "ttsMs", label: "Voice (TTS)", hint: "Sentence to Nimra's first audio", cls: "tts" },
 ] as const;
 
 export type PartKey = (typeof PARTS)[number]["key"];

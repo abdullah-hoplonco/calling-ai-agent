@@ -1,18 +1,38 @@
 "use client";
 
-// Console: a clean product console. Recording on top, transcript with a delay on every reply,
-// and a side panel for latency, call state and events.
+// Console: the Hoplon & Co product console. A black call deck (the Lead, the recording, the stage
+// track and the measured waits) over a white transcript, with a side panel for latency, call state
+// and events. Black, white and one lime, as on hoplonco.com.
 
 import { useEffect, useRef, useState } from "react";
 
-import { CallButton, CodeState, ConfigLine, ErrorNote, GuardList, MuteToggle, Opening, SampleButton, statusWord } from "@/components/blocks";
-import { IconCheck } from "@/components/icons";
+import { CallButton, CodeState, ConfigLine, ErrorNote, GuardList, LlmSwitch, MuteToggle, VoiceSwitch, Opening, SampleButton, statusWord } from "@/components/blocks";
+import { HoplonLogo } from "@/components/HoplonLogo";
+import { IconCheck, IconChevron } from "@/components/icons";
 import { Meter, PartList, PartsBar, Waveform, medianParts, useNow, waveX } from "@/components/shared";
-import { TRACK, trackIndex } from "@/lib/stages";
+import { LLM_CHOICES } from "@/lib/leads";
+import { TRACK, shortStatus, trackIndex } from "@/lib/stages";
 import type { CallModel, TurnView } from "@/lib/useCall";
-import { SLOW_MS, TARGET_MS, clock, initials, ms, num, partsOf, stageName, stepWord, tone } from "@/lib/view";
+import { SLOW_MS, TARGET_MS, clock, initials, ms, num, partsOf, stageName, stepWord, tone, toneWord, type Tone } from "@/lib/view";
+import { VOICES } from "@/lib/voices";
 
-type Tab = "lat" | "state" | "ev";
+const TABS = [
+  ["lat", "Latency"],
+  ["state", "Call state"],
+  ["ev", "Events"],
+] as const;
+type Tab = (typeof TABS)[number][0];
+
+// The sample is always Nimra; a live call takes the name of the picked voice.
+function agentOf(c: CallModel): string {
+  if (c.source === "sample") return "Nimra";
+  return VOICES.find((v) => v.id === c.voiceId)?.agent ?? "Nimra";
+}
+
+// The verdict as a shape as well as a colour: circle within 0.9 s, diamond over, triangle over 1.5 s.
+function Vx({ t }: { t: Tone | undefined }) {
+  return <i className="cn-vx" data-tone={t} aria-hidden="true" />;
+}
 
 export function ConsoleView({ c, switcher }: { c: CallModel; switcher: React.ReactNode }) {
   const [tab, setTab] = useState<Tab>("lat");
@@ -22,59 +42,87 @@ export function ConsoleView({ c, switcher }: { c: CallModel; switcher: React.Rea
   }, [c.busy, c.turns.length]);
   const measuredIdx = c.turns.map((t, i) => (t.turn.totalMs != null ? i : -1)).filter((i) => i >= 0);
   const sel = picked ?? measuredIdx[measuredIdx.length - 1] ?? -1;
+  const agent = agentOf(c);
+  const llm = LLM_CHOICES.find((o) => o.id === c.llm)?.label ?? "Auto";
+  const voice = VOICES.find((v) => v.id === c.voiceId)?.name;
+
+  // Arrow keys move between tabs (APG tabs pattern); Tab leaves the tab list.
+  const onTabKey = (e: React.KeyboardEvent) => {
+    const i = TABS.findIndex(([id]) => id === tab);
+    const n = e.key === "ArrowRight" ? (i + 1) % TABS.length : e.key === "ArrowLeft" ? (i + TABS.length - 1) % TABS.length : e.key === "Home" ? 0 : e.key === "End" ? TABS.length - 1 : -1;
+    if (n < 0) return;
+    e.preventDefault();
+    const next = TABS[n]![0];
+    setTab(next);
+    document.getElementById(`cn-tab-${next}`)?.focus();
+  };
 
   return (
     <div className="cn">
-      <aside className="cn-side">
+      <aside className="cn-side" aria-label="Call setup">
         <div className="cn-ws">
-          <span className="cn-logo" aria-hidden="true">
-            h
-          </span>
-          <div>
-            <b>Hoplon &amp; Co</b>
-            <small>Omar · calling agent</small>
+          <HoplonLogo />
+          <small>{agent} · AI calling agent</small>
+        </div>
+        <fieldset className="cn-leads" disabled={c.busy}>
+          <legend className="cn-sec">Leads</legend>
+          <div className="cn-leads-l">
+            {c.leads.map((l) => (
+              <label key={l.id} className="cn-lead" data-on={l.id === c.leadId || undefined}>
+                <input type="radio" name="cn-lead" value={l.id} checked={l.id === c.leadId} onChange={() => c.setLeadId(l.id)} />
+                <span className="cn-av" aria-hidden="true">
+                  {initials(l.name)}
+                </span>
+                <span>
+                  <b>{l.label ?? l.name}</b>
+                  <small>{l.note}</small>
+                </span>
+              </label>
+            ))}
           </div>
-        </div>
-        <div className="cn-sec">Leads</div>
-        <div className="cn-leads" role="radiogroup" aria-label="Who Omar calls">
-          {c.leads.map((l) => (
-            <button
-              key={l.id}
-              type="button"
-              role="radio"
-              aria-checked={l.id === c.leadId}
-              className="cn-lead"
-              data-on={l.id === c.leadId || undefined}
-              disabled={c.busy}
-              onClick={() => c.setLeadId(l.id)}
-            >
-              <span className="cn-av">{initials(l.name)}</span>
+        </fieldset>
+        <details className="cn-set">
+          <summary>
+            <IconChevron />
+            <span>
+              Call settings
+              <small>
+                {llm}
+                {voice ? ` · ${voice}` : ""}
+                {c.old ? " · old Lead" : ""}
+              </small>
+            </span>
+          </summary>
+          <div className="cn-set-b">
+            <label className="cn-old">
+              <input type="checkbox" checked={c.old} disabled={c.busy} onChange={(e) => c.setOld(e.target.checked)} />
               <span>
-                <b>{l.name}</b>
-                <small>{l.note}</small>
+                Old backlog Lead
+                <small>Opens with “you reached out back in March”.</small>
               </span>
-            </button>
-          ))}
-        </div>
-        <label className="cn-old">
-          <input type="checkbox" checked={c.old} disabled={c.busy} onChange={(e) => c.setOld(e.target.checked)} />
-          <span>
-            Old backlog Lead
-            <small>Opens with “you reached out back in March”.</small>
-          </span>
-        </label>
+            </label>
+            <label className="cn-old">
+              <input type="checkbox" checked={c.hindi} disabled={c.busy} onChange={(e) => c.setHindi(e.target.checked)} />
+              <span>
+                English + Hindi
+                <small>The Lead can speak Hindi; the agent answers in Hindi.</small>
+              </span>
+            </label>
+            <LlmSwitch c={c} />
+            <VoiceSwitch c={c} />
+          </div>
+        </details>
         <div className="cn-grow" />
-        <div className="cn-demo">
-          <b>Demo mode</b>
-          Browser calls only. The calendar is simulated.
-        </div>
+        <p className="cn-demo">
+          <b>Demo mode.</b> Browser calls only. The calendar is simulated.
+        </p>
         <div className="cn-theme">
           <span>Theme</span>
           {switcher}
         </div>
       </aside>
 
-      <div className="cn-main">
+      <main className="cn-main">
         <header className="cn-top">
           <div className="cn-crumb">
             Calls <span aria-hidden="true">/</span> <b>{c.lead.name}</b>
@@ -86,37 +134,41 @@ export function ConsoleView({ c, switcher }: { c: CallModel; switcher: React.Rea
           {c.source === "sample" && <span className="cn-tag">Sample · synthetic data</span>}
           <div className="cn-sp" />
           <MuteToggle c={c} />
-          <SampleButton c={c} className="cn-btn" label="Hear sample call" />
-          <CallButton c={c} className="cn-btn cn-pri" />
+          <CallButton c={c} className="cn-btn" />
+          <SampleButton c={c} className="cn-btn cn-pri" />
         </header>
         <ErrorNote c={c} />
 
         <div className="cn-content">
           <div className="cn-col">
-            <Header c={c} />
-            <Player c={c} sel={sel} onPick={setPicked} />
-            <Transcript c={c} sel={sel} onPick={setPicked} />
+            <Deck c={c} sel={sel} onPick={setPicked} agent={agent} />
+            <Transcript c={c} sel={sel} onPick={setPicked} agent={agent} />
           </div>
-          <section className="cn-card cn-panel">
-            <div className="cn-tabs" role="tablist">
-              {(
-                [
-                  ["lat", "Latency"],
-                  ["state", "Call state"],
-                  ["ev", "Events"],
-                ] as const
-              ).map(([id, label]) => (
-                <button key={id} type="button" role="tab" aria-selected={tab === id} className="cn-tab" data-on={tab === id || undefined} onClick={() => setTab(id)}>
+          <section className="cn-card cn-panel" aria-label="Call details">
+            <div className="cn-tabs" role="tablist" aria-label="Call details" onKeyDown={onTabKey}>
+              {TABS.map(([id, label]) => (
+                <button
+                  key={id}
+                  id={`cn-tab-${id}`}
+                  type="button"
+                  role="tab"
+                  aria-selected={tab === id}
+                  aria-controls="cn-tabpanel"
+                  tabIndex={tab === id ? 0 : -1}
+                  className="cn-tab"
+                  data-on={tab === id || undefined}
+                  onClick={() => setTab(id)}
+                >
                   {label}
                 </button>
               ))}
             </div>
-            <div className="cn-pbody">
-              {tab === "lat" && <Latency c={c} sel={sel} onPick={setPicked} />}
+            <div className="cn-pbody" id="cn-tabpanel" role="tabpanel" aria-labelledby={`cn-tab-${tab}`} tabIndex={0}>
+              {tab === "lat" && <Latency c={c} sel={sel} onPick={setPicked} agent={agent} />}
               {tab === "state" && (
                 <>
                   <Block title="What the code holds">
-                    <CodeState snap={c.snap} />
+                    <CodeState snap={c.snap} c={c} />
                   </Block>
                   <Block title="Legal opening">
                     <Opening snap={c.snap} />
@@ -134,110 +186,151 @@ export function ConsoleView({ c, switcher }: { c: CallModel; switcher: React.Rea
             </div>
           </section>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
 
-function Header({ c }: { c: CallModel }) {
+// The black call deck: who is called, the recording, the stage track and the measured waits.
+function Deck({ c, sel, onPick, agent }: { c: CallModel; sel: number; onPick: (i: number) => void; agent: string }) {
   const now = useNow(c, c.busy);
+  const len = c.busy ? now : c.length;
+  const cur = trackIndex(c.snap?.stage);
+  const first = c.lead.name.split(" ")[0];
   const o = c.summary?.overall;
   const p50 = o?.totalMs.p50 ?? null;
   const p95 = o?.totalMs.p95 ?? null;
   return (
-    <section className="cn-card">
+    <section className="cn-deck" aria-label="Call">
       <div className="cn-hdr">
-        <span className="cn-av cn-av-lg">{initials(c.lead.name)}</span>
+        <span className="cn-av cn-av-lg" aria-hidden="true">
+          {initials(c.lead.name)}
+        </span>
         <div className="cn-hdr-t">
           <h1>
             {c.lead.name}
-            <span className="cn-tag">Website form</span>
+            <span className="cn-chip">Website form</span>
           </h1>
           <p>
             “<bdi>{c.lead.message}</bdi>”
           </p>
         </div>
+        <Outcome c={c} />
       </div>
-      <div className="cn-stats">
-        <Stat label="Duration" value={c.phase === "idle" ? "–" : clock(c.busy ? now : c.length)} />
+
+      <div className="cn-rec">
+        <div className="cn-prow">
+          <div className="cn-ptime">
+            {c.busy && <i className="cn-live" aria-hidden="true" />}
+            <b>{clock(len)}</b>
+            <span>{c.busy ? "recording" : c.phase === "ended" ? "call length" : "no call yet"}</span>
+          </div>
+          <div className="cn-meters">
+            <span>
+              <i className="cn-dot" data-who="lead" />
+              {first}
+              <Meter who="lead" bars={8} />
+            </span>
+            <span>
+              <i className="cn-dot" data-who="omar" />
+              {agent}
+              <Meter who="omar" bars={8} />
+            </span>
+          </div>
+        </div>
+        <div className="cn-wave">
+          <Waveform c={c} height={96} />
+          {c.busy && <span className="cn-wph" style={{ left: `${waveX(c, now, now) * 100}%` }} aria-hidden="true" />}
+          {c.turns.map((t, i) =>
+            t.turn.totalMs != null ? (
+              <button
+                key={i}
+                type="button"
+                className="cn-mark"
+                data-sel={i === sel || undefined}
+                style={{ left: `${waveX(c, t.omarAt, now) * 100}%` }}
+                onClick={() => onPick(i)}
+                aria-pressed={i === sel}
+                aria-label={`Turn ${t.turn.turn}: ${t.turn.totalMs} ms, ${toneWord(tone(t.turn.totalMs)).toLowerCase()}`}
+                title={`Turn ${t.turn.turn} · ${ms(t.turn.totalMs)}`}
+              >
+                <Vx t={tone(t.turn.totalMs)} />
+              </button>
+            ) : null,
+          )}
+          {c.turns.length === 0 && !c.busy && (
+            <p className="cn-wave-empty">
+              The recording draws here as the call runs: {first} above the line, {agent} below.
+            </p>
+          )}
+        </div>
+        <ol className="cn-stages" aria-label="Call stages">
+          {TRACK.map((s, i) => {
+            const state = cur < 0 ? "todo" : i < cur || c.snap?.ended ? "done" : i === cur ? "now" : "todo";
+            return (
+              <li key={s.id} data-state={state} aria-current={state === "now" ? "step" : undefined}>
+                {state === "done" && <IconCheck />}
+                {s.label}
+              </li>
+            );
+          })}
+        </ol>
+      </div>
+
+      <dl className="cn-stats">
+        <Stat label="Duration" value={c.phase === "idle" ? "–" : clock(len)} />
         <Stat label="Replies measured" value={num(c.measured.length)} unit={`of ${c.turns.length} lines`} />
         <Stat label="Typical reply · p50" value={num(p50)} unit={p50 != null ? "ms" : undefined} badge={p50 == null ? undefined : p50 <= TARGET_MS ? "good" : "crit"} />
         <Stat label="Slow reply · p95" value={num(p95)} unit={p95 != null ? "ms" : undefined} badge={p95 == null ? undefined : p95 <= SLOW_MS ? "good" : "crit"} />
         <Stat label="Lines blocked" value={num(c.snap?.guardHits?.length ?? (c.snap ? 0 : null))} unit="by the guard" />
-      </div>
+      </dl>
     </section>
   );
+}
+
+// Right of the Lead: the stage while the call runs, the outcome when it ends.
+function Outcome({ c }: { c: CallModel }) {
+  const snap = c.snap;
+  if (snap?.ended) {
+    const word = shortStatus(snap.status);
+    const won = /booked|Qualified|link sent/i.test(word);
+    return (
+      <div className="cn-outcome" data-won={won || undefined}>
+        <span>Outcome</span>
+        <b>
+          {won && <IconCheck />}
+          {word}
+        </b>
+      </div>
+    );
+  }
+  if (c.busy && snap)
+    return (
+      <div className="cn-outcome" data-live>
+        <span>Stage now</span>
+        <b>
+          <i aria-hidden="true" />
+          {stageName(snap.stage)}
+        </b>
+      </div>
+    );
+  return null;
 }
 
 function Stat({ label, value, unit, badge }: { label: string; value: string; unit?: string; badge?: "good" | "crit" }) {
   return (
     <div className="cn-stat">
-      <span>{label}</span>
-      <b>
-        {value}
+      <dt>{label}</dt>
+      <dd>
+        <b>{value}</b>
         {unit && <small>{unit}</small>}
         {badge && <em data-tone={badge}>{badge === "good" ? "Pass" : "Over"}</em>}
-      </b>
+      </dd>
     </div>
   );
 }
 
-function Player({ c, sel, onPick }: { c: CallModel; sel: number; onPick: (i: number) => void }) {
-  const now = useNow(c, c.busy);
-  const len = c.busy ? now : c.length;
-  const cur = trackIndex(c.snap?.stage);
-  return (
-    <section className="cn-card cn-player">
-      <div className="cn-prow">
-        <div className="cn-ptime">
-          <b>{clock(len)}</b>
-          <span>{c.busy ? "recording" : c.phase === "ended" ? "call length" : "no call yet"}</span>
-        </div>
-        <div className="cn-meters">
-          <span>
-            <i className="cn-dot" data-who="lead" />
-            {c.lead.name.split(" ")[0]}
-            <Meter who="lead" bars={8} />
-          </span>
-          <span>
-            <i className="cn-dot" data-who="omar" />
-            Omar
-            <Meter who="omar" bars={8} />
-          </span>
-        </div>
-      </div>
-      <div className="cn-wave">
-        <Waveform c={c} height={92} />
-        {c.busy && <span className="cn-wph" style={{ left: `${waveX(c, now, now) * 100}%` }} aria-hidden="true" />}
-        {c.turns.map((t, i) =>
-          t.turn.totalMs != null ? (
-            <button
-              key={i}
-              type="button"
-              className="cn-mark"
-              data-tone={tone(t.turn.totalMs)}
-              data-sel={i === sel || undefined}
-              style={{ left: `${waveX(c, t.omarAt, now) * 100}%` }}
-              onClick={() => onPick(i)}
-              aria-label={`Turn ${t.turn.turn}: ${t.turn.totalMs} ms`}
-            />
-          ) : null,
-        )}
-        {c.turns.length === 0 && !c.busy && <p className="cn-wave-empty">The recording draws here as the call runs: the Lead above the line, Omar below.</p>}
-      </div>
-      <div className="cn-stages">
-        {TRACK.map((s, i) => (
-          <span key={s.id} data-state={cur < 0 ? "todo" : i < cur || c.snap?.ended ? "done" : i === cur ? "now" : "todo"}>
-            {(i < cur || c.snap?.ended) && <IconCheck />}
-            {s.label}
-          </span>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function Transcript({ c, sel, onPick }: { c: CallModel; sel: number; onPick: (i: number) => void }) {
+function Transcript({ c, sel, onPick, agent }: { c: CallModel; sel: number; onPick: (i: number) => void; agent: string }) {
   const box = useRef<HTMLDivElement>(null);
   const first = c.lead.name.split(" ")[0];
   useEffect(() => {
@@ -248,22 +341,46 @@ function Transcript({ c, sel, onPick }: { c: CallModel; sel: number; onPick: (i:
   const last = c.turns[c.turns.length - 1];
   const thinking = c.busy && !c.speaking && c.turns.length > 0 && last?.omarEnd != null;
   return (
-    <section className="cn-card cn-tr">
+    <section className="cn-card cn-tr" aria-labelledby="cn-tr-h">
       <div className="cn-trh">
-        <h2>Transcript</h2>
-        <span className="cn-tag">{c.turns.length} replies</span>
+        <h2 id="cn-tr-h">Transcript</h2>
+        <span className="cn-tag">
+          {c.turns.length} {c.turns.length === 1 ? "reply" : "replies"}
+        </span>
+        <span className="cn-trh-k">
+          <span>
+            <Vx t="good" />
+            within 0.9 s
+          </span>
+          <span>
+            <Vx t="warn" />
+            over 0.9 s
+          </span>
+          <span>
+            <Vx t="crit" />
+            over 1.5 s
+          </span>
+        </span>
       </div>
       <div className="cn-tlist" ref={box} aria-live="polite">
         {c.turns.length === 0 && !c.busy && (
           <div className="cn-tr-empty">
-            <p>
-              <b>No call yet.</b> Call {first} to talk to Omar with your microphone, or hear the sample call. Each of
-              Omar&apos;s replies shows how long the Lead waited for it.
-            </p>
+            <h3>Hear a full call in about two minutes</h3>
+            <ul>
+              <li>
+                <b>Listen.</b> {agent} calls {first}, gives the information asked for and tries to book a Discovery Call.
+              </li>
+              <li>
+                <b>Watch the wait.</b> Each of {agent}&apos;s replies shows how long the Lead waited, judged against 0.9 s.
+              </li>
+              <li>
+                <b>Open any reply.</b> The side panel splits that wait into its six parts.
+              </li>
+            </ul>
             <div>
-              <CallButton c={c} className="cn-btn cn-pri" />
-              <SampleButton c={c} className="cn-btn" />
+              <SampleButton c={c} className="cn-btn cn-pri" />
             </div>
+            <small>The sample is synthetic. To talk to {agent} yourself, use Call {first} at the top.</small>
           </div>
         )}
         {c.turns.map((t, i) => {
@@ -272,18 +389,8 @@ function Transcript({ c, sel, onPick }: { c: CallModel; sel: number; onPick: (i:
           return (
             <div key={t.turn.turn}>
               {div && <div className="cn-div">{div}</div>}
-              {t.turn.lead_text && (
-                <Msg who="lead" name={first ?? "Lead"} at={t.leadAt ?? t.omarAt} text={t.turn.lead_text} />
-              )}
-              <Msg
-                who="omar"
-                name="Omar"
-                at={t.omarAt}
-                text={t.turn.omar_text}
-                t={t}
-                sel={i === sel}
-                onClick={() => onPick(i)}
-              />
+              {t.turn.lead_text && <Msg who="lead" name={first ?? "Lead"} at={t.leadAt ?? t.omarAt} text={t.turn.lead_text} />}
+              <Msg who="omar" name={agent} at={t.omarAt} text={t.turn.omar_text} t={t} sel={i === sel} onClick={() => onPick(i)} />
               {t.steps.map((s) => (
                 <div key={`${s.at}-${s.event}`} className="cn-sys" data-by={s.by}>
                   <i />
@@ -296,8 +403,8 @@ function Transcript({ c, sel, onPick }: { c: CallModel; sel: number; onPick: (i:
           );
         })}
         {c.speaking?.who === "lead" && <Typing name={c.source === "live" ? "You" : (first ?? "Lead")} who="lead" />}
-        {thinking && <Typing name="Omar" who="omar" label="thinking" />}
-        {c.phase === "connecting" && <Typing name="Omar" who="omar" label="joining the call" />}
+        {thinking && <Typing name={agent} who="omar" label="thinking" />}
+        {c.phase === "connecting" && <Typing name={agent} who="omar" label="joining the call" />}
       </div>
     </section>
   );
@@ -308,8 +415,8 @@ function Msg({ who, name, at, text, t, sel, onClick }: { who: "lead" | "omar"; n
   return (
     <div className="cn-msg" data-who={who} data-sel={sel || undefined} data-fresh={t?.fresh || undefined} onClick={onClick}>
       <span className="cn-ts">{clock(at)}</span>
-      <span className="cn-av" data-who={who}>
-        {who === "omar" ? "O" : initials(name)}
+      <span className="cn-av" data-who={who} aria-hidden="true">
+        {initials(name) || "N"}
       </span>
       <div className="cn-msg-b">
         <div className="cn-who">
@@ -323,13 +430,16 @@ function Msg({ who, name, at, text, t, sel, onClick }: { who: "lead" | "omar"; n
         <div className="cn-lp">
           {total != null ? (
             <>
-              <button type="button" className="cn-badge" data-tone={tone(total)} onClick={onClick}>
+              <button type="button" className="cn-badge" data-tone={tone(total)} onClick={onClick} aria-pressed={sel} aria-label={`Turn ${t.turn.turn}: waited ${ms(total)}, ${toneWord(tone(total)).toLowerCase()}. Show the breakdown.`}>
+                <Vx t={tone(total)} />
                 {ms(total)}
               </button>
               <PartsBar turn={t.turn} scaleMs={2000} className="cn-mini" animate={t.fresh} />
             </>
           ) : (
-            <span className="cn-tag">Scripted</span>
+            <span className="cn-tag" title="Said from a script, so there is no LLM wait to measure">
+              Scripted
+            </span>
           )}
         </div>
       )}
@@ -341,8 +451,8 @@ function Typing({ name, who, label = "speaking" }: { name: string; who: "lead" |
   return (
     <div className="cn-msg cn-typing" data-who={who}>
       <span className="cn-ts" />
-      <span className="cn-av" data-who={who}>
-        {who === "omar" ? "O" : initials(name) || "Y"}
+      <span className="cn-av" data-who={who} aria-hidden="true">
+        {initials(name) || "Y"}
       </span>
       <div className="cn-msg-b">
         <div className="cn-who">{name}</div>
@@ -352,7 +462,6 @@ function Typing({ name, who, label = "speaking" }: { name: string; who: "lead" |
             <i />
             <i />
           </span>
-          <span className="sr-only">{label}</span>
           <span className="cn-typing-l">{label}</span>
         </p>
       </div>
@@ -360,7 +469,7 @@ function Typing({ name, who, label = "speaking" }: { name: string; who: "lead" |
   );
 }
 
-function Block({ title, sub, children }: { title: string; sub?: React.ReactNode; children: React.ReactNode }) {
+function Block({ title, sub, children }: { title: React.ReactNode; sub?: React.ReactNode; children: React.ReactNode }) {
   return (
     <div className="cn-block">
       <div className="cn-bh">
@@ -372,52 +481,62 @@ function Block({ title, sub, children }: { title: string; sub?: React.ReactNode;
   );
 }
 
-function Latency({ c, sel, onPick }: { c: CallModel; sel: number; onPick: (i: number) => void }) {
-  const o = c.summary?.overall;
-  const p50 = o?.totalMs.p50 ?? null;
-  const p95 = o?.totalMs.p95 ?? null;
+function Latency({ c, sel, onPick, agent }: { c: CallModel; sel: number; onPick: (i: number) => void; agent: string }) {
+  const p50 = c.summary?.overall.totalMs.p50 ?? null;
   const t = sel >= 0 ? c.turns[sel] : undefined;
+  const total = t?.turn.totalMs ?? null;
   const med = medianParts(c.turns);
   return (
     <>
-      <div className="cn-block">
-        <div className="cn-kpis">
-          <Kpi label="Typical reply · p50" v={p50} target={TARGET_MS} />
-          <Kpi label="Slow reply · p95" v={p95} target={SLOW_MS} />
-        </div>
-      </div>
-      <Block title="Delay per reply" sub="dashed line: 0.9 s target">
+      <Block title="Delay per reply" sub={c.measured.length ? "Pick a bar to open it" : undefined}>
         <Chart c={c} sel={sel} onPick={onPick} />
+        <div className="cn-key" aria-hidden="true">
+          <span data-line="good">0.9 s target</span>
+          <span data-line="crit">1.5 s slow</span>
+        </div>
       </Block>
       <Block
-        title={t ? `Turn ${t.turn.turn} breakdown` : "Reply breakdown"}
+        title={t && total != null ? `Turn ${t.turn.turn}` : "Reply breakdown"}
         sub={
-          t?.turn.totalMs != null && p50 != null ? (
-            <span className="cn-delta" data-tone={t.turn.totalMs <= p50 ? "good" : "warn"}>
-              {t.turn.totalMs <= p50 ? "" : "+"}
-              {Math.round(t.turn.totalMs - p50)} ms vs p50
+          total != null && p50 != null ? (
+            <span className="cn-delta">
+              {total <= p50 ? "−" : "+"}
+              {Math.abs(Math.round(total - p50))} ms vs p50
             </span>
           ) : undefined
         }
       >
-        {t?.turn.totalMs != null ? (
+        {t && total != null ? (
           <>
+            <div className="cn-read">
+              <b>
+                {num(total)}
+                <small>ms</small>
+              </b>
+              <em data-tone={tone(total)}>
+                <Vx t={tone(total)} />
+                {toneWord(tone(total))}
+              </em>
+            </div>
+            <p className="cn-read-q">
+              “<bdi>{t.turn.omar_text}</bdi>”
+            </p>
             <PartsBar turn={t.turn} className="cn-stack" animate={t.fresh} />
-            <PartList parts={partsOf(t.turn)} total={t.turn.totalMs} />
-            {t.heardMs != null && <p className="muted">≈ heard {t.heardMs} ms with network and audio buffer.</p>}
+            <PartList parts={partsOf(t.turn)} total={total} />
+            {t.heardMs != null && <p className="muted cn-heard">≈ heard {num(t.heardMs)} ms with network and audio buffer.</p>}
           </>
         ) : (
           <p className="muted">Pick a measured reply in the chart or the transcript.</p>
         )}
       </Block>
-      <Block title="Where the time goes" sub={med.length ? `median of each part, ${c.measured.length} replies` : undefined}>
+      <Block title="Where the time goes" sub={med.length ? `Median of each part, ${c.measured.length} replies` : undefined}>
         {med.length ? (
           <>
             <PartsBar parts={med} className="cn-stack" />
             <PartList parts={med} totalLabel="Sum of medians" />
           </>
         ) : (
-          <p className="muted">Appears after Omar&apos;s first measured reply.</p>
+          <p className="muted">Appears after {agent}&apos;s first measured reply.</p>
         )}
       </Block>
       {c.summary && Object.keys(c.summary.byStage).length > 0 && (
@@ -436,7 +555,10 @@ function Latency({ c, sel, onPick }: { c: CallModel; sel: number; onPick: (i: nu
                 <tr key={s}>
                   <th scope="row">{stageName(s)}</th>
                   <td>{v.n}</td>
-                  <td data-tone={tone(v.totalMs.p50)}>{num(v.totalMs.p50)}</td>
+                  <td data-tone={tone(v.totalMs.p50)}>
+                    <Vx t={tone(v.totalMs.p50)} />
+                    {num(v.totalMs.p50)}
+                  </td>
                   <td>{num(v.totalMs.p95)}</td>
                 </tr>
               ))}
@@ -449,34 +571,18 @@ function Latency({ c, sel, onPick }: { c: CallModel; sel: number; onPick: (i: nu
   );
 }
 
-function Kpi({ label, v, target }: { label: string; v: number | null; target: number }) {
-  const ok = v == null ? null : v <= target;
-  return (
-    <div className="cn-kpi">
-      <span>{label}</span>
-      <b>
-        {num(v)}
-        {v != null && <small>ms</small>}
-      </b>
-      <em>
-        Target {target.toLocaleString("en-US")} ms
-        {ok != null && <i data-tone={ok ? "good" : "crit"}>{ok ? "Pass" : "Over"}</i>}
-      </em>
-    </div>
-  );
-}
-
 function Chart({ c, sel, onPick }: { c: CallModel; sel: number; onPick: (i: number) => void }) {
   const W = 340;
-  const H = 132;
+  const H = 150;
   const pad = 26;
+  const top = 16;
   const max = 2000;
   const n = Math.max(c.turns.length, 8);
   const step = (W - pad) / n;
-  const bw = Math.min(22, step * 0.6);
-  const y = (v: number) => H - 18 - (Math.min(v, max) / max) * (H - 28);
+  const bw = Math.min(20, step * 0.56);
+  const y = (v: number) => H - 18 - (Math.min(v, max) / max) * (H - 18 - top);
   return (
-    <svg className="cn-chart" viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Delay of each reply in milliseconds">
+    <svg className="cn-chart" viewBox={`0 0 ${W} ${H}`} role="group" aria-label="Delay of each reply in milliseconds">
       {[0, 500, 1000, 1500, 2000].map((m) => (
         <g key={m}>
           <line x1={pad} x2={W} y1={y(m)} y2={y(m)} className="cn-grid" />
@@ -486,19 +592,42 @@ function Chart({ c, sel, onPick }: { c: CallModel; sel: number; onPick: (i: numb
         </g>
       ))}
       <line x1={pad} x2={W} y1={y(TARGET_MS)} y2={y(TARGET_MS)} className="cn-target" />
+      <line x1={pad} x2={W} y1={y(SLOW_MS)} y2={y(SLOW_MS)} className="cn-slow" />
       {c.turns.map((t, i) => {
         const cx = pad + step * i + step / 2;
-        if (t.turn.totalMs == null)
-          return <line key={i} x1={cx - 6} x2={cx + 6} y1={y(0) - 1} y2={y(0) - 1} className="cn-scr" />;
+        const total = t.turn.totalMs;
+        if (total == null) return <line key={i} x1={cx - 6} x2={cx + 6} y1={y(0) - 1} y2={y(0) - 1} className="cn-scr" />;
         let acc = 0;
+        const on = i === sel;
         return (
-          <g key={i} className="cn-bar" data-dim={(sel >= 0 && sel !== i) || undefined} onClick={() => onPick(i)}>
+          <g
+            key={i}
+            className="cn-bar"
+            data-dim={(sel >= 0 && !on) || undefined}
+            role="button"
+            tabIndex={0}
+            aria-label={`Turn ${t.turn.turn}: ${total} ms`}
+            aria-pressed={on}
+            onClick={() => onPick(i)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                onPick(i);
+              }
+            }}
+          >
+            <title>{`Turn ${t.turn.turn} · ${ms(total)}`}</title>
+            <rect x={cx - step / 2} y={0} width={step} height={H} className="cn-hit" />
             {partsOf(t.turn).map((p) => {
               const r = <rect key={p.key} x={cx - bw / 2} y={y(acc + p.ms)} width={bw} height={Math.max(0, y(acc) - y(acc + p.ms))} className={`p-${p.cls}`} />;
               acc += p.ms;
               return r;
             })}
-            <rect x={cx - step / 2} y={0} width={step} height={H} fill="transparent" />
+            {on && (
+              <text x={cx} y={y(total) - 5} textAnchor="middle" className="cn-val">
+                {num(total)}
+              </text>
+            )}
           </g>
         );
       })}
@@ -515,20 +644,25 @@ function Events({ c }: { c: CallModel }) {
   const all = c.turns.flatMap((t) => t.steps.map((s) => ({ s, at: t.omarAt, n: t.turn.turn })));
   if (!all.length) return <p className="muted">Events the code records, and the ones the LLM reports, appear here.</p>;
   return (
-    <ul className="cn-evl">
-      {all.map(({ s, at, n }) => (
-        <li key={`${s.at}-${s.event}`} data-by={s.by}>
-          <span className="cn-ts">{clock(at)}</span>
-          <i />
-          <span>
-            {stepWord(s)}
-            <small>
-              Turn {n} · {s.by === "llm" ? "reported by LLM" : "set by code"}
-            </small>
-          </span>
-        </li>
-      ))}
-    </ul>
+    <>
+      <div className="cn-key cn-ev-key" aria-hidden="true">
+        <span data-by="code">set by code</span>
+        <span data-by="llm">reported by LLM</span>
+      </div>
+      <ul className="cn-evl">
+        {all.map(({ s, at, n }) => (
+          <li key={`${s.at}-${s.event}`} data-by={s.by}>
+            <span className="cn-ts">{clock(at)}</span>
+            <i />
+            <span>
+              {stepWord(s)}
+              <small>
+                Turn {n} · {s.by === "llm" ? "reported by LLM" : "set by code"}
+              </small>
+            </span>
+          </li>
+        ))}
+      </ul>
+    </>
   );
 }
-

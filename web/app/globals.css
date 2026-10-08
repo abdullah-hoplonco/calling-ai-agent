@@ -328,6 +328,254 @@ bdi {
   font-size: 0.75rem;
 }
 
+/* LLM switch (which model speaks on the next call) */
+.llm-switch {
+  display: grid;
+  gap: 0.35rem;
+  padding-top: 0.5rem;
+  font-size: 0.8125rem;
+}
+.llm-legend {
+  font-weight: 600;
+  font-size: 0.75rem;
+  color: var(--tx2);
+}
+.llm-seg {
+  display: inline-flex;
+  width: fit-content;
+  border: 1px solid var(--line2);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.llm-seg label {
+  position: relative;
+  padding: 0.3rem 0.75rem;
+  cursor: pointer;
+  color: var(--tx2);
+  border-left: 1px solid var(--line2);
+}
+.llm-seg label:first-child {
+  border-left: 0;
+}
+.llm-seg label[data-on] {
+  background: var(--ac);
+  color: #fff;
+  font-weight: 600;
+}
+.llm-seg input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  cursor: pointer;
+}
+.llm-seg label:has(input:focus-visible) {
+  outline: 2px solid var(--ac);
+  outline-offset: -2px;
+}
+.llm-seg label:has(input:disabled) {
+  cursor: default;
+  opacity: 0.7;
+}
+.llm-note {
+  color: var(--tx3);
+  font-size: 0.75rem;
+  max-width: 34ch;
+}
+
+.llm-key {
+  display: grid;
+  gap: 0.4rem;
+  margin-top: 0.35rem;
+}
+.llm-key label:first-child {
+  display: grid;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--tx2);
+}
+.llm-key input[type="password"] {
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 400;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid var(--line2);
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  max-width: 22rem;
+}
+.llm-key input[type="password"]:focus-visible {
+  outline: 2px solid var(--ac);
+  outline-offset: 1px;
+}
+.llm-remember {
+  display: flex;
+  gap: 0.45rem;
+  align-items: center;
+  font-size: 0.75rem;
+  color: var(--tx2);
+}
+.llm-remember input {
+  accent-color: var(--ac);
+}
+.llm-status {
+  font-size: 0.75rem;
+  color: var(--crit, #c62828);
+}
+.llm-status[data-ok] {
+  color: var(--good, #15803d);
+}
+.llm-usage,
+.llm-compare {
+  margin-top: 0.9rem;
+  display: grid;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+}
+.llm-usage-head {
+  margin: 0;
+  color: var(--tx2);
+}
+.llm-usage-head b {
+  color: inherit;
+  margin-right: 0.35rem;
+}
+.llm-usage table,
+.llm-compare table {
+  border-collapse: collapse;
+  width: 100%;
+  font-variant-numeric: tabular-nums;
+}
+.llm-usage th,
+.llm-usage td,
+.llm-compare th,
+.llm-compare td {
+  text-align: left;
+  padding: 0.25rem 0.4rem 0.25rem 0;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+.llm-usage thead th,
+.llm-compare thead th {
+  color: var(--tx3);
+  font-weight: 600;
+}
+.llm-clear {
+  justify-self: start;
+  font: inherit;
+  font-size: 0.75rem;
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--ac);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.voice-switch {
+  display: grid;
+  gap: 0.35rem;
+  padding-top: 0.6rem;
+  font-size: 0.8125rem;
+}
+.voice-list {
+  display: grid;
+  gap: 0.25rem;
+}
+.voice-stability {
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.4rem 0.1rem 0;
+}
+.voice-stability > span {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  color: var(--tx2);
+}
+.voice-stability > span b {
+  color: var(--tx);
+  font-variant-numeric: tabular-nums;
+}
+.voice-stability > span small {
+  margin-left: auto;
+  font-weight: 600;
+  color: var(--ac);
+}
+.voice-stability input[type="range"] {
+  width: 100%;
+  accent-color: var(--ac);
+}
+.voice-group {
+  display: grid;
+  gap: 0.25rem;
+}
+.voice-group + .voice-group {
+  margin-top: 0.4rem;
+}
+.voice-engine {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--tx3);
+}
+.voice-list label em + em {
+  margin-left: 0.4rem;
+}
+.voice-list label {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  padding: 0.3rem 0.55rem;
+  border: 1px solid var(--line2);
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--tx2);
+}
+.voice-list label b {
+  color: var(--tx);
+  font-weight: 600;
+}
+.voice-list label span {
+  font-size: 0.75rem;
+}
+.voice-list label em {
+  margin-left: auto;
+  font-style: normal;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--ac);
+}
+.voice-list label[data-top] {
+  border-color: var(--ac);
+}
+.voice-list label[data-on] {
+  background: var(--ac);
+  border-color: var(--ac);
+  color: #fff;
+}
+.voice-list label[data-on] b,
+.voice-list label[data-on] em {
+  color: #fff;
+}
+.voice-list input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  cursor: pointer;
+}
+.voice-list label:has(input:focus-visible) {
+  outline: 2px solid var(--ac);
+  outline-offset: 1px;
+}
+.voice-list label:has(input:disabled) {
+  cursor: default;
+  opacity: 0.7;
+}
+
 /* buttons shared by every theme (themes add size and color) */
 .b-call,
 .b-end,

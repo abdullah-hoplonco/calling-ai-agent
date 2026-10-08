@@ -9,7 +9,7 @@ from typing import Any
 
 from livekit.agents import AgentSession, llm
 
-from omar_core import DEFAULT_LEAD, Lead
+from omar_core import DEFAULT_LEAD, CallConfig, Lead
 from omar_core.fake_calendar import DUBAI, FakeCalendar
 from omar_voice.agent import OmarAgent
 from omar_voice.controller import CallController
@@ -44,9 +44,12 @@ async def converse(
     lead: Lead = DEFAULT_LEAD,
     taken_rate: float = 0.0,
     turn_pause_s: float = 0.0,
+    config: CallConfig | None = None,
 ) -> Transcript:
     controller = CallController(
-        lead=lead, calendar=FakeCalendar(now=NOW, busy_ratio=0.3, taken_rate=taken_rate)
+        lead=lead,
+        calendar=FakeCalendar(now=NOW, busy_ratio=0.3, taken_rate=taken_rate),
+        config=config or CallConfig(),
     )
     agent = OmarAgent(controller, Settings(), RecordingBus())  # type: ignore[arg-type]
     omar: list[str] = []

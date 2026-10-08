@@ -13,6 +13,7 @@ from typing import Any
 
 from omar_core import (
     STAGE_LABEL,
+    CallConfig,
     CallState,
     Effects,
     Event,
@@ -24,6 +25,7 @@ from omar_core import (
 )
 from omar_core import start as start_call
 from omar_core.fake_calendar import FakeCalendar
+from omar_core.lang import detect
 from omar_core.prompts import event_menu, instructions
 
 
@@ -68,11 +70,12 @@ class Reply:
 class CallController:
     lead: Lead
     calendar: FakeCalendar = field(default_factory=FakeCalendar)
+    config: CallConfig = field(default_factory=CallConfig)
     state: CallState = field(init=False)
     steps: list[Step] = field(default_factory=list)
 
     def __post_init__(self) -> None:
-        self.state = start_call(self.lead)
+        self.state = start_call(self.lead, self.config)
 
     # -- queries ----------------------------------------------------------
 
@@ -102,6 +105,7 @@ class CallController:
             "chosen": s.chosen,
             "bookingConfirmed": s.booking_confirmed,
             "aiDisclosed": s.ai_disclosed,
+            "language": s.language,
             "opening": {
                 "companyAndPurpose": s.opening.company_and_purpose,
                 "recordingNotice": s.opening.recording_notice,
@@ -145,6 +149,16 @@ class CallController:
         if event not in allowed(self.state):
             return Reply(error=f"'{event.value}' does not apply in stage {self.state.stage.value}.")
         return self._apply(event, None, by="code")
+
+    def note_language(self, text: str) -> bool:
+        """Follow the Lead's language (Hindi calls only). True if it changed."""
+        if not self.state.config.hindi:
+            return False
+        lang = detect(text)
+        if lang is None or lang == self.state.language:
+            return False
+        self.state.language = lang
+        return True
 
     def line_dropped(self) -> None:
         if Event.LINE_DROPS in allowed(self.state):

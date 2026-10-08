@@ -1,6 +1,6 @@
 "use client";
 
-// Feeds a live LiveKit call into the call model: worker data messages, Omar's state,
+// Feeds a live LiveKit call into the call model: worker data messages, Nimra's state,
 // audio levels and the network numbers for "heard" delay. Renders nothing.
 
 import { useDataChannel, useLocalParticipant, useTrackVolume, useVoiceAssistant } from "@livekit/components-react";
@@ -31,7 +31,7 @@ export function LiveBridge({ c }: { c: CallModel }) {
     levels.omar = omar;
   }, [omar]);
 
-  // Network between this browser and LiveKit for Omar's audio, from WebRTC statistics:
+  // Network between this browser and LiveKit for Nimra's audio, from WebRTC statistics:
   // round-trip time of the selected connection and the average jitter-buffer delay.
   const track = audioTrack?.publication?.track;
   useEffect(() => {

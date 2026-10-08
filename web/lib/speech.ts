@@ -1,4 +1,4 @@
-// Browser voices for the spoken sample call. Live calls use Omar's real voice from LiveKit.
+// Browser voices for the spoken sample call. Live calls use Nimra's real voice from LiveKit.
 
 type Voices = { omar: SpeechSynthesisVoice | null; lead: SpeechSynthesisVoice | null };
 
@@ -8,12 +8,12 @@ function pick() {
   if (typeof window === "undefined" || !window.speechSynthesis) return;
   const en = window.speechSynthesis.getVoices().filter((v) => /^en/i.test(v.lang));
   const omar =
-    en.find((v) => /Daniel|UK English Male|Arthur|Oliver|George|Ryan/i.test(v.name)) ??
+    en.find((v) => /Samantha|Karen|Moira|Tessa|Serena|Kate|Libby|Sonia|Fiona|Martha|Victoria|UK English Female|US English Female|female/i.test(v.name)) ??
     en.find((v) => /GB/i.test(v.lang)) ??
     en[0] ??
     null;
   const lead =
-    en.find((v) => v !== omar && /Rishi|Aaron|Fred|Alex|Tom|Reed|US English|Eddy/i.test(v.name)) ??
+    en.find((v) => v !== omar && /Rishi|Daniel|Aaron|Fred|Alex|Tom|Reed|Arthur|Oliver|George|UK English Male|US English Male|Eddy/i.test(v.name)) ??
     en.find((v) => v !== omar && !/GB/i.test(v.lang)) ??
     en.find((v) => v !== omar) ??
     omar;

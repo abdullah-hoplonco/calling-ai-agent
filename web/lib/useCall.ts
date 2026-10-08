@@ -3,12 +3,14 @@
 // One call, read the same way by every theme: live (LiveKit) or the spoken sample.
 // Times on the timeline are ms since the call started, on the browser's clock.
 
-import { Room, RoomEvent } from "livekit-client";
+import { type Participant, Room, RoomEvent } from "livekit-client";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import { LEADS, type DemoLead } from "@/lib/leads";
+import { LEADS, type DemoLead, type LlmChoice } from "@/lib/leads";
 import { levels } from "@/lib/levels";
+import { clearHistory, type LlmSample, loadHistory, saveCall } from "@/lib/llmHistory";
 import { playSample } from "@/lib/replay";
+import { DEFAULT_STABILITY, DEFAULT_VOICE } from "@/lib/voices";
 import { speechMs } from "@/lib/speech";
 import type { CallSnapshot, LatencyMessage, LatencySummary, Step } from "@/lib/types";
 
@@ -31,10 +33,98 @@ export type Net = { rttMs: number; jitterMs: number };
 
 export type CallModel = ReturnType<typeof useCall>;
 
+const KEY_STORE = "omar.deepseekKey";
+
+function waitForAgent(room: Room, ms = 20000): Promise<Participant | null> {
+  const present = [...room.remoteParticipants.values()].find((p) => p.isAgent);
+  if (present) return Promise.resolve(present);
+  return new Promise((resolve) => {
+    const on = (p: Participant) => {
+      if (p.isAgent) done(p);
+    };
+    const done = (p: Participant | null) => {
+      room.off(RoomEvent.ParticipantConnected, on);
+      window.clearTimeout(timer);
+      resolve(p);
+    };
+    const timer = window.setTimeout(() => done(null), ms);
+    room.on(RoomEvent.ParticipantConnected, on);
+  });
+}
+
+// Sends the pasted DeepSeek key straight to the agent (LiveKit RPC). It is not put in the
+// call token or the dispatch data, and our token route never sees it.
+async function sendKey(room: Room, key: string, report: (s: { ok: boolean; text: string }) => void): Promise<void> {
+  report({ ok: true, text: "Sending the DeepSeek key to Nimra…" });
+  const agent = await waitForAgent(room);
+  if (!agent) return report({ ok: false, text: "Nimra did not join, so the key was not sent." });
+  try {
+    const raw = await room.localParticipant.performRpc({
+      destinationIdentity: agent.identity,
+      method: "omar.set_deepseek_key",
+      payload: JSON.stringify({ key }),
+      responseTimeout: 15000,
+    });
+    const r = JSON.parse(raw) as { ok: boolean; llm?: string; error?: string; note?: string };
+    report(r.ok ? { ok: true, text: r.note ?? `Using ${r.llm}` } : { ok: false, text: r.error ?? "Key refused." });
+  } catch (e) {
+    report({ ok: false, text: `Could not send the key: ${e instanceof Error ? e.message : String(e)}` });
+  }
+}
+
 export function useCall() {
   const room = useMemo(() => new Room({ adaptiveStream: true, dynacast: true }), []);
   const [leadId, setLeadId] = useState(LEADS[0]!.id);
   const [old, setOld] = useState(false);
+  const [hindi, setHindi] = useState(false); // the Lead may speak Hindi; the agent answers in it
+  const [llm, setLlm] = useState<LlmChoice>("auto");
+  const [voiceId, setVoiceId] = useState(DEFAULT_VOICE);
+  const [stability, setStability] = useState(DEFAULT_STABILITY); // ElevenLabs: lower = more emotion
+  // DeepSeek key pasted on the page: sent to the agent by RPC for one call, never to our server.
+  const [deepseekKey, setDeepseekKeyState] = useState("");
+  const [rememberKey, setRememberKeyState] = useState(false);
+  const [keyStatus, setKeyStatus] = useState<{ ok: boolean; text: string } | null>(null);
+  const [history, setHistory] = useState<LlmSample[]>([]);
+  const savedCall = useRef(false);
+
+  useEffect(() => {
+    setHistory(loadHistory());
+    try {
+      const k = window.localStorage.getItem(KEY_STORE);
+      if (k) {
+        setDeepseekKeyState(k);
+        setRememberKeyState(true);
+      }
+    } catch {
+      /* storage blocked */
+    }
+  }, []);
+
+  const setDeepseekKey = useCallback(
+    (k: string) => {
+      setDeepseekKeyState(k);
+      setKeyStatus(null);
+      try {
+        if (rememberKey && k) window.localStorage.setItem(KEY_STORE, k);
+      } catch {
+        /* storage blocked */
+      }
+    },
+    [rememberKey],
+  );
+
+  const setRememberKey = useCallback(
+    (on: boolean) => {
+      setRememberKeyState(on);
+      try {
+        if (on && deepseekKey) window.localStorage.setItem(KEY_STORE, deepseekKey);
+        if (!on) window.localStorage.removeItem(KEY_STORE);
+      } catch {
+        /* storage blocked */
+      }
+    },
+    [deepseekKey],
+  );
   const [phase, setPhase] = useState<Phase>("idle");
   const [source, setSource] = useState<"live" | "sample" | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -88,7 +178,7 @@ export function useCall() {
     setSnap(s);
   }, []);
 
-  // A reply arrives when Omar's first audio plays; the worker sends the same turn again
+  // A reply arrives when Nimra's first audio plays; the worker sends the same turn again
   // with final numbers, so rows are updated by turn number, never appended twice.
   const onLatency = useCallback(
     (m: LatencyMessage) => {
@@ -293,7 +383,7 @@ export function useCall() {
       const res = await fetch("/api/token", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ leadId, old }),
+        body: JSON.stringify({ leadId, old, llm, voice: voiceId, stability, lang: hindi ? "hi" : "en" }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? `Token request failed (${res.status}).`);
@@ -301,6 +391,9 @@ export function useCall() {
       await room.localParticipant.setMicrophoneEnabled(true);
       t0.current = performance.now();
       setPhase("live");
+      savedCall.current = false;
+      setKeyStatus(null);
+      if (llm !== "groq" && deepseekKey.trim()) void sendKey(room, deepseekKey.trim(), setKeyStatus);
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
       setError(
@@ -313,7 +406,20 @@ export function useCall() {
       setPhase("error");
       room.disconnect();
     }
-  }, [leadId, old, room, reset]);
+  }, [leadId, old, hindi, llm, voiceId, stability, deepseekKey, room, reset]);
+
+  // keep each finished live call in the Groq-vs-DeepSeek comparison (this browser only)
+  useEffect(() => {
+    if (phase === "ended" && source === "live" && !savedCall.current) {
+      savedCall.current = true;
+      setHistory(saveCall(turns.map((r) => r.turn)));
+    }
+  }, [phase, source, turns]);
+
+  const resetHistory = useCallback(() => {
+    clearHistory();
+    setHistory([]);
+  }, []);
 
   const hangUp = useCallback(() => {
     room.disconnect();
@@ -341,6 +447,21 @@ export function useCall() {
     setLeadId,
     old,
     setOld,
+    hindi,
+    setHindi,
+    llm,
+    setLlm,
+    voiceId,
+    setVoiceId,
+    stability,
+    setStability,
+    deepseekKey,
+    setDeepseekKey,
+    rememberKey,
+    setRememberKey,
+    keyStatus,
+    history,
+    resetHistory,
     snap,
     turns,
     measured,

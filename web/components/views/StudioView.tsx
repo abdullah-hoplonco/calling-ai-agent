@@ -40,7 +40,7 @@ export function StudioView({ c, switcher }: { c: CallModel; switcher: React.Reac
           <WaitEditor c={c} t={turn} />
         </Panel>
         <Panel title="Code state" sub="what the code enforces">
-          <CodeState snap={c.snap} />
+          <CodeState snap={c.snap} c={c} />
           <h3 className="st-h3">Guard</h3>
           <GuardList snap={c.snap} />
           <ConfigLine snap={c.snap} />
@@ -59,7 +59,7 @@ function Transport({ c, switcher }: { c: CallModel; switcher: React.ReactNode })
     <header className="st-tp">
       <div className="st-brand">
         <Image src="/hoplon-logo.png" alt="Hoplon & Co" width={112} height={20} priority />
-        <span>Talk to Omar</span>
+        <span>Talk to Nimra</span>
       </div>
       <div className="st-btns">
         <CallButton c={c} className="st-b" />
@@ -171,7 +171,7 @@ function Arrangement({ c, sel, onPick }: { c: CallModel; sel: number; onPick: (i
         <div className="st-th" style={{ height: laneH }}>
           <span className="st-sw-c" data-who="omar" />
           <div>
-            <b>Omar</b>
+            <b>Nimra</b>
             <small>AI agent · en-GB</small>
           </div>
           <Meter who="omar" bars={8} />
@@ -180,7 +180,7 @@ function Arrangement({ c, sel, onPick }: { c: CallModel; sel: number; onPick: (i
           <span className="st-sw-c" data-who="gap" />
           <div>
             <b>Wait</b>
-            <small>Lead stops → Omar speaks</small>
+            <small>Lead stops → Nimra speaks</small>
           </div>
         </div>
         <div className="st-th st-th-ev">
@@ -269,7 +269,7 @@ function Region({ s, h, sel, onPick }: { s: Span; h: number; sel: boolean; onPic
       style={{ left: px(s.a), width: w }}
       onClick={() => s.i >= 0 && onPick(s.i)}
       tabIndex={s.i >= 0 ? 0 : -1}
-      aria-label={`${s.who === "lead" ? "Lead" : "Omar"}: ${s.text}`}
+      aria-label={`${s.who === "lead" ? "Lead" : "Nimra"}: ${s.text}`}
     >
       <span className="st-rg-hd">{s.text}</span>
       <svg viewBox={`0 0 ${bucket} ${h}`} width={bucket} height={h} preserveAspectRatio="none" aria-hidden="true">
@@ -334,9 +334,9 @@ function EmptyState({ c }: { c: CallModel }) {
   return (
     <div className="st-empty">
       <div className="st-empty-card">
-        <h1>Talk to Omar</h1>
+        <h1>Talk to Nimra</h1>
         <p>
-          Omar is an AI calling agent. He phones a warm Lead, answers questions and books a Discovery Call. Every reply is
+          Nimra is an AI calling agent. She phones a warm Lead, answers questions and books a Discovery Call. Every reply is
           timed: this timeline shows each wait, split into its parts.
         </p>
         <LeadPicker c={c} compact />
@@ -363,7 +363,7 @@ function Panel({ title, sub, children }: { title: string; sub?: string; children
 }
 
 function Inspector({ c, t }: { c: CallModel; t: TurnView | undefined }) {
-  if (!t) return <p className="muted">Each reply appears here as Omar speaks. Click any region on the timeline to inspect it.</p>;
+  if (!t) return <p className="muted">Each reply appears here as Nimra speaks. Click any region on the timeline to inspect it.</p>;
   return (
     <div className="st-ins">
       <p className="st-line" data-who="lead">
@@ -371,7 +371,7 @@ function Inspector({ c, t }: { c: CallModel; t: TurnView | undefined }) {
         {t.turn.lead_text || <em>(picks up the phone)</em>}
       </p>
       <p className="st-line" data-who="omar">
-        <span>OMAR</span>
+        <span>NIMRA</span>
         <span>
           {t.turn.omar_text}
           {t.turn.interrupted && <span className="st-cut">cut off by the Lead</span>}

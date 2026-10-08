@@ -34,7 +34,7 @@ def test_legal_opening_order_and_wording():
         s.opening.company_and_purpose and s.opening.recording_notice and s.opening.asked_to_continue
     )
     line = fx.say
-    company = line.index("Omar from Hoplon and Co")
+    company = line.index("Nimra from Hoplon and Co")
     purpose = line.index("so I'm calling with the information you asked for")
     recording = line.index("this call is recorded")
     ask = line.index("Is now a good time")
@@ -59,13 +59,23 @@ def test_info_cannot_be_reached_before_lead_agrees():
     assert E.LEAD_TURN not in reportable(s)
 
 
-def test_two_rapport_turns_before_intent_probe():
+def test_rapport_turns_before_intent_probe():
     s = to_info()
-    s, fx = transition(s, E.LEAD_TURN)
-    assert s.stage is Stage.INFO and fx.guide is None
+    for _ in range(s.config.min_rapport_turns - 1):
+        s, fx = transition(s, E.LEAD_TURN)
+        assert s.stage is Stage.INFO and fx.guide is None
     s, fx = transition(s, E.LEAD_TURN)
     assert s.stage is Stage.INTENT
     assert "move ahead" in fx.guide
+
+
+def test_persona_name_is_config():
+    from omar_core import CallConfig
+
+    _, fx = run(
+        E.ANSWERED, E.CONFIRM_IDENTITY, state=start(DEFAULT_LEAD, CallConfig(agent_name="Sara"))
+    )
+    assert "this is Sara from Hoplon and Co" in fx.say
 
 
 @pytest.mark.parametrize("event", [E.ASK_PRICE, E.ASK_MANAGER, E.INTENT_YES])
@@ -87,7 +97,8 @@ def test_ask_manager_uses_manager_wording():
 
 
 def test_two_objections_handled_third_parks():
-    s, _ = run(E.LEAD_TURN, E.LEAD_TURN, state=to_info())
+    s = to_info()
+    s, _ = run(*[E.LEAD_TURN] * s.config.min_rapport_turns, state=s)
     s, fx1 = transition(s, E.OBJECTION)
     s, fx2 = transition(s, E.OBJECTION)
     assert s.stage is Stage.INTENT and fx1.guide and fx2.guide

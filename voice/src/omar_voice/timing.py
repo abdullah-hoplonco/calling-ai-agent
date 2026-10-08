@@ -62,6 +62,18 @@ class LlmRequest:
     first_token: float | None = None  # first text or tool-call chunk from the model
     end: float | None = None
     tool_call: bool = False
+    # preemptive draft: started before the turn was final (see OmarAgent.llm_node)
+    early: bool = False
+    user_id: str | None = None  # the Lead message this request answers
+    first_out: float | None = None  # first guarded sentence of this request
+    cancelled: bool = False  # stopped before its stream ended
+    # from LiveKit's LLM metrics for this request (set when the request finishes)
+    provider: str | None = None  # "groq" | "deepseek"
+    model: str | None = None
+    prompt_tokens: int = 0
+    completion_tokens: int = 0
+    cost_usd: float = 0.0
+    price_band: str | None = None
 
 
 @dataclass
@@ -72,7 +84,8 @@ class TurnMarks:
     user_end: float | None = None  # end of the Lead's last word
     user_end_source: str = "none"  # "words" | "livekit" | "none"
     stt_final: float | None = None  # final transcript reached the worker
-    commit: float | None = None  # turn committed: first llm_node call for this turn
+    commit: float | None = None  # turn committed: on_user_turn_completed (voice) or llm_node
+    end_of_speech: float | None = None  # STT's END_OF_SPEECH reached the worker (diagnostic)
     requests: list[LlmRequest] = field(default_factory=list)
     first_out: float | None = None  # first guarded sentence handed to TTS
     playout: float | None = None  # Omar's first audio frame sent to the room
@@ -89,6 +102,12 @@ def _ms(a: float | None, b: float | None) -> float | None:
     return round(max(b - a, 0.0) * 1000, 1)
 
 
+def _not_before(t: float | None, floor: float | None) -> float | None:
+    if t is None or floor is None:
+        return t
+    return max(t, floor)
+
+
 def breakdown(m: TurnMarks) -> dict[str, Any]:
     """The named parts of one turn, in ms. Parts are consecutive, so they sum to the total.
 
@@ -98,6 +117,11 @@ def breakdown(m: TurnMarks) -> dict[str, Any]:
     if reply is None and m.requests:
         reply = m.requests[-1]
     tool_steps = [r for r in m.requests if r is not reply]
+    # a preemptive draft may have produced text before the commit: the Lead could not hear
+    # it earlier than the commit, so later marks are clamped to it and the parts still add up
+    floor = m.commit
+    first_token = _not_before(reply.first_token, floor) if reply else None
+    first_out = _not_before(m.first_out, first_token or floor)
 
     out: dict[str, Any] = {
         "userEndSource": m.user_end_source,
@@ -112,7 +136,22 @@ def breakdown(m: TurnMarks) -> dict[str, Any]:
         "ttsTtfbMs": round(m.tts_ttfb[0] * 1000, 1) if m.tts_ttfb else None,
         "ttsRealtimeFactor": round(m.tts_gen_s / m.tts_audio_s, 2) if m.tts_audio_s else None,
         "llmRequests": len(m.requests),
+        "llmProvider": (reply or (m.requests[-1] if m.requests else None)).provider
+        if (reply or m.requests)
+        else None,
+        "llmModel": (reply or (m.requests[-1] if m.requests else None)).model
+        if (reply or m.requests)
+        else None,
+        "promptTokens": sum(r.prompt_tokens for r in m.requests),
+        "completionTokens": sum(r.completion_tokens for r in m.requests),
+        "llmCostUsd": round(sum(r.cost_usd for r in m.requests), 8),
         "toolTurn": bool(tool_steps),
+        "preemptive": bool(reply and reply.early),
+        # how long before the commit the reply's LLM request started (preemptive head start)
+        "headStartMs": _ms(reply.start, m.commit) if reply and reply.early else None,
+        # diagnostics for the commit step: STT end of speech -> commit; commit -> LLM request
+        "eouWaitMs": _ms(m.end_of_speech, m.commit),
+        "llmStartMs": _ms(m.commit, reply.start) if reply and not reply.early else None,
         "scripted": m.scripted,
         "interrupted": m.interrupted,
     }
@@ -130,11 +169,11 @@ def breakdown(m: TurnMarks) -> dict[str, Any]:
         return _check(out)
     if tool_steps:
         out["toolMs"] = _ms(m.commit, reply.start)
-        out["llmMs"] = _ms(reply.start, reply.first_token)
+        out["llmMs"] = _ms(_not_before(reply.start, floor), first_token)
     else:
-        out["llmMs"] = _ms(m.commit, reply.first_token)
-    out["guardMs"] = _ms(reply.first_token, m.first_out)
-    out["ttsMs"] = _ms(m.first_out, m.playout)
+        out["llmMs"] = _ms(m.commit, first_token)
+    out["guardMs"] = _ms(first_token, first_out)
+    out["ttsMs"] = _ms(first_out, m.playout)
     return _check(out)
 
 

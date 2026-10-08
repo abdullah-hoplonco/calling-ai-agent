@@ -48,7 +48,8 @@ def test_rapport_counted_by_code():
     c = ctl()
     c.report("confirm_identity")
     c.report("good_time")
-    assert c.lead_turn() is False
+    for _ in range(c.state.config.min_rapport_turns - 1):
+        assert c.lead_turn() is False
     assert c.lead_turn() is True
     assert c.stage is Stage.INTENT
 
@@ -95,3 +96,22 @@ def test_line_drop_ends_live_call():
 def test_snapshot_shape():
     snap = ctl().snapshot()
     assert snap["stage"] == "IDENTITY" and snap["steps"][0]["event"] == "answered"
+
+
+def test_hindi_call_follows_the_lead_language():
+    from omar_core import CallConfig
+
+    c = CallController(lead=DEFAULT_LEAD, config=CallConfig(hindi=True))
+    c.start()
+    assert c.note_language("जी, बोल रहा हूँ") is True
+    assert c.state.language == "hi"
+    assert "बोल रही हूँ" in c.report("confirm_identity").say
+    assert c.note_language("ok") is False  # too short: keep Hindi
+    assert c.note_language("Sorry, can we switch to English?") is True
+    assert c.state.language == "en"
+
+
+def test_english_call_ignores_hindi():
+    c = ctl()
+    assert c.note_language("जी, बोल रहा हूँ") is False
+    assert c.state.language == "en"

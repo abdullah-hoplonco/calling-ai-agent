@@ -83,6 +83,8 @@ async def test_4_brush_offs_park():
             "Sure.",
             "We sell perfume online.",
             "Mostly Instagram right now.",
+            "It's just me and two staff.",
+            "We started last year.",
             "Just send me an email.",
             "Honestly, just email me the details.",
             "No, please just send an email.",
@@ -122,3 +124,29 @@ async def test_7_callback():
         lead=Lead(name="Rhea Fernandes", email="rhea.f@example.com"),
     )
     assert t.controller.state.status is LeadStatus.CALLBACK, t.controller.steps
+
+
+DEVANAGARI = re.compile(r"[ऀ-ॿ]")
+
+
+async def test_8_hindi_lead_gets_hindi_and_the_rules_hold():
+    from omar_core import CallConfig
+
+    t = await converse(
+        model(),
+        turn_pause_s=TURN_PAUSE_S,
+        config=CallConfig(hindi=True),
+        lead_lines=[
+            "जी, बोल रहा हूँ।",
+            "हाँ जी, बताइए।",
+            "हमारी चार laundry shops हैं, लोग pickup book करने के लिए बहुत call करते हैं।",
+            "ऐसा app बनाने में कितना खर्चा आएगा? और कितना time लगेगा?",
+        ],
+    )
+    replies = t.omar[2:]  # after the identity ask and the opening
+    assert t.controller.state.language == "hi", t.controller.steps
+    assert all(DEVANAGARI.search(r) for r in replies), replies
+    assert "Hoplon and Co" in t.omar[1]  # the opening keeps the name in English
+    assert not re.search(r"होपलॉन|हॉपलॉन", t.text)
+    assert not MONEY.search(t.text) and "हज़ार" not in t.text and "रुपये" not in t.text
+    print("\n".join(t.omar))

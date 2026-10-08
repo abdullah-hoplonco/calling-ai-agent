@@ -82,6 +82,8 @@ async def test_4_three_brush_offs_park():
             "Sure",
             "ok",
             "fine",
+            "we sell perfume",
+            "mostly online",
             "Just send me an email",
             "Just send me an email",
             "Just send me an email",

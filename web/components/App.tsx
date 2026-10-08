@@ -16,7 +16,7 @@ const isUi = (v: string | null): v is Ui => THEMES.some((t) => t.id === v);
 
 export function App() {
   const c = useCall();
-  const [ui, setUiState] = useState<Ui>("studio");
+  const [ui, setUiState] = useState<Ui>("console");
 
   useEffect(() => {
     const q = new URLSearchParams(window.location.search).get("ui");
@@ -50,7 +50,7 @@ export function App() {
       </div>
       {c.source === "live" && <LiveBridge c={c} />}
       <RoomAudioRenderer />
-      <StartAudio label="Allow audio to hear Omar" className="start-audio" />
+      <StartAudio label="Allow audio to hear Nimra" className="start-audio" />
     </RoomContext.Provider>
   );
 }
