@@ -5,7 +5,7 @@ import pytest
 from omar_core import DEFAULT_LEAD, CallConfig, Event, Stage, start, transition
 from omar_core.expressive import render
 from omar_core.guards import check_sentence, split_complete
-from omar_core.lang import BRAND, detect, fix_brand, gendered
+from omar_core.lang import BRAND, SPOKEN_BRAND, detect, fix_brand, gendered
 from omar_core.prompts import instructions
 from omar_core.quick_events import quick_event
 
@@ -39,8 +39,27 @@ def test_brand_stays_in_english(text):
     assert "होप" not in fix_brand(text) and "हॉप" not in fix_brand(text)
 
 
-def test_render_fixes_the_brand_for_tts():
-    assert render("[happy] मैं होपलॉन एंड को से हूँ।", "elevenlabs").endswith(f"{BRAND} से हूँ।")
+def test_gurmukhi_brand_goes_back_to_english():
+    assert fix_brand("ਮੈਂ ਹੋਪਲੋਨ ਐਂਡ ਕੋ ਤੋਂ ਹਾਂ।") == f"ਮੈਂ {BRAND} ਤੋਂ ਹਾਂ।"
+
+
+@pytest.mark.parametrize(
+    ("text", "spoken"),
+    [
+        # tested on eleven_v4_turbo: in English letters, a Hindi or Punjabi sentence
+        # says "Hopelin and Company" / "Hoplon Inc"; the native spelling sounds right
+        ("[happy] मैं होपलॉन एंड को से हूँ।", f"मैं {SPOKEN_BRAND['hi']} से हूँ।"),
+        ("मैं Hoplon & Co से Uzair बोल रहा हूँ।", f"मैं {SPOKEN_BRAND['hi']} से Uzair बोल रहा हूँ।"),
+        ("ਮੈਂ Hoplon and Co ਤੋਂ ਬੋਲ ਰਿਹਾ ਹਾਂ।", f"ਮੈਂ {SPOKEN_BRAND['pa']} ਤੋਂ ਬੋਲ ਰਿਹਾ ਹਾਂ।"),
+        ("Uzair from Hoplon & Co, hi!", f"Uzair from {BRAND}, hi!"),  # English: as written
+    ],
+)
+def test_elevenlabs_says_the_brand_in_the_sentence_script(text, spoken):
+    assert render(text, "elevenlabs").endswith(spoken)
+
+
+def test_other_engines_keep_the_brand_in_english():
+    assert render("मैं होपलॉन एंड को से हूँ।", "cartesia") == f"मैं {BRAND} से हूँ।"
 
 
 def test_gendered_verbs():
@@ -60,10 +79,10 @@ def test_scripted_lines_follow_the_lead():
 
 
 def test_male_agent_speaks_male_hindi():
-    s = hindi_call(agent_name="Hamza", agent_female=False)
+    s = hindi_call(agent_name="Uzair", agent_female=False)
     s.language = "hi"
     s, fx = transition(s, Event.CONFIRM_IDENTITY)
-    assert "Hamza बोल रहा हूँ" in fx.say
+    assert "Uzair बोल रहा हूँ" in fx.say
 
 
 def test_english_only_call_never_speaks_hindi():

@@ -6,7 +6,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-import { CallButton, CodeState, ConfigLine, ErrorNote, GuardList, LlmSwitch, MuteToggle, VoiceSwitch, Opening, SampleButton, statusWord } from "@/components/blocks";
+import { CallButton, CodeState, ConfigLine, ErrorNote, GuardList, LlmSwitch, MuteToggle, VoiceSwitch, Opening, SampleButton, agentOf, statusWord } from "@/components/blocks";
 import { HoplonLogo } from "@/components/HoplonLogo";
 import { IconCheck, IconChevron } from "@/components/icons";
 import { Meter, PartList, PartsBar, Waveform, medianParts, useNow, waveX } from "@/components/shared";
@@ -22,12 +22,6 @@ const TABS = [
   ["ev", "Events"],
 ] as const;
 type Tab = (typeof TABS)[number][0];
-
-// The sample is always Nimra; a live call takes the name of the picked voice.
-function agentOf(c: CallModel): string {
-  if (c.source === "sample") return "Nimra";
-  return VOICES.find((v) => v.id === c.voiceId)?.agent ?? "Nimra";
-}
 
 // The verdict as a shape as well as a colour: circle within 0.9 s, diamond over, triangle over 1.5 s.
 function Vx({ t }: { t: Tone | undefined }) {

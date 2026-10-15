@@ -5,7 +5,7 @@
 import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 
-import { CallButton, CodeState, ConfigLine, ErrorNote, GuardList, LeadPicker, MuteToggle, SampleButton, StepChips, statusWord } from "@/components/blocks";
+import { CallButton, CodeState, ConfigLine, ErrorNote, GuardList, LeadPicker, MuteToggle, SampleButton, StepChips, agentOf, statusWord } from "@/components/blocks";
 import { Meter, PartList, useNow, wavePath } from "@/components/shared";
 import { TRACK, trackIndex } from "@/lib/stages";
 import type { CallModel, TurnView } from "@/lib/useCall";
@@ -171,7 +171,7 @@ function Arrangement({ c, sel, onPick }: { c: CallModel; sel: number; onPick: (i
         <div className="st-th" style={{ height: laneH }}>
           <span className="st-sw-c" data-who="omar" />
           <div>
-            <b>Nimra</b>
+            <b>{agentOf(c)}</b>
             <small>AI agent · en-GB</small>
           </div>
           <Meter who="omar" bars={8} />
@@ -208,7 +208,7 @@ function Arrangement({ c, sel, onPick }: { c: CallModel; sel: number; onPick: (i
               {spans
                 .filter((s) => s.who === who)
                 .map((s) => (
-                  <Region key={s.key} s={s} h={laneH - 12 - 18} sel={s.i === sel} onPick={onPick} />
+                  <Region key={s.key} s={s} h={laneH - 12 - 18} sel={s.i === sel} onPick={onPick} agent={agentOf(c)} />
                 ))}
             </div>
           ))}
@@ -254,7 +254,7 @@ function Ruler({ width }: { width: number }) {
   return <div className="st-lane st-ruler">{ticks}</div>;
 }
 
-function Region({ s, h, sel, onPick }: { s: Span; h: number; sel: boolean; onPick: (i: number) => void }) {
+function Region({ s, h, sel, onPick, agent }: { s: Span; h: number; sel: boolean; onPick: (i: number) => void; agent: string }) {
   const w = Math.max(px(s.b - s.a), 6);
   const seed = s.i * 7 + (s.who === "omar" ? 31 : 3);
   const bucket = s.open ? Math.ceil(w / 120) * 120 : Math.round(w);
@@ -269,7 +269,7 @@ function Region({ s, h, sel, onPick }: { s: Span; h: number; sel: boolean; onPic
       style={{ left: px(s.a), width: w }}
       onClick={() => s.i >= 0 && onPick(s.i)}
       tabIndex={s.i >= 0 ? 0 : -1}
-      aria-label={`${s.who === "lead" ? "Lead" : "Nimra"}: ${s.text}`}
+      aria-label={`${s.who === "lead" ? "Lead" : agent}: ${s.text}`}
     >
       <span className="st-rg-hd">{s.text}</span>
       <svg viewBox={`0 0 ${bucket} ${h}`} width={bucket} height={h} preserveAspectRatio="none" aria-hidden="true">

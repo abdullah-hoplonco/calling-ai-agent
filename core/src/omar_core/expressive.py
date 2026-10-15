@@ -16,7 +16,7 @@ from __future__ import annotations
 
 import re
 
-from .lang import fix_brand
+from .lang import fix_brand, spoken_brand
 
 # moods the LLM may use: they suit a friendly call and both engines act them well
 EMOTIONS = (
@@ -58,9 +58,11 @@ def _cue(word: str, engine: str) -> str:
 def render(text: str, engine: str) -> str:
     """Text for one TTS engine ("cartesia" | "elevenlabs"): allowed cues only, in its syntax.
     Any other engine reads no cues: it gets the words only."""
-    text = fix_brand(text)  # the company name always reaches TTS in English letters
+    text = fix_brand(text)  # the company name in English letters...
     if engine not in ("cartesia", "elevenlabs"):
         return plain(text)
+    if engine == "elevenlabs":
+        text = spoken_brand(text)  # ...except where ElevenLabs says it better in Hindi/Punjabi
     out = _EMOTION_TAG.sub(lambda m: f"[{m.group(1)}]", text)  # accept Cartesia-style too
     out = _ANY_TAG.sub("", out)
     out = _BRACKET.sub(lambda m: _cue(m.group(1), engine) + " ", out)

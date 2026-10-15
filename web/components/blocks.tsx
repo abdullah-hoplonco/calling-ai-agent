@@ -101,7 +101,7 @@ export function VoiceSwitch({ c }: { c: CallModel }) {
         </label>
       )}
       <small className="llm-note">
-        Female voices introduce themselves as Nimra, male voices as Hamza.
+        Female voices introduce themselves as Nimra, male voices as Uzair.
       </small>
     </div>
   );
@@ -327,9 +327,15 @@ export const AGENT_WORDS: Record<string, string> = {
   speaking: "Speaking",
 };
 
+// The sample is always Nimra; a live call takes the name of the picked voice.
+export function agentOf(c: CallModel): string {
+  if (c.source === "sample") return "Nimra";
+  return VOICES.find((v) => v.id === c.voiceId)?.agent ?? "Nimra";
+}
+
 export function statusWord(c: CallModel): string {
   if (c.phase === "connecting") return "Connecting";
-  if (c.phase === "live") return c.speaking?.who === "lead" ? "You are speaking" : `Nimra · ${AGENT_WORDS[c.agentState] ?? c.agentState}`;
+  if (c.phase === "live") return c.speaking?.who === "lead" ? "You are speaking" : `${agentOf(c)} · ${AGENT_WORDS[c.agentState] ?? c.agentState}`;
   if (c.phase === "sample")
     return c.speaking?.who === "lead"
       ? `${c.lead.name.split(" ")[0]} is speaking`
@@ -369,7 +375,7 @@ export function CodeState({ snap, c }: { snap: CallSnapshot | null; c?: CallMode
         {snap.objections} of {snap.maxObjections}
       </dd>
       <dt>Asked if AI</dt>
-      <dd>{snap.aiDisclosed ? "Yes, Nimra said she is an AI" : "Not yet"}</dd>
+      <dd>{snap.aiDisclosed ? `Yes, ${c ? agentOf(c) : "the agent"} said it is an AI` : "Not yet"}</dd>
       {snap.offered.length > 0 && (
         <>
           <dt>Slots offered</dt>

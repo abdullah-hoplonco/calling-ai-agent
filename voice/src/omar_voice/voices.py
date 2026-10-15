@@ -6,7 +6,7 @@ Each voice belongs to one TTS engine; choosing the voice chooses the engine.
 from __future__ import annotations
 
 FEMALE_NAME = "Nimra"
-MALE_NAME = "Hamza"
+MALE_NAME = "Uzair"
 CARTESIA = "cartesia"
 ELEVENLABS = "elevenlabs"
 # ElevenLabs premade voice (Jessica: playful, bright, warm female). Premade voices work on
@@ -30,6 +30,17 @@ VOICES: dict[str, tuple[str, str, str]] = {
     ),
     "1qEiC6qsybMkmnNdVMbK": (
         "Monika · Indian female (ElevenLabs, paid plan)",
+        FEMALE_NAME,
+        ELEVENLABS,
+    ),
+    # custom voices in our ElevenLabs account (cloned / Voice Design); Uzair is the default
+    "yT7vgjEeBvbJ8sriYQpT": (
+        "Uzair · Dubai male (ElevenLabs custom clone)",
+        MALE_NAME,
+        ELEVENLABS,
+    ),
+    "HuebwE9KboxaCKr7bdgt": (
+        "Lite · British female (ElevenLabs custom)",
         FEMALE_NAME,
         ELEVENLABS,
     ),

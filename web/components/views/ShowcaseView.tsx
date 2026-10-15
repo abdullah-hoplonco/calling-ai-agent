@@ -5,7 +5,7 @@
 import Image from "next/image";
 import { useEffect, useRef } from "react";
 
-import { CallButton, ErrorNote, GuardList, LeadPicker, MuteToggle, Opening, SampleButton, StepChips, statusWord } from "@/components/blocks";
+import { CallButton, ErrorNote, GuardList, LeadPicker, MuteToggle, Opening, SampleButton, StepChips, agentOf, statusWord } from "@/components/blocks";
 import { IconArrow, IconShield } from "@/components/icons";
 import { PartsBar, Waveform, medianParts } from "@/components/shared";
 import { previewModel } from "@/lib/preview";
@@ -115,7 +115,7 @@ function Window({ c, preview }: { c: CallModel; preview: boolean }) {
               </p>
             )}
             <p data-who="omar">
-              <b>Nimra</b>
+              <b>{agentOf(c)}</b>
               {t.turn.omar_text}
             </p>
           </div>
@@ -281,7 +281,7 @@ function Transcript({ c }: { c: CallModel }) {
           )}
           <p data-who="omar">
             <b>
-              Nimra
+              {agentOf(c)}
               {t.turn.totalMs != null ? <em data-tone={tone(t.turn.totalMs)}>{ms(t.turn.totalMs)}</em> : <em>scripted</em>}
             </b>
             {t.turn.omar_text}

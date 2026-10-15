@@ -76,7 +76,7 @@ export function useCall() {
   const room = useMemo(() => new Room({ adaptiveStream: true, dynacast: true }), []);
   const [leadId, setLeadId] = useState(LEADS[0]!.id);
   const [old, setOld] = useState(false);
-  const [hindi, setHindi] = useState(false); // the Lead may speak Hindi; the agent answers in it
+  const [hindi, setHindi] = useState(true); // on by default: the Lead may speak Hindi; the agent answers in it
   const [llm, setLlm] = useState<LlmChoice>("auto");
   const [voiceId, setVoiceId] = useState(DEFAULT_VOICE);
   const [stability, setStability] = useState(DEFAULT_STABILITY); // ElevenLabs: lower = more emotion

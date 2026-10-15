@@ -6,7 +6,7 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
-import { CallButton, CodeState, ErrorNote, GuardList, LeadPicker, MuteToggle, Opening, SampleButton, StepChips, statusWord } from "@/components/blocks";
+import { CallButton, CodeState, ErrorNote, GuardList, LeadPicker, MuteToggle, Opening, SampleButton, StepChips, agentOf, statusWord } from "@/components/blocks";
 import { IconCheck } from "@/components/icons";
 import { Meter, PartList, PartsBar, Waveform, medianParts, useNow } from "@/components/shared";
 import { TRACK, shortStatus, trackIndex } from "@/lib/stages";
@@ -39,7 +39,7 @@ export function EnterpriseView({ c, switcher }: { c: CallModel; switcher: React.
           <div className="en-title">
             <h1>Live call review</h1>
             <p>
-              Nimra calling <b>{c.lead.name}</b> · {statusWord(c)}
+              {agentOf(c)} calling <b>{c.lead.name}</b> · {statusWord(c)}
               {c.source === "sample" && <span className="en-synth">Sample · synthetic numbers</span>}
             </p>
           </div>
@@ -183,7 +183,7 @@ function Conversation({ c, sel, onPick }: { c: CallModel; sel: number; onPick: (
             {first} <Meter who="lead" bars={7} />
           </span>
           <span>
-            Nimra <Meter who="omar" bars={7} />
+            {agentOf(c)} <Meter who="omar" bars={7} />
           </span>
         </div>
       </div>
@@ -205,7 +205,7 @@ function Conversation({ c, sel, onPick }: { c: CallModel; sel: number; onPick: (
       )}
       <ol className="en-thread">
         {c.turns.map((t, i) => (
-          <Exchange key={t.turn.turn} t={t} first={first} sel={i === sel} onPick={() => onPick(i)} />
+          <Exchange key={t.turn.turn} t={t} first={first} agent={agentOf(c)} sel={i === sel} onPick={() => onPick(i)} />
         ))}
         {c.speaking?.who === "lead" && (
           <li className="en-x en-live">
@@ -221,7 +221,7 @@ function Conversation({ c, sel, onPick }: { c: CallModel; sel: number; onPick: (
   );
 }
 
-function Exchange({ t, first, sel, onPick }: { t: TurnView; first: string; sel: boolean; onPick: () => void }) {
+function Exchange({ t, first, agent, sel, onPick }: { t: TurnView; first: string; agent: string; sel: boolean; onPick: () => void }) {
   const total = t.turn.totalMs;
   return (
     <li className="en-x" data-sel={sel || undefined} data-fresh={t.fresh || undefined}>
@@ -257,7 +257,7 @@ function Exchange({ t, first, sel, onPick }: { t: TurnView; first: string; sel: 
         </span>
         <div>
           <span className="en-who">
-            Nimra <time>{clock(t.omarAt)}</time>
+            {agent} <time>{clock(t.omarAt)}</time>
             <span className="en-stage">{stageName(t.turn.stage)}</span>
             {t.turn.interrupted && <span className="en-cut">Interrupted</span>}
           </span>

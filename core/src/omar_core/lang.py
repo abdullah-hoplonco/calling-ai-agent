@@ -5,8 +5,10 @@ like "zaroor", "shukriya", "waqt", never formal Sanskrit-heavy Hindi. It is writ
 Devanagari (what Deepgram returns for Hindi speech and what the TTS reads best), with
 English business words kept in English letters.
 
-The company name is always "Hoplon and Co" in English letters, in every language:
-fix_brand() puts it back if a Hindi sentence spells it in Devanagari.
+The company name is "Hoplon and Co" in English letters in all text (transcripts, guards,
+logs): fix_brand() puts it back if a Hindi or Punjabi sentence spells it in its own script.
+Only the ElevenLabs voice gets spoken_brand(): inside a Hindi or Punjabi sentence the
+English letters sound wrong ("Hopelin and Company"), the native spelling sounds right.
 """
 
 from __future__ import annotations
@@ -18,6 +20,7 @@ Lang = Literal["en", "hi"]
 BRAND = "Hoplon and Co"
 
 _DEVANAGARI = re.compile(r"[ऀ-ॿ]")
+_GURMUKHI = re.compile(r"[\u0A00-\u0A7F]")
 _LATIN = re.compile(r"[A-Za-z]")
 # Hindi written in English letters (some STT output and chat text): common function words
 _ROMAN_HINDI = re.compile(
@@ -46,14 +49,36 @@ _BRAND_DEV = re.compile(
     r"(?<![\u0900-\u0963\u0966-\u097F])(?:हो|हॉ|हौ|हा)प्?\s?ल(?:ो|ॉ|ौ|ा)?न्?(?![\u0900-\u0963\u0966-\u097F])"
     r"(?:\s*(?:एंड|ऐंड|एन्ड|&|and)\s*(?:को|कंपनी|कम्पनी|Co\b\.?))?"
 )
+# the same in Gurmukhi (Punjabi)
+_BRAND_GUR = re.compile(
+    r"(?<![\u0A00-\u0A7F])ਹ(?:ੋ|ੌ|ਾ)?ਪ੍?ਲ(?:ੋ|ੌ|ਾ)?ਨ(?![\u0A00-\u0A7F])"
+    r"(?:\s*(?:ਐਂਡ|ਐਡ|ਏਂਡ|ਐਨਡ|&|and)\s*(?:ਕੋ|ਕੰਪਨੀ|Co\b\.?))?"
+)
 _BRAND_LATIN = re.compile(r"\bhoplon\s*(?:&|and|n)\s*co\b\.?", re.IGNORECASE)
 
 
 def fix_brand(text: str) -> str:
     """Keep the company name in English letters so the TTS always says it the same way."""
     out = _BRAND_DEV.sub(BRAND, text)
+    out = _BRAND_GUR.sub(BRAND, out)
     out = _BRAND_LATIN.sub(BRAND, out)
     return out.replace(f"{BRAND} {BRAND}", BRAND)
+
+
+# How the voice says "Hoplon and Co" ("HOP-lon and Koh") inside a sentence of each script.
+# Chosen on eleven_v4_turbo (2026-10-15): speech-to-text heard each one as "Hoplon and Co".
+SPOKEN_BRAND = {"hi": "हॉपलॉन एंड को", "pa": "ਹੌਪਲੌਨ ਐਂਡ ਕੋ"}
+
+
+def spoken_brand(text: str) -> str:
+    """For the TTS only: the brand in the script of its sentence (after fix_brand)."""
+    if BRAND not in text:
+        return text
+    if len(_GURMUKHI.findall(text)) >= 2:
+        return text.replace(BRAND, SPOKEN_BRAND["pa"])
+    if len(_DEVANAGARI.findall(text)) >= 2:
+        return text.replace(BRAND, SPOKEN_BRAND["hi"])
+    return text
 
 
 _GENDER = re.compile(r"\{g:([^/{}]*)/([^{}]*)\}")

@@ -100,7 +100,7 @@ class Settings:
 
     cartesia_model: str = field(default_factory=lambda: _env("CARTESIA_MODEL", "sonic-3"))
     # the persona the Lead hears, and its Cartesia voice (OMAR_VOICE_ID is the old name)
-    agent_persona: str = field(default_factory=lambda: _env("AGENT_NAME", "Nimra"))
+    agent_persona: str = field(default_factory=lambda: _env("AGENT_NAME", "Uzair"))
     cartesia_voice: str = field(
         default_factory=lambda: _env("AGENT_VOICE_ID") or _env("OMAR_VOICE_ID")
     )

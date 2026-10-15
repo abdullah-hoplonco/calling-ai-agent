@@ -90,7 +90,7 @@ def test_voice_choice_allowlist():
     from omar_voice.agent import parse_voice_choice
 
     v = parse_voice_choice('{"voice": "ef191366-f52f-447a-a398-ed8c0f2943a1"}')
-    assert v and v[2] == "Hamza" and "British male" in v[1]
+    assert v and v[2] == "Uzair" and "British male" in v[1]
     assert parse_voice_choice('{"voice": "f8f5f1b2-f02d-4d8e-a40d-fd850a487b3d"}')[2] == "Nimra"
     assert parse_voice_choice('{"voice": "not-a-listed-voice"}') is None
 
