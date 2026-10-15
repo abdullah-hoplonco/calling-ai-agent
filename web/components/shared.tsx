@@ -10,6 +10,7 @@ import type { CallModel, TurnView } from "@/lib/useCall";
 import { PARTS, TARGET_MS, partsOf, percentile, type Part } from "@/lib/view";
 
 export const THEMES = [
+  { id: "horizon", label: "Horizon" },
   { id: "studio", label: "Studio" },
   { id: "console", label: "Console" },
   { id: "enterprise", label: "Enterprise" },

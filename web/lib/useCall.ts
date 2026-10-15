@@ -75,6 +75,7 @@ async function sendKey(room: Room, key: string, report: (s: { ok: boolean; text:
 export function useCall() {
   const room = useMemo(() => new Room({ adaptiveStream: true, dynacast: true }), []);
   const [leadId, setLeadId] = useState(LEADS[0]!.id);
+  const [name, setName] = useState(""); // the visitor's own name; empty = the scenario's Lead name
   const [old, setOld] = useState(false);
   const [hindi, setHindi] = useState(true); // on by default: the Lead may speak Hindi; the agent answers in it
   const [llm, setLlm] = useState<LlmChoice>("auto");
@@ -383,7 +384,7 @@ export function useCall() {
       const res = await fetch("/api/token", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ leadId, old, llm, voice: voiceId, stability, lang: hindi ? "hi" : "en" }),
+        body: JSON.stringify({ leadId, name, old, llm, voice: voiceId, stability, lang: hindi ? "hi" : "en" }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? `Token request failed (${res.status}).`);
@@ -406,7 +407,7 @@ export function useCall() {
       setPhase("error");
       room.disconnect();
     }
-  }, [leadId, old, hindi, llm, voiceId, stability, deepseekKey, room, reset]);
+  }, [leadId, name, old, hindi, llm, voiceId, stability, deepseekKey, room, reset]);
 
   // keep each finished live call in the Groq-vs-DeepSeek comparison (this browser only)
   useEffect(() => {
@@ -445,6 +446,8 @@ export function useCall() {
     leads: LEADS,
     leadId,
     setLeadId,
+    name,
+    setName,
     old,
     setOld,
     hindi,

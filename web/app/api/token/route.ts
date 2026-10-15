@@ -1,7 +1,7 @@
 import { AccessToken, RoomAgentDispatch, RoomConfiguration } from "livekit-server-sdk";
 import { NextResponse } from "next/server";
 
-import { LEADS, type LlmChoice, leadMetadata } from "@/lib/leads";
+import { LEADS, type LlmChoice, cleanName, leadMetadata } from "@/lib/leads";
 import { VOICES } from "@/lib/voices";
 
 export const runtime = "nodejs";
@@ -22,6 +22,7 @@ export async function POST(req: Request) {
 
   const body = (await req.json().catch(() => ({}))) as {
     leadId?: string;
+    name?: string;
     old?: boolean;
     llm?: string;
     voice?: string;
@@ -36,7 +37,9 @@ export async function POST(req: Request) {
       : undefined;
   const llm: LlmChoice = body.llm === "groq" || body.llm === "deepseek" ? body.llm : "auto";
   const lang = body.lang === "hi" ? "hi" : "en";
-  const lead = LEADS.find((l) => l.id === body.leadId) ?? LEADS[0];
+  const base = LEADS.find((l) => l.id === body.leadId) ?? LEADS[0]!;
+  const typed = cleanName(body.name);
+  const lead = typed ? { ...base, name: typed } : base; // the visitor's name, else the scenario's
   const agentName = process.env.OMAR_AGENT_NAME ?? "omar";
   const roomName = `omar-${lead.id}-${Date.now().toString(36)}`;
   const identity = `lead-${Math.random().toString(36).slice(2, 8)}`;

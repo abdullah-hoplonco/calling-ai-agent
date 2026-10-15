@@ -4,9 +4,11 @@ import { RoomAudioRenderer, RoomContext, StartAudio } from "@livekit/components-
 import { useCallback, useEffect, useState } from "react";
 
 import { LiveBridge } from "@/components/LiveBridge";
+import { agentOf } from "@/components/blocks";
 import { THEMES, ThemeSwitch, type Ui } from "@/components/shared";
 import { ConsoleView } from "@/components/views/ConsoleView";
 import { EnterpriseView } from "@/components/views/EnterpriseView";
+import { HorizonView } from "@/components/views/HorizonView";
 import { ShowcaseView } from "@/components/views/ShowcaseView";
 import { StudioView } from "@/components/views/StudioView";
 import { useCall } from "@/lib/useCall";
@@ -16,7 +18,7 @@ const isUi = (v: string | null): v is Ui => THEMES.some((t) => t.id === v);
 
 export function App() {
   const c = useCall();
-  const [ui, setUiState] = useState<Ui>("console");
+  const [ui, setUiState] = useState<Ui>("horizon");
 
   useEffect(() => {
     const q = new URLSearchParams(window.location.search).get("ui");
@@ -43,6 +45,7 @@ export function App() {
   return (
     <RoomContext.Provider value={c.room}>
       <div className={`ui ui-${ui}`} data-ui={ui}>
+        {ui === "horizon" && <HorizonView c={c} switcher={sw} />}
         {ui === "studio" && <StudioView c={c} switcher={sw} />}
         {ui === "console" && <ConsoleView c={c} switcher={sw} />}
         {ui === "enterprise" && <EnterpriseView c={c} switcher={sw} />}
@@ -50,7 +53,7 @@ export function App() {
       </div>
       {c.source === "live" && <LiveBridge c={c} />}
       <RoomAudioRenderer />
-      <StartAudio label="Allow audio to hear Nimra" className="start-audio" />
+      <StartAudio label={`Allow audio to hear ${agentOf(c)}`} className="start-audio" />
     </RoomContext.Provider>
   );
 }

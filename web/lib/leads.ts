@@ -8,6 +8,7 @@ export type DemoLead = {
   topic: string | null;
   note: string;
   label?: string; // shown in the picker when several Leads share a name
+  scenario: string; // who you play, without the name (Horizon's scenario list)
 };
 
 export const LEADS: DemoLead[] = [
@@ -15,6 +16,7 @@ export const LEADS: DemoLead[] = [
     id: "omair",
     name: "Omair",
     label: "Omair · catering business",
+    scenario: "Catering business · wants a website and an app",
     email: "omair@example.com",
     message:
       "Hi, I run a small business in Dubai and I'm thinking about a proper website and maybe an app. Can someone call me to talk it through?",
@@ -25,6 +27,7 @@ export const LEADS: DemoLead[] = [
     id: "omair-realestate",
     name: "Omair",
     label: "Omair · real estate brokerage",
+    scenario: "Real estate brokerage · needs serious enquiries",
     email: "omair.homes@example.com",
     message:
       "Hi, I run a small real estate brokerage in Dubai Marina. Our listings get views but very few serious enquiries. Looking for help with ads and lead generation.",
@@ -35,6 +38,7 @@ export const LEADS: DemoLead[] = [
     id: "omair-startup",
     name: "Omair",
     label: "Omair · fintech founder",
+    scenario: "Fintech founder · needs an app before investors",
     email: "omair@savewise.example.com",
     message:
       "Hey, I'm building a savings app and need an MVP for iOS and Android before an investor meeting. Please call me.",
@@ -44,6 +48,7 @@ export const LEADS: DemoLead[] = [
   {
     id: "khalifa",
     name: "Khalifa Al Dhaheri",
+    scenario: "Four laundry shops · want a booking app",
     email: "khalifa.dhaheri@example.com",
     message:
       "We run a chain of 4 laundry shops in Dubai and want a mobile app where customers can schedule pickup and delivery and pay by card. iOS and Android.",
@@ -53,6 +58,7 @@ export const LEADS: DemoLead[] = [
   {
     id: "rhea",
     name: "Rhea Fernandes",
+    scenario: "Left no details · wrote only “please call me”",
     email: "rhea.f@example.com",
     message: "please call me",
     topic: null,
@@ -61,6 +67,7 @@ export const LEADS: DemoLead[] = [
   {
     id: "salma",
     name: "Salma Al Hammadi",
+    scenario: "Perfume shop · wrote the form in Arabic",
     email: "salma.hammadi@example.com",
     message:
       "السلام عليكم، عندي متجر عطور على انستغرام وأبغى حملة إعلانية على تيك توك وسناب شات، وكمان موقع إلكتروني بسيط للطلبات.",
@@ -79,6 +86,12 @@ export const LLM_CHOICES: { id: LlmChoice; label: string; note: string }[] = [
   { id: "groq", label: "Groq", note: "Qwen3.8-27B. Fastest, but the free tier runs out after about 2 minutes of talk." },
   { id: "deepseek", label: "DeepSeek", note: "V4.1 Flash, thinking off. No per-minute limit; slower to start." },
 ];
+
+/** The name the agent uses: what the visitor typed, else the scenario's Lead. */
+export function cleanName(raw: unknown): string {
+  if (typeof raw !== "string") return "";
+  return raw.replace(/[^\p{L}\p{M}' .-]/gu, "").replace(/\s+/g, " ").trim().slice(0, 40);
+}
 
 export function leadMetadata(
   lead: DemoLead,

@@ -200,6 +200,627 @@
         ],
         "createdAt": "2026-10-06T14:09:14.477Z",
         "reason": "agent: throwaway direction preview, not shipped; the shipped UI lives in web/"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/nightline.html"
+        ],
+        "createdAt": "2026-10-15T13:01:51.775Z",
+        "reason": "agent: throwaway direction preview for the decision round, not shipped; the shipped UI lives in web/"
+      },
+      {
+        "rule": "dark-glow",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/nightline.html"
+        ],
+        "createdAt": "2026-10-15T13:01:51.781Z",
+        "reason": "agent: throwaway direction preview for the decision round, not shipped; the shipped UI lives in web/"
+      },
+      {
+        "rule": "tiny-text",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/nightline.html"
+        ],
+        "createdAt": "2026-10-15T13:01:51.786Z",
+        "reason": "agent: throwaway direction preview for the decision round, not shipped; the shipped UI lives in web/"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/nightline.html"
+        ],
+        "createdAt": "2026-10-15T13:01:51.791Z",
+        "reason": "agent: throwaway direction preview for the decision round, not shipped; the shipped UI lives in web/"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/sleeve.html"
+        ],
+        "createdAt": "2026-10-15T13:01:51.797Z",
+        "reason": "agent: throwaway direction preview for the decision round, not shipped; the shipped UI lives in web/"
+      },
+      {
+        "rule": "dark-glow",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/sleeve.html"
+        ],
+        "createdAt": "2026-10-15T13:01:51.802Z",
+        "reason": "agent: throwaway direction preview for the decision round, not shipped; the shipped UI lives in web/"
+      },
+      {
+        "rule": "tiny-text",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/sleeve.html"
+        ],
+        "createdAt": "2026-10-15T13:01:51.807Z",
+        "reason": "agent: throwaway direction preview for the decision round, not shipped; the shipped UI lives in web/"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/sleeve.html"
+        ],
+        "createdAt": "2026-10-15T13:01:51.812Z",
+        "reason": "agent: throwaway direction preview for the decision round, not shipped; the shipped UI lives in web/"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/dunes.html"
+        ],
+        "createdAt": "2026-10-15T13:01:51.816Z",
+        "reason": "agent: throwaway direction preview for the decision round, not shipped; the shipped UI lives in web/"
+      },
+      {
+        "rule": "dark-glow",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/dunes.html"
+        ],
+        "createdAt": "2026-10-15T13:01:51.821Z",
+        "reason": "agent: throwaway direction preview for the decision round, not shipped; the shipped UI lives in web/"
+      },
+      {
+        "rule": "tiny-text",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/dunes.html"
+        ],
+        "createdAt": "2026-10-15T13:01:51.826Z",
+        "reason": "agent: throwaway direction preview for the decision round, not shipped; the shipped UI lives in web/"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/dunes.html"
+        ],
+        "createdAt": "2026-10-15T13:01:51.831Z",
+        "reason": "agent: throwaway direction preview for the decision round, not shipped; the shipped UI lives in web/"
+      },
+      {
+        "rule": "tight-leading",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/nightline.html"
+        ],
+        "createdAt": "2026-10-15T13:03:47.717Z",
+        "reason": "agent: throwaway direction preview; tight leading is on large display lines only, not body text"
+      },
+      {
+        "rule": "tight-leading",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/sleeve.html"
+        ],
+        "createdAt": "2026-10-15T13:03:47.722Z",
+        "reason": "agent: throwaway direction preview; tight leading is on large display lines only, not body text"
+      },
+      {
+        "rule": "tight-leading",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/dunes.html"
+        ],
+        "createdAt": "2026-10-15T13:03:47.726Z",
+        "reason": "agent: throwaway direction preview; tight leading is on large display lines only, not body text"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/matter.html"
+        ],
+        "createdAt": "2026-10-15T14:23:03.362Z",
+        "reason": "agent: throwaway art-direction preview for the user's choice round; new world fonts are being explored, not shipped"
+      },
+      {
+        "rule": "tight-leading",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/matter.html"
+        ],
+        "createdAt": "2026-10-15T14:23:03.371Z",
+        "reason": "agent: throwaway art-direction preview for the user's choice round; new world fonts are being explored, not shipped"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/matter.html"
+        ],
+        "createdAt": "2026-10-15T14:23:03.377Z",
+        "reason": "agent: throwaway art-direction preview for the user's choice round; new world fonts are being explored, not shipped"
+      },
+      {
+        "rule": "dark-glow",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/matter.html"
+        ],
+        "createdAt": "2026-10-15T14:23:03.385Z",
+        "reason": "agent: throwaway art-direction preview for the user's choice round; new world fonts are being explored, not shipped"
+      },
+      {
+        "rule": "tiny-text",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/matter.html"
+        ],
+        "createdAt": "2026-10-15T14:23:03.391Z",
+        "reason": "agent: throwaway art-direction preview for the user's choice round; new world fonts are being explored, not shipped"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/room.html"
+        ],
+        "createdAt": "2026-10-15T14:27:00.844Z",
+        "reason": "agent: throwaway art-direction preview for the user's choice round; new world fonts are being explored, not shipped"
+      },
+      {
+        "rule": "tight-leading",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/room.html"
+        ],
+        "createdAt": "2026-10-15T14:27:00.855Z",
+        "reason": "agent: throwaway art-direction preview for the user's choice round; new world fonts are being explored, not shipped"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/room.html"
+        ],
+        "createdAt": "2026-10-15T14:27:00.875Z",
+        "reason": "agent: throwaway art-direction preview for the user's choice round; new world fonts are being explored, not shipped"
+      },
+      {
+        "rule": "dark-glow",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/room.html"
+        ],
+        "createdAt": "2026-10-15T14:27:00.884Z",
+        "reason": "agent: throwaway art-direction preview for the user's choice round; new world fonts are being explored, not shipped"
+      },
+      {
+        "rule": "tiny-text",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/room.html"
+        ],
+        "createdAt": "2026-10-15T14:27:00.891Z",
+        "reason": "agent: throwaway art-direction preview for the user's choice round; new world fonts are being explored, not shipped"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/keepsake.html"
+        ],
+        "createdAt": "2026-10-15T14:27:00.899Z",
+        "reason": "agent: throwaway art-direction preview for the user's choice round; new world fonts are being explored, not shipped"
+      },
+      {
+        "rule": "tight-leading",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/keepsake.html"
+        ],
+        "createdAt": "2026-10-15T14:27:00.904Z",
+        "reason": "agent: throwaway art-direction preview for the user's choice round; new world fonts are being explored, not shipped"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/keepsake.html"
+        ],
+        "createdAt": "2026-10-15T14:27:00.909Z",
+        "reason": "agent: throwaway art-direction preview for the user's choice round; new world fonts are being explored, not shipped"
+      },
+      {
+        "rule": "dark-glow",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/keepsake.html"
+        ],
+        "createdAt": "2026-10-15T14:27:00.915Z",
+        "reason": "agent: throwaway art-direction preview for the user's choice round; new world fonts are being explored, not shipped"
+      },
+      {
+        "rule": "tiny-text",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/keepsake.html"
+        ],
+        "createdAt": "2026-10-15T14:27:00.920Z",
+        "reason": "agent: throwaway art-direction preview for the user's choice round; new world fonts are being explored, not shipped"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/index.html"
+        ],
+        "createdAt": "2026-10-15T14:35:18.684Z",
+        "reason": "agent: throwaway presentation page for the user's choice round, not shipped"
+      },
+      {
+        "rule": "tight-leading",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/index.html"
+        ],
+        "createdAt": "2026-10-15T14:35:18.780Z",
+        "reason": "agent: throwaway presentation page for the user's choice round, not shipped"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/index.html"
+        ],
+        "createdAt": "2026-10-15T14:35:18.814Z",
+        "reason": "agent: throwaway presentation page for the user's choice round, not shipped"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/silk.html"
+        ],
+        "createdAt": "2026-10-15T19:14:41.714Z",
+        "reason": "agent: art-direction preview, not shipped; its own fonts and text over a live WebGL canvas (the detector cannot see the backdrop)"
+      },
+      {
+        "rule": "tight-leading",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/silk.html"
+        ],
+        "createdAt": "2026-10-15T19:14:41.714Z",
+        "reason": "agent: art-direction preview, not shipped; its own fonts and text over a live WebGL canvas (the detector cannot see the backdrop)"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/silk.html"
+        ],
+        "createdAt": "2026-10-15T19:14:41.714Z",
+        "reason": "agent: art-direction preview, not shipped; its own fonts and text over a live WebGL canvas (the detector cannot see the backdrop)"
+      },
+      {
+        "rule": "dark-glow",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/silk.html"
+        ],
+        "createdAt": "2026-10-15T19:14:41.714Z",
+        "reason": "agent: art-direction preview, not shipped; its own fonts and text over a live WebGL canvas (the detector cannot see the backdrop)"
+      },
+      {
+        "rule": "tiny-text",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/silk.html"
+        ],
+        "createdAt": "2026-10-15T19:14:41.714Z",
+        "reason": "agent: art-direction preview, not shipped; its own fonts and text over a live WebGL canvas (the detector cannot see the backdrop)"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/constellation.html"
+        ],
+        "createdAt": "2026-10-15T19:14:41.714Z",
+        "reason": "agent: art-direction preview, not shipped; its own fonts and text over a live WebGL canvas (the detector cannot see the backdrop)"
+      },
+      {
+        "rule": "tight-leading",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/constellation.html"
+        ],
+        "createdAt": "2026-10-15T19:14:41.714Z",
+        "reason": "agent: art-direction preview, not shipped; its own fonts and text over a live WebGL canvas (the detector cannot see the backdrop)"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/constellation.html"
+        ],
+        "createdAt": "2026-10-15T19:14:41.714Z",
+        "reason": "agent: art-direction preview, not shipped; its own fonts and text over a live WebGL canvas (the detector cannot see the backdrop)"
+      },
+      {
+        "rule": "dark-glow",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/constellation.html"
+        ],
+        "createdAt": "2026-10-15T19:14:41.714Z",
+        "reason": "agent: art-direction preview, not shipped; its own fonts and text over a live WebGL canvas (the detector cannot see the backdrop)"
+      },
+      {
+        "rule": "tiny-text",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/constellation.html"
+        ],
+        "createdAt": "2026-10-15T19:14:41.714Z",
+        "reason": "agent: art-direction preview, not shipped; its own fonts and text over a live WebGL canvas (the detector cannot see the backdrop)"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/horizon.html"
+        ],
+        "createdAt": "2026-10-15T19:14:41.714Z",
+        "reason": "agent: art-direction preview, not shipped; its own fonts and text over a live WebGL canvas (the detector cannot see the backdrop)"
+      },
+      {
+        "rule": "tight-leading",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/horizon.html"
+        ],
+        "createdAt": "2026-10-15T19:14:41.714Z",
+        "reason": "agent: art-direction preview, not shipped; its own fonts and text over a live WebGL canvas (the detector cannot see the backdrop)"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/horizon.html"
+        ],
+        "createdAt": "2026-10-15T19:14:41.714Z",
+        "reason": "agent: art-direction preview, not shipped; its own fonts and text over a live WebGL canvas (the detector cannot see the backdrop)"
+      },
+      {
+        "rule": "dark-glow",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/horizon.html"
+        ],
+        "createdAt": "2026-10-15T19:14:41.714Z",
+        "reason": "agent: art-direction preview, not shipped; its own fonts and text over a live WebGL canvas (the detector cannot see the backdrop)"
+      },
+      {
+        "rule": "tiny-text",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/horizon.html"
+        ],
+        "createdAt": "2026-10-15T19:14:41.714Z",
+        "reason": "agent: art-direction preview, not shipped; its own fonts and text over a live WebGL canvas (the detector cannot see the backdrop)"
+      },
+      {
+        "rule": "overused-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/matter.html"
+        ],
+        "createdAt": "2026-10-15T19:44:22.580Z",
+        "reason": "agent: owner-chosen fonts (Instrument Serif liked by owner; Space Grotesk/Epilogue are hoplonco.com's own brand fonts) in a throwaway art preview"
+      },
+      {
+        "rule": "cream-palette",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/matter.html"
+        ],
+        "createdAt": "2026-10-15T19:44:22.580Z",
+        "reason": "agent: round-one art preview whose palette the owner reviewed; not shipped"
+      },
+      {
+        "rule": "all-caps-body",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/matter.html"
+        ],
+        "createdAt": "2026-10-15T19:44:22.580Z",
+        "reason": "agent: short mono labels in a round-one art preview, not body text; not shipped"
+      },
+      {
+        "rule": "overused-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/room.html"
+        ],
+        "createdAt": "2026-10-15T19:44:22.580Z",
+        "reason": "agent: owner-chosen fonts (Instrument Serif liked by owner; Space Grotesk/Epilogue are hoplonco.com's own brand fonts) in a throwaway art preview"
+      },
+      {
+        "rule": "cream-palette",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/room.html"
+        ],
+        "createdAt": "2026-10-15T19:44:22.580Z",
+        "reason": "agent: round-one art preview whose palette the owner reviewed; not shipped"
+      },
+      {
+        "rule": "all-caps-body",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/room.html"
+        ],
+        "createdAt": "2026-10-15T19:44:22.580Z",
+        "reason": "agent: short mono labels in a round-one art preview, not body text; not shipped"
+      },
+      {
+        "rule": "overused-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/keepsake.html"
+        ],
+        "createdAt": "2026-10-15T19:44:22.580Z",
+        "reason": "agent: owner-chosen fonts (Instrument Serif liked by owner; Space Grotesk/Epilogue are hoplonco.com's own brand fonts) in a throwaway art preview"
+      },
+      {
+        "rule": "cream-palette",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/keepsake.html"
+        ],
+        "createdAt": "2026-10-15T19:44:22.580Z",
+        "reason": "agent: round-one art preview whose palette the owner reviewed; not shipped"
+      },
+      {
+        "rule": "all-caps-body",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/keepsake.html"
+        ],
+        "createdAt": "2026-10-15T19:44:22.580Z",
+        "reason": "agent: short mono labels in a round-one art preview, not body text; not shipped"
+      },
+      {
+        "rule": "overused-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/index.html"
+        ],
+        "createdAt": "2026-10-15T19:44:22.580Z",
+        "reason": "agent: owner-chosen fonts (Instrument Serif liked by owner; Space Grotesk/Epilogue are hoplonco.com's own brand fonts) in a throwaway art preview"
+      },
+      {
+        "rule": "cream-palette",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/index.html"
+        ],
+        "createdAt": "2026-10-15T19:44:22.580Z",
+        "reason": "agent: round-one art preview whose palette the owner reviewed; not shipped"
+      },
+      {
+        "rule": "all-caps-body",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/index.html"
+        ],
+        "createdAt": "2026-10-15T19:44:22.580Z",
+        "reason": "agent: short mono labels in a round-one art preview, not body text; not shipped"
+      },
+      {
+        "rule": "overused-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/silk.html"
+        ],
+        "createdAt": "2026-10-15T19:44:22.580Z",
+        "reason": "agent: owner-chosen fonts (Instrument Serif liked by owner; Space Grotesk/Epilogue are hoplonco.com's own brand fonts) in a throwaway art preview"
+      },
+      {
+        "rule": "cream-palette",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/silk.html"
+        ],
+        "createdAt": "2026-10-15T19:44:22.580Z",
+        "reason": "agent: round-one art preview whose palette the owner reviewed; not shipped"
+      },
+      {
+        "rule": "all-caps-body",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/silk.html"
+        ],
+        "createdAt": "2026-10-15T19:44:22.580Z",
+        "reason": "agent: short mono labels in a round-one art preview, not body text; not shipped"
+      },
+      {
+        "rule": "overused-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/constellation.html"
+        ],
+        "createdAt": "2026-10-15T19:44:22.580Z",
+        "reason": "agent: owner-chosen fonts (Instrument Serif liked by owner; Space Grotesk/Epilogue are hoplonco.com's own brand fonts) in a throwaway art preview"
+      },
+      {
+        "rule": "cream-palette",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/constellation.html"
+        ],
+        "createdAt": "2026-10-15T19:44:22.580Z",
+        "reason": "agent: round-one art preview whose palette the owner reviewed; not shipped"
+      },
+      {
+        "rule": "all-caps-body",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/constellation.html"
+        ],
+        "createdAt": "2026-10-15T19:44:22.580Z",
+        "reason": "agent: short mono labels in a round-one art preview, not body text; not shipped"
+      },
+      {
+        "rule": "overused-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/horizon.html"
+        ],
+        "createdAt": "2026-10-15T19:44:22.580Z",
+        "reason": "agent: owner-chosen fonts (Instrument Serif liked by owner; Space Grotesk/Epilogue are hoplonco.com's own brand fonts) in a throwaway art preview"
+      },
+      {
+        "rule": "cream-palette",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/horizon.html"
+        ],
+        "createdAt": "2026-10-15T19:44:22.580Z",
+        "reason": "agent: round-one art preview whose palette the owner reviewed; not shipped"
+      },
+      {
+        "rule": "all-caps-body",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/art/horizon.html"
+        ],
+        "createdAt": "2026-10-15T19:44:22.580Z",
+        "reason": "agent: short mono labels in a round-one art preview, not body text; not shipped"
       }
     ]
   }

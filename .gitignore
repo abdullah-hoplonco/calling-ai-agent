@@ -31,3 +31,9 @@ web/next-env.d.ts
 *.tsbuildinfo
 .impeccable/review/
 .impeccable/questions/
+
+# design exploration (large: videos, captures, recordings); the shipped design lives in web/
+.impeccable/mocks/art/
+.impeccable/mocks/decision/
+.impeccable/mocks/inspiration/
+.impeccable/mocks/study/
