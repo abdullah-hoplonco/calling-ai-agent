@@ -1,9 +1,114 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-06T14:14:32+00:00",
-  "title": "Design System: Talk to Omar (four themes, one call)",
+  "generatedAt": "2026-10-15T20:18:01+00:00",
+  "title": "Design System: Talk to Uzair (five themes, one call)",
   "extensions": {
     "colorMeta": {
+      "horizon-black": {
+        "role": "neutral",
+        "displayName": "Horizon Black",
+        "canonical": "#0a0a0a",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ]
+      },
+      "horizon-lime": {
+        "role": "primary",
+        "displayName": "Horizon Lime",
+        "canonical": "#d8ff36",
+        "tonalRamp": [
+          "#090d00",
+          "#212903",
+          "#3c480d",
+          "#586a0d",
+          "#778e15",
+          "#97b407",
+          "#b8da28",
+          "#e0fe82"
+        ]
+      },
+      "horizon-grey": {
+        "role": "neutral",
+        "displayName": "Horizon Grey",
+        "canonical": "#bbbbbb",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ]
+      },
+      "horizon-white": {
+        "role": "neutral",
+        "displayName": "Horizon White",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ]
+      },
+      "horizon-line": {
+        "role": "neutral",
+        "displayName": "Horizon Line",
+        "canonical": "rgb(255 255 255 / 0.25)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ]
+      },
+      "horizon-night-sky": {
+        "role": "neutral",
+        "displayName": "Night Sky",
+        "canonical": "#060706",
+        "tonalRamp": [
+          "#0a0c0a",
+          "#242524",
+          "#414241",
+          "#606260",
+          "#818381",
+          "#a4a6a4",
+          "#c8cac8",
+          "#edefed"
+        ]
+      },
+      "horizon-dawn-sky": {
+        "role": "neutral",
+        "displayName": "Dawn Sky",
+        "canonical": "#161d0c",
+        "tonalRamp": [
+          "#080e01",
+          "#212817",
+          "#3d4533",
+          "#5c6551",
+          "#7d8671",
+          "#9fa994",
+          "#c3cdb7",
+          "#e8f3dc"
+        ]
+      },
       "studio-bg": {
         "role": "neutral",
         "displayName": "Studio Bg",
@@ -382,16 +487,16 @@
       "console-bg": {
         "role": "neutral",
         "displayName": "Console Bg",
-        "canonical": "#f6f6f7",
+        "canonical": "#f3f3f0",
         "tonalRamp": [
-          "#0b0b0c",
-          "#252526",
-          "#424243",
-          "#616162",
-          "#828283",
-          "#a5a5a6",
-          "#c9c9ca",
-          "#eeeeef"
+          "#0b0b09",
+          "#252523",
+          "#424240",
+          "#61615f",
+          "#828280",
+          "#a5a5a2",
+          "#c9c9c6",
+          "#efefec"
         ]
       },
       "console-surface": {
@@ -412,211 +517,331 @@
       "console-surface-2": {
         "role": "neutral",
         "displayName": "Console Surface 2",
-        "canonical": "#fafafb",
+        "canonical": "#f9f9f7",
         "tonalRamp": [
-          "#0b0b0c",
-          "#252526",
-          "#424243",
-          "#616162",
-          "#828283",
-          "#a5a5a6",
-          "#c9c9ca",
-          "#eeeeef"
+          "#0b0b0a",
+          "#252524",
+          "#424240",
+          "#616160",
+          "#828281",
+          "#a5a5a3",
+          "#c9c9c7",
+          "#eeeeec"
         ]
       },
       "console-hover": {
         "role": "neutral",
         "displayName": "Console Hover",
-        "canonical": "#f2f2f4",
+        "canonical": "#efefeb",
         "tonalRamp": [
-          "#0b0b0c",
-          "#252526",
-          "#424243",
-          "#616163",
-          "#828284",
-          "#a5a5a7",
-          "#c9c9cb",
-          "#eeeef0"
+          "#0b0b09",
+          "#252522",
+          "#42423f",
+          "#61615e",
+          "#82827f",
+          "#a5a5a1",
+          "#c9c9c5",
+          "#efefeb"
         ]
       },
       "console-line": {
         "role": "neutral",
         "displayName": "Console Line",
-        "canonical": "#e6e6ea",
+        "canonical": "#e6e6e1",
         "tonalRamp": [
-          "#0b0b0d",
-          "#252528",
-          "#424245",
-          "#616164",
-          "#828285",
-          "#a4a4a8",
-          "#c9c9cc",
-          "#eeeef2"
+          "#0b0b08",
+          "#252522",
+          "#42423e",
+          "#61615d",
+          "#83837e",
+          "#a5a5a1",
+          "#c9c9c5",
+          "#efefea"
         ]
       },
       "console-line-2": {
         "role": "neutral",
         "displayName": "Console Line 2",
-        "canonical": "#d4d5db",
+        "canonical": "#d3d3cd",
         "tonalRamp": [
-          "#0a0b0f",
-          "#242529",
-          "#414246",
-          "#606166",
-          "#818287",
-          "#a4a5aa",
-          "#c8c9cf",
-          "#edeef4"
+          "#0b0b08",
+          "#252521",
+          "#42423d",
+          "#62625c",
+          "#83837d",
+          "#a5a5a0",
+          "#c9c9c4",
+          "#efefe9"
+        ]
+      },
+      "console-field": {
+        "role": "neutral",
+        "displayName": "Console Field Grey",
+        "canonical": "#8a8e96",
+        "tonalRamp": [
+          "#090b11",
+          "#22252b",
+          "#3f4249",
+          "#5e6169",
+          "#7e828a",
+          "#a1a5ad",
+          "#c5c9d2",
+          "#eaeff7"
         ]
       },
       "console-ink": {
         "role": "neutral",
         "displayName": "Console Ink",
-        "canonical": "#0f1115",
+        "canonical": "#0d0f12",
+        "tonalRamp": [
+          "#090b0e",
+          "#232529",
+          "#404246",
+          "#5f6165",
+          "#808287",
+          "#a2a5aa",
+          "#c6c9ce",
+          "#eceff3"
+        ]
+      },
+      "console-ink-2": {
+        "role": "neutral",
+        "displayName": "Console Ink 2",
+        "canonical": "#43474e",
+        "tonalRamp": [
+          "#080b11",
+          "#22252b",
+          "#3e4249",
+          "#5d6169",
+          "#7e838a",
+          "#a1a5ad",
+          "#c4c9d2",
+          "#eaeff7"
+        ]
+      },
+      "console-ink-3": {
+        "role": "neutral",
+        "displayName": "Console Ink 3",
+        "canonical": "#62666e",
+        "tonalRamp": [
+          "#080b11",
+          "#22252c",
+          "#3e4249",
+          "#5d6169",
+          "#7e828b",
+          "#a1a5ae",
+          "#c5c9d2",
+          "#eaeff8"
+        ]
+      },
+      "console-ink-hover": {
+        "role": "neutral",
+        "displayName": "Console Ink Hover",
+        "canonical": "#2b2e34",
+        "tonalRamp": [
+          "#090b10",
+          "#22252b",
+          "#3f4248",
+          "#5e6168",
+          "#7f828a",
+          "#a1a5ad",
+          "#c5c9d1",
+          "#eaeff7"
+        ]
+      },
+      "console-lime": {
+        "role": "primary",
+        "displayName": "Hoplon Lime",
+        "canonical": "#d8ff36",
+        "tonalRamp": [
+          "#090d00",
+          "#212903",
+          "#3c480d",
+          "#586a0d",
+          "#778e15",
+          "#97b407",
+          "#b8da28",
+          "#e0fe82"
+        ]
+      },
+      "console-lime-soft": {
+        "role": "neutral",
+        "displayName": "Lime Tint",
+        "canonical": "#f8ffdb",
+        "tonalRamp": [
+          "#0a0d00",
+          "#24280a",
+          "#404527",
+          "#5f6546",
+          "#808666",
+          "#a3a988",
+          "#c7ceab",
+          "#ecf3cf"
+        ]
+      },
+      "console-lime-line": {
+        "role": "neutral",
+        "displayName": "Lime Line",
+        "canonical": "#d9ec8a",
+        "tonalRamp": [
+          "#0a0d00",
+          "#232901",
+          "#3e470a",
+          "#5c6906",
+          "#7c8c27",
+          "#9eaf4e",
+          "#c2d473",
+          "#e7fa98"
+        ]
+      },
+      "console-logo-dot": {
+        "role": "neutral",
+        "displayName": "Logo Dot Lime",
+        "canonical": "#cefe07",
+        "tonalRamp": [
+          "#080d00",
+          "#202a00",
+          "#3a4907",
+          "#556b00",
+          "#748e23",
+          "#93b424",
+          "#b2dd03",
+          "#ddff8a"
+        ]
+      },
+      "console-deck": {
+        "role": "neutral",
+        "displayName": "Console Deck",
+        "canonical": "#0b0c0e",
+        "tonalRamp": [
+          "#0a0b0d",
+          "#242527",
+          "#414244",
+          "#606164",
+          "#818285",
+          "#a3a5a8",
+          "#c7c9cc",
+          "#edeef2"
+        ]
+      },
+      "console-deck-2": {
+        "role": "neutral",
+        "displayName": "Console Deck 2",
+        "canonical": "#1a1c20",
         "tonalRamp": [
           "#090b0f",
           "#232529",
           "#404247",
           "#5f6166",
+          "#808287",
+          "#a2a5aa",
+          "#c6c9cf",
+          "#eceef4"
+        ]
+      },
+      "console-deck-ink": {
+        "role": "neutral",
+        "displayName": "Deck Ink",
+        "canonical": "#f4f4f1",
+        "tonalRamp": [
+          "#0b0b09",
+          "#252523",
+          "#424240",
+          "#61615f",
+          "#828280",
+          "#a5a5a2",
+          "#c9c9c6",
+          "#efefec"
+        ]
+      },
+      "console-deck-ink-2": {
+        "role": "neutral",
+        "displayName": "Deck Ink 2",
+        "canonical": "#b9bcc2",
+        "tonalRamp": [
+          "#090b0f",
+          "#23252a",
+          "#404247",
+          "#5f6167",
           "#808288",
           "#a2a5ab",
           "#c6c9cf",
           "#ebeef5"
         ]
       },
-      "console-ink-2": {
+      "console-deck-ink-3": {
         "role": "neutral",
-        "displayName": "Console Ink 2",
-        "canonical": "#4a505e",
+        "displayName": "Deck Ink 3",
+        "canonical": "#8c9098",
         "tonalRamp": [
-          "#070b16",
-          "#202531",
-          "#3c424f",
-          "#5b6170",
-          "#7c8292",
-          "#9ea5b5",
-          "#c2c9da",
-          "#e8eefe"
-        ]
-      },
-      "console-ink-3": {
-        "role": "neutral",
-        "displayName": "Console Ink 3",
-        "canonical": "#666c7e",
-        "tonalRamp": [
-          "#070a17",
-          "#202433",
-          "#3c4152",
-          "#5b6172",
-          "#7c8294",
-          "#9ea5b8",
-          "#c2c9dd",
-          "#e9eefe"
-        ]
-      },
-      "console-blue": {
-        "role": "primary",
-        "displayName": "Console Blue",
-        "canonical": "#2f56e0",
-        "tonalRamp": [
-          "#010035",
-          "#060974",
-          "#1225b1",
-          "#294ed8",
-          "#4b77f6",
-          "#7ca1fd",
-          "#b2c9fd",
-          "#e7effe"
-        ]
-      },
-      "console-blue-hover": {
-        "role": "primary",
-        "displayName": "Console Blue Hover",
-        "canonical": "#2447c4",
-        "tonalRamp": [
-          "#010035",
-          "#060974",
-          "#132ba9",
-          "#2c52d0",
-          "#4a77f7",
-          "#7ba1fe",
-          "#b1c9fe",
-          "#e7effe"
-        ]
-      },
-      "console-blue-soft": {
-        "role": "primary",
-        "displayName": "Console Blue Soft",
-        "canonical": "#eef2fe",
-        "tonalRamp": [
-          "#090b12",
-          "#22252d",
-          "#3f424b",
-          "#5e616b",
-          "#7e828d",
-          "#a1a5b0",
-          "#c5c9d4",
-          "#eaeefa"
-        ]
-      },
-      "console-blue-line": {
-        "role": "primary",
-        "displayName": "Console Blue Line",
-        "canonical": "#c9d5fb",
-        "tonalRamp": [
-          "#050822",
-          "#1c233f",
-          "#37405f",
-          "#566081",
-          "#7681a4",
-          "#98a4c8",
-          "#bcc8ed",
-          "#e8eeff"
+          "#090b11",
+          "#22252b",
+          "#3f4249",
+          "#5e6169",
+          "#7e828a",
+          "#a1a5ad",
+          "#c5c9d2",
+          "#eaeff7"
         ]
       },
       "console-lead-wave": {
-        "role": "secondary",
+        "role": "neutral",
         "displayName": "Console Lead Wave",
-        "canonical": "#a3aabb",
+        "canonical": "#a3a7ae",
         "tonalRamp": [
-          "#070b16",
-          "#202532",
-          "#3c4250",
-          "#5b6170",
-          "#7c8292",
-          "#9ea5b6",
-          "#c2c9db",
-          "#e8eefe"
+          "#090b10",
+          "#22252b",
+          "#3f4248",
+          "#5e6168",
+          "#7f8289",
+          "#a1a5ac",
+          "#c5c9d1",
+          "#eaeff6"
+        ]
+      },
+      "console-deck-lead-wave": {
+        "role": "neutral",
+        "displayName": "Deck Lead Wave",
+        "canonical": "#5c616b",
+        "tonalRamp": [
+          "#080b12",
+          "#21252e",
+          "#3d424b",
+          "#5c616b",
+          "#7d828d",
+          "#a0a5b0",
+          "#c4c9d5",
+          "#e9effa"
         ]
       },
       "console-good": {
-        "role": "verdict",
+        "role": "neutral",
         "displayName": "Console Good",
-        "canonical": "#15803d",
+        "canonical": "#14783a",
         "tonalRamp": [
-          "#011003",
-          "#022e11",
-          "#095024",
-          "#167438",
-          "#379954",
-          "#5ebd76",
-          "#83e299",
-          "#c7ffd1"
+          "#001003",
+          "#032e12",
+          "#0e4f25",
+          "#0d7537",
+          "#3d9858",
+          "#62bc79",
+          "#87e19c",
+          "#cafed4"
         ]
       },
       "console-good-bg": {
-        "role": "verdict",
+        "role": "neutral",
         "displayName": "Console Good Bg",
-        "canonical": "#e9f7ee",
+        "canonical": "#e8f5ec",
         "tonalRamp": [
-          "#050e08",
-          "#1d2822",
-          "#3a453e",
-          "#59655d",
-          "#79867e",
+          "#050d08",
+          "#1e2821",
+          "#3b453e",
+          "#59645d",
+          "#7a867e",
           "#9ca9a0",
           "#c0cdc4",
-          "#e5f3ea"
+          "#e5f2e9"
         ]
       },
       "console-warn": {
@@ -635,9 +860,9 @@
         ]
       },
       "console-warn-bg": {
-        "role": "verdict",
+        "role": "neutral",
         "displayName": "Console Warn Bg",
-        "canonical": "#fdf4e4",
+        "canonical": "#fcf3e3",
         "tonalRamp": [
           "#100a02",
           "#2b2418",
@@ -647,6 +872,21 @@
           "#aca495",
           "#d1c8b9",
           "#f6eddd"
+        ]
+      },
+      "console-warn-mark": {
+        "role": "neutral",
+        "displayName": "Warn Mark",
+        "canonical": "#c47c05",
+        "tonalRamp": [
+          "#140800",
+          "#361f03",
+          "#5e3800",
+          "#86550e",
+          "#b27215",
+          "#dd9330",
+          "#feba69",
+          "#ffebd6"
         ]
       },
       "console-crit": {
@@ -679,6 +919,51 @@
           "#fbeaea"
         ]
       },
+      "console-deck-good": {
+        "role": "neutral",
+        "displayName": "Deck Good",
+        "canonical": "#4ade80",
+        "tonalRamp": [
+          "#010f04",
+          "#052d15",
+          "#065026",
+          "#19743d",
+          "#249a53",
+          "#23c468",
+          "#58ea8b",
+          "#c8fed5"
+        ]
+      },
+      "console-deck-warn": {
+        "role": "neutral",
+        "displayName": "Deck Warn",
+        "canonical": "#fbbf24",
+        "tonalRamp": [
+          "#110a00",
+          "#312302",
+          "#533e0b",
+          "#7b5c0b",
+          "#a47b12",
+          "#d09c00",
+          "#fbbf23",
+          "#ffecc8"
+        ]
+      },
+      "console-deck-crit": {
+        "role": "neutral",
+        "displayName": "Deck Crit",
+        "canonical": "#ff7a7a",
+        "tonalRamp": [
+          "#1e0102",
+          "#4d000b",
+          "#7e081b",
+          "#aa2b35",
+          "#d25155",
+          "#fa7676",
+          "#fdb3b0",
+          "#ffe9e7"
+        ]
+      },
       "console-end": {
         "role": "verdict",
         "displayName": "Console End",
@@ -695,93 +980,93 @@
         ]
       },
       "console-p-detect": {
-        "role": "part-ink",
+        "role": "neutral",
         "displayName": "Console P Detect",
-        "canonical": "#9ab6fb",
+        "canonical": "#a7bdf6",
         "tonalRamp": [
-          "#020132",
-          "#0f1e56",
-          "#293e79",
-          "#475e9c",
-          "#6680c1",
-          "#88a3e7",
-          "#b2c8ff",
-          "#e7eeff"
+          "#02032e",
+          "#14214e",
+          "#2f3f6f",
+          "#4d5f92",
+          "#6d80b6",
+          "#8ea3db",
+          "#b4c8fc",
+          "#e8eefe"
         ]
       },
       "console-p-commit": {
-        "role": "part-ink",
+        "role": "neutral",
         "displayName": "Console P Commit",
-        "canonical": "#6f8fef",
+        "canonical": "#6787ea",
         "tonalRamp": [
-          "#020133",
-          "#0c126b",
-          "#22378f",
-          "#3e59b4",
-          "#5d7cda",
-          "#81a0fa",
-          "#b4c8fb",
+          "#020034",
+          "#0c106d",
+          "#223691",
+          "#3d58b7",
+          "#5c7bdd",
+          "#81a0fb",
+          "#b3c8ff",
           "#e8eeff"
         ]
       },
       "console-p-tool": {
-        "role": "part-ink",
+        "role": "neutral",
         "displayName": "Console P Tool",
-        "canonical": "#c4a6f2",
+        "canonical": "#bd9ff1",
         "tonalRamp": [
-          "#120026",
-          "#301050",
-          "#4e3072",
-          "#6d5095",
-          "#8f71b9",
-          "#b294df",
-          "#d4bbfc",
-          "#f2ebfe"
+          "#110026",
+          "#300d54",
+          "#4d2f76",
+          "#6d4f9a",
+          "#8e70be",
+          "#b193e4",
+          "#d3bbff",
+          "#f1ebff"
         ]
       },
       "console-p-llm": {
-        "role": "part-ink",
+        "role": "neutral",
         "displayName": "Console P Llm",
-        "canonical": "#2f56e0",
+        "canonical": "#0d0f12",
         "tonalRamp": [
-          "#010035",
-          "#060974",
-          "#1225b1",
-          "#294ed8",
-          "#4b77f6",
-          "#7ca1fd",
-          "#b2c9fd",
-          "#e7effe"
+          "#090b0e",
+          "#232529",
+          "#404246",
+          "#5f6165",
+          "#808287",
+          "#a2a5aa",
+          "#c6c9ce",
+          "#eceff3"
         ]
       },
       "console-p-guard": {
-        "role": "part-ink",
+        "role": "neutral",
         "displayName": "Console P Guard",
-        "canonical": "#f0b44c",
+        "canonical": "#f0b23e",
         "tonalRamp": [
           "#120900",
-          "#332100",
-          "#583c04",
-          "#7f590c",
-          "#ab7701",
-          "#d4992a",
-          "#fabd56",
-          "#ffeccf"
+          "#322203",
+          "#583c02",
+          "#7e5a12",
+          "#a8791a",
+          "#d59816",
+          "#fbbd4b",
+          "#feecd0"
         ]
       },
       "console-p-tts": {
-        "role": "part-ink",
+        "role": "neutral",
         "displayName": "Console P Tts",
-        "canonical": "#13b5a2",
+        "canonical": "#13b09f",
         "tonalRamp": [
           "#000f0c",
-          "#032c27",
-          "#0d4d44",
-          "#047165",
-          "#1b9687",
-          "#27beaa",
-          "#5ae3cf",
-          "#bcfef2"
+          "#012c27",
+          "#0b4d45",
+          "#057165",
+          "#099788",
+          "#2ebdac",
+          "#5ee2d0",
+          "#bafff3"
         ]
       },
       "enterprise-bg": {
@@ -1581,6 +1866,34 @@
       }
     },
     "typographyMeta": {
+      "horizon-display": {
+        "displayName": "Horizon Display",
+        "purpose": "The entry invitation; last words in lime."
+      },
+      "horizon-close": {
+        "displayName": "Horizon Close",
+        "purpose": "The booked time or outcome on the close card."
+      },
+      "horizon-caption": {
+        "displayName": "Horizon Caption",
+        "purpose": "The spoken line, revealed word by word over the world."
+      },
+      "horizon-field": {
+        "displayName": "Horizon Field",
+        "purpose": "Typed name and chosen scenario on the entry card."
+      },
+      "horizon-body": {
+        "displayName": "Horizon Body",
+        "purpose": "The entry lede, grey, max 42ch."
+      },
+      "horizon-label": {
+        "displayName": "Horizon Label",
+        "purpose": "State, speaker name, End call; 12px for field labels, hints, mode note, theme menu."
+      },
+      "horizon-chapter": {
+        "displayName": "Horizon Chapter",
+        "purpose": "The chapter marker at the foot of the screen, uppercase, numeral in lime."
+      },
       "studio-title": {
         "displayName": "Studio Title",
         "purpose": "Studio empty-state card heading only."
@@ -1601,13 +1914,21 @@
         "displayName": "Studio Readout",
         "purpose": "Selected reply total wait in the Wait editor."
       },
-      "console-title": {
-        "displayName": "Console Title",
-        "purpose": "Call header title."
+      "console-display": {
+        "displayName": "Console Display",
+        "purpose": "The Lead's name on the call deck."
+      },
+      "console-readout": {
+        "displayName": "Console Readout",
+        "purpose": "The picked reply's total in the side panel."
       },
       "console-metric": {
         "displayName": "Console Metric",
         "purpose": "Stat strip and KPI figures."
+      },
+      "console-title": {
+        "displayName": "Console Title",
+        "purpose": "Call header title."
       },
       "console-body": {
         "displayName": "Console Body",
@@ -1652,9 +1973,34 @@
     },
     "shadows": [
       {
+        "name": "horizon-caption-shade",
+        "value": "0 2px 26px rgb(0 0 0 / 0.7)",
+        "purpose": "text-shadow on Horizon captions; 0 4px 40px rgb(0 0 0 / 0.5) on the close heading. Legibility over the world."
+      },
+      {
+        "name": "horizon-dot-glow",
+        "value": "0 0 8px rgb(216 255 54 / 0.5)",
+        "purpose": "Horizon speaking dot (0.45 on the entry eyes' pupils)."
+      },
+      {
+        "name": "horizon-primary-glow",
+        "value": "0 0 28px rgb(216 255 54 / 0.18)",
+        "purpose": "Under the Horizon lime button on hover only."
+      },
+      {
         "name": "console-hairline",
         "value": "0 1px 2px rgb(16 24 40 / 0.05)",
-        "purpose": "Console cards, buttons, selected sidebar Lead."
+        "purpose": "Console buttons and the mute toggle."
+      },
+      {
+        "name": "console-lift",
+        "value": "0 0 0 1px rgb(13 15 18 / 0.07), 0 1px 2px rgb(13 15 18 / 0.04), 0 6px 18px -8px rgb(13 15 18 / 0.1)",
+        "purpose": "Console cards, the selected sidebar Lead and the selected panel tab."
+      },
+      {
+        "name": "console-deck",
+        "value": "0 20px 40px -24px rgb(13 15 18 / 0.5)",
+        "purpose": "The black Console call deck only."
       },
       {
         "name": "enterprise-shadow-1",
@@ -1694,6 +2040,36 @@
     ],
     "motion": [
       {
+        "name": "horizon-word-in",
+        "value": "1s opacity; with motion allowed also 1.2s blur(12px) to 0 and translateY(6px) to 0, cubic-bezier(0.2, 0.7, 0.2, 1)",
+        "purpose": "Each caption word as it is spoken."
+      },
+      {
+        "name": "horizon-line-out",
+        "value": "0.6s opacity (blur 10px with motion allowed)",
+        "purpose": "A caption leaves when the other side starts."
+      },
+      {
+        "name": "horizon-close-in",
+        "value": "2s fade after 1.6s; actions 1.2s after 3s",
+        "purpose": "The close card and its actions."
+      },
+      {
+        "name": "horizon-press",
+        "value": "scale(1.03) on hover, 0.96 on press, cubic-bezier(0, 0, 0, 1) 0.3s",
+        "purpose": "The Horizon lime button."
+      },
+      {
+        "name": "horizon-world",
+        "value": "per-frame exponential ease over seconds, frame-rate independent",
+        "purpose": "Chapters, camera places, mountains rising, dawn; never cuts."
+      },
+      {
+        "name": "horizon-reduced-motion",
+        "value": "camera holds its chapter place, sparks still, captions fade only",
+        "purpose": "Horizon under prefers-reduced-motion."
+      },
+      {
         "name": "ease",
         "value": "cubic-bezier(0.16, 1, 0.3, 1)",
         "purpose": "Shared ease-out for growth and entry animations."
@@ -1726,6 +2102,14 @@
     ],
     "breakpoints": [
       {
+        "name": "horizon-xs",
+        "value": "420px"
+      },
+      {
+        "name": "horizon-sm",
+        "value": "760px"
+      },
+      {
         "name": "showcase-sm",
         "value": "640px"
       },
@@ -1752,10 +2136,58 @@
       {
         "name": "studio-lg",
         "value": "1400px"
+      },
+      {
+        "name": "console-md",
+        "value": "1040px"
+      },
+      {
+        "name": "console-lg",
+        "value": "1240px"
       }
     ]
   },
   "components": [
+    {
+      "name": "Horizon Primary Button",
+      "kind": "button",
+      "refersTo": "horizon-button-primary",
+      "description": "The one lime pill in Horizon, paired with an underlined grey text button.",
+      "html": "<div class=\"ds-hz-go\"><button class=\"ds-hz-pri\">Start the call</button><span class=\"ds-hz-hint\">Uses your microphone · about two minutes</span><button class=\"ds-hz-quiet\">Hear a sample call first</button></div>",
+      "css": ".ds-hz-go{display:grid;gap:12px;justify-items:center;padding:32px;background:#0a0a0a}.ds-hz-pri{background:#d8ff36;color:#0a0a0a;border:0;border-radius:999px;padding:16px 34px;font:700 16px Epilogue,system-ui,sans-serif;cursor:pointer;transition:transform .3s cubic-bezier(0,0,0,1),box-shadow .3s cubic-bezier(0,0,0,1)}.ds-hz-pri:hover{transform:scale(1.03);box-shadow:0 0 28px rgb(216 255 54 / .18)}.ds-hz-pri:active{transform:scale(.96);transition-duration:.15s}.ds-hz-pri:focus-visible{outline:2px solid #fff;outline-offset:4px}.ds-hz-hint{font:400 12px 'Space Grotesk',Epilogue,system-ui,sans-serif;color:#bbb}.ds-hz-quiet{background:none;border:0;color:#bbb;padding:6px 10px;font:400 14px 'Space Grotesk',Epilogue,system-ui,sans-serif;text-decoration:underline;text-underline-offset:3px;cursor:pointer;transition:color .15s ease}.ds-hz-quiet:hover{color:#fff}.ds-hz-quiet:focus-visible{outline:2px solid #d8ff36;outline-offset:3px}"
+    },
+    {
+      "name": "Horizon Top Bar",
+      "kind": "nav",
+      "refersTo": "horizon-button-end",
+      "description": "Wordmark, call state with the lime speaking dot, and the hairline End call pill.",
+      "html": "<div class=\"ds-hz-top\"><span class=\"ds-hz-logo\">hoplon &amp; co<b>.</b></span><span class=\"ds-hz-r\"><span class=\"ds-hz-state\"><i></i>Uzair is speaking</span><button class=\"ds-hz-end\">End call</button></span></div>",
+      "css": ".ds-hz-top{display:flex;justify-content:space-between;align-items:center;padding:24px 30px;background:#0a0a0a;color:#fff;font-family:Epilogue,system-ui,sans-serif}.ds-hz-logo{font-weight:600;font-size:24px;letter-spacing:-.03em}.ds-hz-logo b{color:#d8ff36}.ds-hz-r{display:flex;align-items:center;gap:18px}.ds-hz-state{display:flex;align-items:center;gap:10px;font:500 13px 'Space Grotesk',Epilogue,system-ui,sans-serif}.ds-hz-state i{width:8px;height:8px;border-radius:50%;background:#d8ff36;box-shadow:0 0 8px rgb(216 255 54 / .5)}.ds-hz-end{font:500 13px 'Space Grotesk',Epilogue,system-ui,sans-serif;color:#fff;background:none;border:1px solid rgb(255 255 255 / .25);border-radius:999px;padding:8px 14px;cursor:pointer;transition:border-color .15s,color .15s}.ds-hz-end:hover{border-color:#fff}.ds-hz-end:focus-visible{outline:2px solid #d8ff36;outline-offset:3px}"
+    },
+    {
+      "name": "Horizon Underline Field",
+      "kind": "input",
+      "refersTo": "horizon-field",
+      "description": "Entry field: grey label over a large white value on one hairline that turns lime on focus.",
+      "html": "<div class=\"ds-hz-fields\"><label class=\"ds-hz-f\">Your name<input placeholder=\"Sara\"></label><label class=\"ds-hz-f\">Who are you today?<select><option>A café owner who might want a website</option></select></label></div>",
+      "css": ".ds-hz-fields{display:grid;gap:14px;padding:32px;background:#0a0a0a;width:420px}.ds-hz-f{display:grid;gap:4px;font:500 12px 'Space Grotesk',Epilogue,system-ui,sans-serif;color:#bbb;border-bottom:1px solid rgb(255 255 255 / .25);padding-bottom:8px}.ds-hz-f:focus-within{border-bottom-color:#d8ff36;box-shadow:0 1px 0 #d8ff36}.ds-hz-f input,.ds-hz-f select{appearance:none;background:transparent;border:0;outline:none;padding:0;width:100%;font:500 24px Epilogue,system-ui,sans-serif;letter-spacing:-.02em;color:#fff}.ds-hz-f input::placeholder{color:rgb(255 255 255 / .45)}.ds-hz-f select{cursor:pointer;padding-right:28px;background:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='none' stroke='%23d8ff36' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 5.5l4 4 4-4'/%3E%3C/svg%3E\") no-repeat right 4px center}.ds-hz-f option{color:#0a0a0a;background:#fff}"
+    },
+    {
+      "name": "Horizon Caption",
+      "kind": "custom",
+      "refersTo": "horizon-caption",
+      "description": "Speaker name over the spoken line; words arrive one by one, feeling words in lime italics.",
+      "html": "<div class=\"ds-hz-cap\"><small>Uzair · Hoplon &amp; Co</small><p><span data-on>That </span><span data-on>sounds </span><span data-on class=\"feel\">lovely! </span><span>Tell </span><span>me </span><span>more.</span></p></div>",
+      "css": ".ds-hz-cap{background:#0a0a0a;color:#fff;text-align:center;padding:48px 24px;font-family:Epilogue,system-ui,sans-serif}.ds-hz-cap small{display:block;font:500 13px 'Space Grotesk',Epilogue,system-ui,sans-serif;margin-bottom:14px;color:#d8ff36;letter-spacing:.02em}.ds-hz-cap p{font-size:40px;font-weight:500;line-height:1.18;letter-spacing:-.025em;text-wrap:balance;text-shadow:0 2px 26px rgb(0 0 0 / .7);margin:0}.ds-hz-cap span{display:inline-block;white-space:pre;opacity:.12;filter:blur(12px);transform:translateY(6px);transition:opacity 1s ease,filter 1.2s ease,transform 1.2s cubic-bezier(.2,.7,.2,1)}.ds-hz-cap span[data-on]{opacity:1;filter:none;transform:none}.ds-hz-cap .feel{color:#d8ff36;font-style:italic}.ds-hz-cap:hover span{opacity:1;filter:none;transform:none}"
+    },
+    {
+      "name": "Horizon Theme Menu",
+      "kind": "nav",
+      "refersTo": "horizon-theme-option-on",
+      "description": "The older themes behind a small Theme disclosure, bottom right; selected option in lime.",
+      "html": "<div class=\"ds-hz-tm\"><div class=\"ds-hz-ts\"><button class=\"ds-hz-o\" data-on>Horizon</button><button class=\"ds-hz-o\">Studio</button><button class=\"ds-hz-o\">Console</button><button class=\"ds-hz-o\">Enterprise</button><button class=\"ds-hz-o\">Showcase</button></div><span class=\"ds-hz-sum\">Theme</span></div>",
+      "css": ".ds-hz-tm{display:inline-grid;justify-items:end;gap:6px;padding:20px;background:#0a0a0a;font:400 12px 'Space Grotesk',Epilogue,system-ui,sans-serif;color:#bbb}.ds-hz-ts{display:grid;gap:2px;padding:6px;border:1px solid rgb(255 255 255 / .25);border-radius:10px;background:rgb(10 10 10 / .92)}.ds-hz-o{padding:8px 14px;border-radius:6px;text-align:start;color:#bbb;background:none;border:0;font:500 13px 'Space Grotesk',Epilogue,system-ui,sans-serif;cursor:pointer}.ds-hz-o:hover:not([data-on]){color:#fff}.ds-hz-o[data-on]{color:#0a0a0a;background:#d8ff36}.ds-hz-o:focus-visible{outline:2px solid #d8ff36;outline-offset:1px}.ds-hz-sum{padding:6px 8px}"
+    },
     {
       "name": "Studio Call Button",
       "kind": "button",
@@ -1784,17 +2216,17 @@
       "name": "Console Primary Button",
       "kind": "button",
       "refersTo": "console-button-primary",
-      "description": "The one blue filled action in Console, beside a white secondary.",
-      "html": "<div class=\"ds-cn-row\"><button class=\"ds-cn-btn\">Hear sample call</button><button class=\"ds-cn-btn ds-cn-pri\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2\"/></svg>Call Khalifa</button></div>",
-      "css": ".ds-cn-row{display:flex;gap:.5rem;font-family:Inter,system-ui,sans-serif}.ds-cn-btn{display:inline-flex;align-items:center;gap:.5rem;height:34px;padding:0 .85rem;border-radius:7px;font-size:.8125rem;font-weight:600;border:1px solid #d4d5db;background:#fff;color:#0f1115;box-shadow:0 1px 2px rgb(16 24 40/.05);cursor:pointer;transition:background 150ms}.ds-cn-btn:hover{background:#f2f2f4}.ds-cn-btn:focus-visible{outline:2px solid #2f56e0;outline-offset:2px}.ds-cn-btn:active{transform:translateY(1px)}.ds-cn-pri{background:#2f56e0;border-color:#2f56e0;color:#fff}.ds-cn-pri:hover{background:#2447c4}"
+      "description": "Ink-black pill with a lime icon, paired with a white outline pill.",
+      "html": "<div class=\"ds-cn-row\"><button class=\"ds-cn-btn ds-cn-pri\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#d8ff36\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M7 5v14l11-7z\"/></svg>Hear a sample call</button><button class=\"ds-cn-btn\">Call</button></div>",
+      "css": ".ds-cn-row{display:flex;gap:.5rem;padding:1rem;background:#f3f3f0;font-family:Epilogue,system-ui,sans-serif}.ds-cn-btn{display:inline-flex;align-items:center;gap:.5rem;height:38px;padding:0 1.1rem;border-radius:999px;font-size:.875rem;font-weight:650;border:1px solid #d3d3cd;background:#fff;color:#0d0f12;box-shadow:0 1px 2px rgb(16 24 40 / .05);cursor:pointer;transition:background 150ms,transform 150ms}.ds-cn-btn:hover{background:#efefeb}.ds-cn-btn:active{transform:scale(.96)}.ds-cn-btn:focus-visible{outline:2px solid #0d0f12;outline-offset:2px}.ds-cn-pri{background:#0d0f12;color:#fff;border-color:#0d0f12}.ds-cn-pri:hover{background:#2b2e34}"
     },
     {
-      "name": "Console Delay Badge",
+      "name": "Console Verdict Pill",
       "kind": "chip",
       "refersTo": "console-badge-good",
-      "description": "Verdict badge on each Omar reply; colour only from the 0.9 s / 1.5 s verdict.",
-      "html": "<div class=\"ds-badges\"><span class=\"ds-badge ds-g\">0.82 s</span><span class=\"ds-badge ds-w\">1.21 s</span><span class=\"ds-badge ds-c\">1.74 s</span></div>",
-      "css": ".ds-badges{display:flex;gap:.4rem;font-family:Inter,system-ui,sans-serif}.ds-badge{font-size:.75rem;font-weight:650;padding:.1rem .45rem;border-radius:5px;font-feature-settings:\"tnum\",\"lnum\"}.ds-g{background:#e9f7ee;color:#15803d}.ds-w{background:#fdf4e4;color:#b45309}.ds-c{background:#fdecec;color:#c62828}"
+      "description": "Verdict pill on each reply: a shape plus the total (circle, diamond, triangle).",
+      "html": "<div class=\"ds-badges\"><span class=\"ds-badge ds-g\"><i class=\"ds-vx ds-vg\"></i>740 ms</span><span class=\"ds-badge ds-w\"><i class=\"ds-vx ds-vw\"></i>1,120 ms</span><span class=\"ds-badge ds-c\"><i class=\"ds-vx ds-vc\"></i>1,830 ms</span></div>",
+      "css": ".ds-badges{display:flex;gap:.4rem;padding:1rem;background:#fff;font-family:Epilogue,system-ui,sans-serif}.ds-badge{display:inline-flex;align-items:center;gap:.35rem;font-size:.6875rem;font-weight:600;padding:.1rem .5rem;border-radius:999px;font-feature-settings:\"tnum\",\"lnum\"}.ds-g{background:#e8f5ec;color:#14783a}.ds-w{background:#fcf3e3;color:#b45309}.ds-c{background:#fdecec;color:#c62828}.ds-vx{display:inline-block;width:7px;height:7px}.ds-vg{border-radius:50%;background:#14783a}.ds-vw{border-radius:1px;rotate:45deg;scale:.85;background:#c47c05}.ds-vc{clip-path:polygon(50% 0,100% 100%,0 100%);background:#c62828}"
     },
     {
       "name": "Enterprise Gold Button",
@@ -1832,26 +2264,32 @@
       "name": "Theme Switch",
       "kind": "nav",
       "refersTo": "showcase-button-gold",
-      "description": "Segmented radio group present in every theme; saved per browser and in ?ui=.",
-      "html": "<div class=\"ds-ts\" role=\"radiogroup\" aria-label=\"Theme\"><button class=\"ds-ts-o\" data-on>Studio</button><button class=\"ds-ts-o\">Console</button><button class=\"ds-ts-o\">Enterprise</button><button class=\"ds-ts-o\">Showcase</button></div>",
+      "description": "Segmented radio group in each measurement theme's chrome (Studio shown); saved per browser and in ?ui=.",
+      "html": "<div class=\"ds-ts\" role=\"radiogroup\" aria-label=\"Theme\"><button class=\"ds-ts-o\">Horizon</button><button class=\"ds-ts-o\" data-on>Studio</button><button class=\"ds-ts-o\">Console</button><button class=\"ds-ts-o\">Enterprise</button><button class=\"ds-ts-o\">Showcase</button></div>",
       "css": ".ds-ts{display:inline-flex;padding:3px;gap:2px;border-radius:7px;background:#0b0c0e;border:1px solid #000;font-family:Geist,system-ui,sans-serif}.ds-ts-o{padding:.3rem .65rem;border-radius:4px;font-size:.75rem;font-weight:600;color:#9a9fab;background:none;border:0;cursor:pointer;transition:background 150ms,color 150ms}.ds-ts-o:hover{color:#e9eaee}.ds-ts-o:focus-visible{outline:2px solid #f39a3d;outline-offset:2px}.ds-ts-o[data-on]{background:#e9eaee;color:#0b0c0e;box-shadow:0 1px 2px rgb(0 0 0/.12)}"
     }
   ],
   "narrative": {
     "northStar": "Hear the Call, Then See the Wait",
-    "overview": "One call model wears four complete visual worlds. Studio (the default) is a dark recording session: a transport bar with an LCD clock, stacked lanes for Time, Stages, Lead, Omar, Wait and Events, and an Inspector, Wait editor and Code state below. Console is a light, neutral product console with one blue, a recording card, a transcript with a delay badge on each reply, and a tabbed side panel. Enterprise is a premium workspace: a Hoplon navy band with a gold primary action, a six-step stepper, raised KPI tiles that overlap the band, and soft-shadowed cards. Showcase is a navy landing page where the working call window is the product shot, followed by long editorial sections.\n\nThe worlds share no surface, font or radius. They share the measurement. Every theme shows the gap between the Lead's last word and Omar's first sound as one bar split into six parts in a fixed order, and judges totals against the same two targets (0.9 s typical, 1.5 s slow). The theme switch is a segmented control inside each theme's own chrome; the choice is saved per browser (`localStorage` key `omar-ui`) and in the URL (`?ui=studio|console|enterprise|showcase`), with the URL winning on load. The spoken sample call is labelled synthetic in every theme.\n\nDensity follows the world: Studio and Console are tight tools on a 13.5px base that fill one viewport (`100dvh`, internal scroll), Enterprise is a roomier 14px page with a 1400px content column, and Showcase is a 16px scrolling page with section padding up to 7rem. The old house look (Noto Sans, navy-band ledger) is retired; the Hoplon logo and name stay.",
+    "overview": "One call model wears five complete visual worlds. **Horizon** (the default since it shipped) is not a dashboard: it is a full-screen night world drawn in WebGL, in Hoplon's black and lime. A dark mirror orb floats over a mirror sea; the orb's edge is a ring of 180 thin bars that move with whoever is speaking (lime for the agent, a cool grey for the Lead). The scenery changes in six chapters as the call moves through its stages: night sea, mountains with lime contour lines rising out of the water, a pass under the surface, an aurora, first light, and a lime dawn seam on the horizon at the close. The agent's words appear as large centred captions, revealed word by word. Horizon shows no timing at all: the call is the show. It opens on an entry card (name, \"Who are you today?\", Start the call, or hear a recorded sample first) and ends on a close card with the booking and a three-line recap.\n\nThe other four are the measurement themes. Studio is a dark recording session: a transport bar with an LCD clock, stacked lanes for Time, Stages, Lead, Omar, Wait and Events, and an Inspector, Wait editor and Code state below. Console (the default from 2026-10-07 until Horizon) wears the hoplonco.com identity: black, white and one electric lime, Epilogue, pill buttons and the real wordmark. A black call deck carries the Lead, the recording (Lead in grey, the agent in lime), a six-step lime stage track and the measured waits; it shows the stage while the call runs and the outcome when it ends. Below it, a white transcript puts a verdict badge on each reply, and a tabbed side panel opens any reply as a large readout. Enterprise is a premium workspace: a Hoplon navy band with a gold primary action, a six-step stepper, raised KPI tiles that overlap the band, and soft-shadowed cards. Showcase is a navy landing page where the working call window is the product shot, followed by long editorial sections.\n\nThe four measurement themes share no surface, font or radius. They share the measurement. Each shows the gap between the Lead's last word and the agent's first sound as one bar split into six parts in a fixed order, and judges totals against the same two targets (0.9 s typical, 1.5 s slow). Horizon shares Console's brand (the hoplonco.com black and lime, Epilogue) but none of its measurement. The theme switch is a segmented control inside each theme's own chrome (in Horizon, behind a small \"Theme\" disclosure at the bottom right); the choice is saved per browser (`localStorage` key `omar-ui`) and in the URL (`?ui=horizon|studio|console|enterprise|showcase`), with the URL winning on load. The sample call is labelled synthetic in every theme. The agent's name (Nimra or Uzair) comes from the chosen voice at runtime; lane and token names in the older themes keep `omar`, the agent's first name.\n\nDensity follows the world: Horizon is one fixed full screen with no scroll and very few words over the scene; Studio (13.5px) and Console (14px) are tight tools that fill one viewport (`100dvh`, internal scroll), Enterprise is a roomier 14px page with a 1400px content column, and Showcase is a 16px scrolling page with section padding up to 7rem. The old house look (Noto Sans, navy-band ledger) is retired; the Hoplon logo and name stay.",
     "keyCharacteristics": [
-      "Four themes, one call model; theme switch saved per browser and via `?ui=`.",
-      "Six part inks per theme, always in the order Turn detect, Commit, Tool step, LLM first token, Guard, Voice (TTS).",
-      "Green, amber and red read as verdicts against 0.9 s and 1.5 s.",
-      "Numbers use tabular, lining figures everywhere (`tnum`, `lnum` on the root of every theme).",
-      "The sample call is spoken with browser voices and labelled synthetic.",
+      "Five themes, one call model; Horizon is the default; theme switch saved per browser and via `?ui=`.",
+      "Horizon: black dominates, lime only on lines, edges and the one filled action; the voice drives the world; no numbers.",
+      "Six part inks per measurement theme, always in the order Turn detect, Commit, Tool step, LLM first token, Guard, Voice (TTS).",
+      "Green, amber and red read as verdicts against 0.9 s and 1.5 s (measurement themes only).",
+      "Numbers use tabular, lining figures everywhere (`tnum`, `lnum` on the shared `.ui` root).",
+      "Voices only: no music, chimes or generated sound. Horizon's sample is a recorded call with synthetic voices; the measurement themes speak theirs with browser voices; both are labelled synthetic.",
       "One SVG icon family (24px grid, 1.75 stroke, round caps) sized 16px by default."
     ],
     "rules": [
       {
+        "name": "The Black Dominates Rule",
+        "body": "In Horizon black is the material and lime is the light. Lime stays thin (bars, rims, contour lines, a seam, a dot, a word in italics) and the scene stays dark; the bloom is low (strength about 0.4) and the bars are 72% opaque. The theme was toned down once after it read as blinding; a new Horizon element earns lime only as a line or edge.",
+        "section": "colors"
+      },
+      {
         "name": "The Six Inks Rule",
-        "body": "Each theme defines exactly six part inks (`--p-detect`, `--p-commit`, `--p-tool`, `--p-llm`, `--p-guard`, `--p-tts`) and they always appear in that order: in bars, legends, the Studio wait editor and the Showcase anatomy. Detect and Commit are light-to-mid blues, Tool a violet, LLM the theme's strongest ink (violet in Studio, the accent blue in Console, navy in Enterprise and Showcase), Guard a yellow or gold, TTS a teal.",
+        "body": "Each measurement theme defines exactly six part inks (`--p-detect`, `--p-commit`, `--p-tool`, `--p-llm`, `--p-guard`, `--p-tts`) and they always appear in that order: in bars, legends, the Studio wait editor and the Showcase anatomy. Detect and Commit are light-to-mid blues, Tool a violet, LLM the theme's strongest ink (violet in Studio, ink black in Console, navy in Enterprise and Showcase), Guard a yellow or gold, TTS a teal.",
         "section": "colors"
       },
       {
@@ -1861,7 +2299,7 @@
       },
       {
         "name": "The One Action Rule",
-        "body": "Each button group has one filled action; its partner is a secondary, outline or ghost button. Studio fills amber, Console fills blue. Enterprise and Showcase fill gold on navy (band, hero) and navy on white (empty state, try-it section).",
+        "body": "Each button group has one filled action; its partner is a secondary, outline, ghost or text button. Horizon fills lime (Start the call, Call me again) beside an underlined grey text button. Studio fills amber, Console fills ink black (with a lime icon). Enterprise and Showcase fill gold on navy (band, hero) and navy on white (empty state, try-it section).",
         "section": "colors"
       },
       {
@@ -1871,7 +2309,7 @@
       },
       {
         "name": "The Sentence Case Rule",
-        "body": "Outside Studio's hardware labels, labels and section names are sentence case with no tracking.",
+        "body": "Outside Studio's hardware labels and Horizon's chapter marker, labels and section names are sentence case with no tracking.",
         "section": "typography"
       },
       {
@@ -1881,14 +2319,21 @@
       }
     ],
     "dos": [
+      "**Do** keep black dominant in Horizon: lime only on lines, edges, small marks and the one filled action.",
+      "**Do** let the voice drive Horizon: the equaliser reads the real call audio (agent in lime, Lead in cool grey) and the chapter follows the call's stage.",
+      "**Do** keep Horizon's fallbacks working: reduced motion holds the camera still, and with no WebGL a plain night gradient carries the page.",
       "**Do** keep the six part inks in the order Turn detect, Commit, Tool step, LLM first token, Guard, Voice (TTS) in every bar, legend and list.",
       "**Do** colour a total by `tone()`: within 0.9 s green, up to 1.5 s amber (yellow in Studio), over 1.5 s red, and say it in words too (\"Within target\", \"Over 0.9 s\", \"Over 1.5 s\").",
       "**Do** label the sample call as synthetic wherever its numbers show (\"Status · synthetic sample\", \"Sample · synthetic data\", \"Sample · synthetic numbers\", \"Sample call · preview\").",
-      "**Do** set new values through the theme's variables (`--ac`, `--line`, `--p-*`) so shared blocks keep working in all four themes.",
-      "**Do** keep the theme switch inside each theme's own chrome and keep `?ui=` and the saved choice in step.",
+      "**Do** set new values through the theme's variables (`--ac`, `--line`, `--p-*`) so shared blocks keep working in all four measurement themes; in Horizon use the `--hz-*` tokens.",
+      "**Do** keep the theme switch inside each theme's own chrome (behind the small Theme disclosure in Horizon) and keep `?ui=` and the saved choice in step.",
       "**Do** use the shared SVG icon family (24px grid, 1.75 stroke, round caps)."
     ],
     "donts": [
+      "**Don't** add background music, chimes or generated sound to any theme or sample; voices only.",
+      "**Don't** add bubble particles, including in Horizon's underwater chapter; keep the motion calm.",
+      "**Don't** fill Horizon with lime: no lime backgrounds, washes, large lime areas or stronger bloom (it was toned down after reading as blinding).",
+      "**Don't** show latency, milliseconds, parts, verdicts or other tech figures in Horizon; the measurement belongs to the other four themes.",
       "**Don't** reorder, merge or recolour the six parts per screen; a part keeps its ink across the whole theme.",
       "**Don't** put two filled actions side by side; pair the filled action with an outline, ghost or secondary button.",
       "**Don't** use drop shadows to separate Studio panels; use value steps and seams.",
