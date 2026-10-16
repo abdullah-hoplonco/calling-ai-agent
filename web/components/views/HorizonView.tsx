@@ -14,6 +14,7 @@ import { SampleCall } from "@/lib/horizon/sample";
 import { speechMs } from "@/lib/speech";
 import { shortStatus, trackIndex } from "@/lib/stages";
 import type { CallModel } from "@/lib/useCall";
+import { ENGINE_LABEL, VOICES, type VoiceEngine } from "@/lib/voices";
 
 type Mode = "entry" | "sample" | "live" | "close";
 type Line = { who: "agent" | "lead"; words: string[] };
@@ -454,6 +455,21 @@ export function HorizonView({ c, switcher }: { c: CallModel; switcher: ReactNode
                     </option>
                   ))}
                 </select>
+              </label>
+              <label>
+                Voice
+                <select value={c.voiceId} onChange={(e) => c.setVoiceId(e.target.value)} name="voice">
+                  {(["elevenlabs", "cartesia"] as VoiceEngine[]).map((engine) => (
+                    <optgroup key={engine} label={ENGINE_LABEL[engine]}>
+                      {VOICES.filter((v) => v.engine === engine).map((v) => (
+                        <option key={v.id} value={v.id}>
+                          {v.name} · {v.desc}
+                        </option>
+                      ))}
+                    </optgroup>
+                  ))}
+                </select>
+                <small>Female voices introduce themselves as Nimra, male voices as Uzair.</small>
               </label>
             </div>
             <div className="hz-go">
